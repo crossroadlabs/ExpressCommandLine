@@ -1,0 +1,2 @@
+github "Carthage/Commandant" ~> 0.8.1
+github "crossroadlabs/Regex" ~> 0.4
