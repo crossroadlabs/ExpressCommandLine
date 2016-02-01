@@ -17,7 +17,7 @@ import Regex
 //  outputFolder: String
 struct CopyDirectoryContents : Step {
     let dependsOn = [Step]()
-    let gitR = "\\.git".r!
+    let gitR = "\\.git$".r!
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["inputFolder"] == nil {

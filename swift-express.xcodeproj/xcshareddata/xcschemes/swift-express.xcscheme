@@ -78,7 +78,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--template &quot;https://github.com/crossroadlabs/Regex.git&quot;"
+            argument = "--template &quot;ssh://git@git.crossplusplus.com/swift-express-project-template.git&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
