@@ -1,0 +1,528 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		963488831C5F9253000D152F /* CopyDirectoryContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488821C5F9253000D152F /* CopyDirectoryContents.swift */; };
+		963488871C5F981A000D152F /* FindXcodeProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488861C5F981A000D152F /* FindXcodeProject.swift */; };
+		963488891C5F9846000D152F /* RenameXcodeProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488881C5F9846000D152F /* RenameXcodeProject.swift */; };
+		9634888B1C5F9878000D152F /* CarthageInstallLibs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */; };
+		9634888C1C5FB183000D152F /* Regex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; };
+		9634888D1C5FB183000D152F /* Regex.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		963AC8341C5988DE00362B15 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963AC8331C5988DE00362B15 /* Random.swift */; };
+		966C941D1C5A35C800A80D20 /* CloneGitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */; };
+		967383A71C5947C0002E27A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 967383A61C5947C0002E27A3 /* Assets.xcassets */; };
+		967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383B41C5947C0002E27A3 /* swift_expressTests.swift */; };
+		967383C11C5948F4002E27A3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383C01C5948F4002E27A3 /* main.swift */; };
+		967383DE1C5963BD002E27A3 /* SwiftExpress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383DD1C5963BD002E27A3 /* SwiftExpress.swift */; };
+		967383E11C59672F002E27A3 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E01C59672F002E27A3 /* App.swift */; };
+		967383E31C5979D1002E27A3 /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E21C5979D1002E27A3 /* Step.swift */; };
+		967383E51C597E66002E27A3 /* StepCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E41C597E66002E27A3 /* StepCommand.swift */; };
+		967383EA1C598591002E27A3 /* CreateTempDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E91C598591002E27A3 /* CreateTempDirectory.swift */; };
+		96860A5F1C5A893B006DBC55 /* FileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96860A5E1C5A893B006DBC55 /* FileOperations.swift */; };
+		9692AE201C5A4BA100DD9F5C /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1E1C5A4BA100DD9F5C /* Result.framework */; };
+		9692AE211C5A535400DD9F5C /* Commandant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */; };
+		9692AE221C5A535400DD9F5C /* Commandant.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9692AE241C5A535400DD9F5C /* Result.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1E1C5A4BA100DD9F5C /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		96CCD7C61C5A6B8200E503E0 /* SubTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C51C5A6B8200E503E0 /* SubTask.swift */; };
+		96CCD7C81C5A788D00E503E0 /* Git.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C71C5A788D00E503E0 /* Git.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		967383B11C5947C0002E27A3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 967383991C5947BF002E27A3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 967383A01C5947BF002E27A3;
+			remoteInfo = "swift-express";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		967383DC1C5957C2002E27A3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9692AE221C5A535400DD9F5C /* Commandant.framework in Embed Frameworks */,
+				9634888D1C5FB183000D152F /* Regex.framework in Embed Frameworks */,
+				9692AE241C5A535400DD9F5C /* Result.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		963488821C5F9253000D152F /* CopyDirectoryContents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyDirectoryContents.swift; sourceTree = "<group>"; };
+		963488841C5F9587000D152F /* Regex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Regex.framework; path = Carthage/Build/Mac/Regex.framework; sourceTree = "<group>"; };
+		963488861C5F981A000D152F /* FindXcodeProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindXcodeProject.swift; sourceTree = "<group>"; };
+		963488881C5F9846000D152F /* RenameXcodeProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameXcodeProject.swift; sourceTree = "<group>"; };
+		9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarthageInstallLibs.swift; sourceTree = "<group>"; };
+		963AC8331C5988DE00362B15 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
+		966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloneGitRepository.swift; sourceTree = "<group>"; };
+		967383A11C5947BF002E27A3 /* swift-express.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-express.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		967383A61C5947C0002E27A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		967383AB1C5947C0002E27A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		967383B01C5947C0002E27A3 /* swift-expressTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-expressTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		967383B41C5947C0002E27A3 /* swift_expressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_expressTests.swift; sourceTree = "<group>"; };
+		967383B61C5947C0002E27A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		967383BF1C5947E6002E27A3 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		967383C01C5948F4002E27A3 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		967383DD1C5963BD002E27A3 /* SwiftExpress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftExpress.swift; sourceTree = "<group>"; };
+		967383E01C59672F002E27A3 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		967383E21C5979D1002E27A3 /* Step.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
+		967383E41C597E66002E27A3 /* StepCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepCommand.swift; sourceTree = "<group>"; };
+		967383E91C598591002E27A3 /* CreateTempDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTempDirectory.swift; sourceTree = "<group>"; };
+		96860A5E1C5A893B006DBC55 /* FileOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileOperations.swift; sourceTree = "<group>"; };
+		9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Commandant.framework; path = Carthage/Build/Mac/Commandant.framework; sourceTree = "<group>"; };
+		9692AE1E1C5A4BA100DD9F5C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
+		96CCD7C51C5A6B8200E503E0 /* SubTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubTask.swift; sourceTree = "<group>"; };
+		96CCD7C71C5A788D00E503E0 /* Git.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Git.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9673839E1C5947BF002E27A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9692AE211C5A535400DD9F5C /* Commandant.framework in Frameworks */,
+				9634888C1C5FB183000D152F /* Regex.framework in Frameworks */,
+				9692AE201C5A4BA100DD9F5C /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		967383AD1C5947C0002E27A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		967383981C5947BF002E27A3 = {
+			isa = PBXGroup;
+			children = (
+				967383A31C5947BF002E27A3 /* swift-express */,
+				967383B31C5947C0002E27A3 /* swift-expressTests */,
+				967383C21C594916002E27A3 /* Frameworks */,
+				967383BF1C5947E6002E27A3 /* Cartfile */,
+				967383A21C5947BF002E27A3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		967383A21C5947BF002E27A3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				967383A11C5947BF002E27A3 /* swift-express.app */,
+				967383B01C5947C0002E27A3 /* swift-expressTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		967383A31C5947BF002E27A3 /* swift-express */ = {
+			isa = PBXGroup;
+			children = (
+				967383C41C594A54002E27A3 /* Core */,
+				967383C71C594E89002E27A3 /* Commands */,
+				967383C31C594A38002E27A3 /* Resources */,
+				967383C01C5948F4002E27A3 /* main.swift */,
+			);
+			path = "swift-express";
+			sourceTree = "<group>";
+		};
+		967383B31C5947C0002E27A3 /* swift-expressTests */ = {
+			isa = PBXGroup;
+			children = (
+				967383B41C5947C0002E27A3 /* swift_expressTests.swift */,
+				967383B61C5947C0002E27A3 /* Info.plist */,
+			);
+			path = "swift-expressTests";
+			sourceTree = SOURCE_ROOT;
+		};
+		967383C21C594916002E27A3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				963488841C5F9587000D152F /* Regex.framework */,
+				9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */,
+				9692AE1E1C5A4BA100DD9F5C /* Result.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		967383C31C594A38002E27A3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				967383A61C5947C0002E27A3 /* Assets.xcassets */,
+				967383AB1C5947C0002E27A3 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		967383C41C594A54002E27A3 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				967383DD1C5963BD002E27A3 /* SwiftExpress.swift */,
+				967383E21C5979D1002E27A3 /* Step.swift */,
+				967383E41C597E66002E27A3 /* StepCommand.swift */,
+				963AC8331C5988DE00362B15 /* Random.swift */,
+				96CCD7C51C5A6B8200E503E0 /* SubTask.swift */,
+				96CCD7C71C5A788D00E503E0 /* Git.swift */,
+				96860A5E1C5A893B006DBC55 /* FileOperations.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		967383C71C594E89002E27A3 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				967383DF1C596718002E27A3 /* App */,
+			);
+			path = Commands;
+			sourceTree = "<group>";
+		};
+		967383DF1C596718002E27A3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				967383E61C598490002E27A3 /* Steps */,
+				967383E01C59672F002E27A3 /* App.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		967383E61C598490002E27A3 /* Steps */ = {
+			isa = PBXGroup;
+			children = (
+				967383E91C598591002E27A3 /* CreateTempDirectory.swift */,
+				966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */,
+				963488821C5F9253000D152F /* CopyDirectoryContents.swift */,
+				963488861C5F981A000D152F /* FindXcodeProject.swift */,
+				963488881C5F9846000D152F /* RenameXcodeProject.swift */,
+				9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */,
+			);
+			path = Steps;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		967383A01C5947BF002E27A3 /* swift-express */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 967383B91C5947C0002E27A3 /* Build configuration list for PBXNativeTarget "swift-express" */;
+			buildPhases = (
+				9673839D1C5947BF002E27A3 /* Sources */,
+				9673839E1C5947BF002E27A3 /* Frameworks */,
+				9673839F1C5947BF002E27A3 /* Resources */,
+				967383DC1C5957C2002E27A3 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "swift-express";
+			productName = "swift-express";
+			productReference = 967383A11C5947BF002E27A3 /* swift-express.app */;
+			productType = "com.apple.product-type.application";
+		};
+		967383AF1C5947C0002E27A3 /* swift-expressTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 967383BC1C5947C0002E27A3 /* Build configuration list for PBXNativeTarget "swift-expressTests" */;
+			buildPhases = (
+				967383AC1C5947C0002E27A3 /* Sources */,
+				967383AD1C5947C0002E27A3 /* Frameworks */,
+				967383AE1C5947C0002E27A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				967383B21C5947C0002E27A3 /* PBXTargetDependency */,
+			);
+			name = "swift-expressTests";
+			productName = "swift-expressTests";
+			productReference = 967383B01C5947C0002E27A3 /* swift-expressTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		967383991C5947BF002E27A3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Crossroad Labs";
+				TargetAttributes = {
+					967383A01C5947BF002E27A3 = {
+						CreatedOnToolsVersion = 7.2;
+					};
+					967383AF1C5947C0002E27A3 = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 967383A01C5947BF002E27A3;
+					};
+				};
+			};
+			buildConfigurationList = 9673839C1C5947BF002E27A3 /* Build configuration list for PBXProject "swift-express" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 967383981C5947BF002E27A3;
+			productRefGroup = 967383A21C5947BF002E27A3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				967383A01C5947BF002E27A3 /* swift-express */,
+				967383AF1C5947C0002E27A3 /* swift-expressTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9673839F1C5947BF002E27A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				967383A71C5947C0002E27A3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		967383AE1C5947C0002E27A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9673839D1C5947BF002E27A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				963488831C5F9253000D152F /* CopyDirectoryContents.swift in Sources */,
+				966C941D1C5A35C800A80D20 /* CloneGitRepository.swift in Sources */,
+				963488871C5F981A000D152F /* FindXcodeProject.swift in Sources */,
+				967383E11C59672F002E27A3 /* App.swift in Sources */,
+				96860A5F1C5A893B006DBC55 /* FileOperations.swift in Sources */,
+				9634888B1C5F9878000D152F /* CarthageInstallLibs.swift in Sources */,
+				967383E31C5979D1002E27A3 /* Step.swift in Sources */,
+				967383DE1C5963BD002E27A3 /* SwiftExpress.swift in Sources */,
+				96CCD7C81C5A788D00E503E0 /* Git.swift in Sources */,
+				967383EA1C598591002E27A3 /* CreateTempDirectory.swift in Sources */,
+				967383C11C5948F4002E27A3 /* main.swift in Sources */,
+				96CCD7C61C5A6B8200E503E0 /* SubTask.swift in Sources */,
+				963488891C5F9846000D152F /* RenameXcodeProject.swift in Sources */,
+				967383E51C597E66002E27A3 /* StepCommand.swift in Sources */,
+				963AC8341C5988DE00362B15 /* Random.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		967383AC1C5947C0002E27A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		967383B21C5947C0002E27A3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 967383A01C5947BF002E27A3 /* swift-express */;
+			targetProxy = 967383B11C5947C0002E27A3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		967383B71C5947C0002E27A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		967383B81C5947C0002E27A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		967383BA1C5947C0002E27A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = "swift-express/Resources/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-express";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		967383BB1C5947C0002E27A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = "swift-express/Resources/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-express";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		967383BD1C5947C0002E27A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "swift-expressTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-expressTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/swift-express.app/Contents/MacOS/swift-express";
+			};
+			name = Debug;
+		};
+		967383BE1C5947C0002E27A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "swift-expressTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-expressTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/swift-express.app/Contents/MacOS/swift-express";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9673839C1C5947BF002E27A3 /* Build configuration list for PBXProject "swift-express" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				967383B71C5947C0002E27A3 /* Debug */,
+				967383B81C5947C0002E27A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		967383B91C5947C0002E27A3 /* Build configuration list for PBXNativeTarget "swift-express" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				967383BA1C5947C0002E27A3 /* Debug */,
+				967383BB1C5947C0002E27A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		967383BC1C5947C0002E27A3 /* Build configuration list for PBXNativeTarget "swift-expressTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				967383BD1C5947C0002E27A3 /* Debug */,
+				967383BE1C5947C0002E27A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 967383991C5947BF002E27A3 /* Project object */;
+}
