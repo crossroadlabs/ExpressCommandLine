@@ -1,34 +1,24 @@
+//===--- SubTask.swift ----------------------------------------------------===//
+//Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
-//  SubTask.swift
-//  swift-express
+//This file is part of Swift Express Command Line
 //
-//  Created by Yegor Popovych on 1/28/16.
-//  Copyright © 2016 Crossroad Labs. All rights reserved.
+//Swift Express Command Line is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
 //
+//Swift Express Command Line is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
+//
+//===----------------------------------------------------------------------===//
 
 import Foundation
-
-protocol SEByte {}
-extension UInt8 : SEByte {}
-extension Int8 : SEByte {}
-
-extension Array where Element:SEByte {
-    func toString() throws -> String {
-        if count == 0 {
-            return ""
-        }
-        return String.fromCString(UnsafePointer<Int8>(self))!
-    }
-}
-
-extension String {
-    static func fromArray(array: [UInt8]) throws -> String {
-        return try array.toString()
-    }
-    static func fromArray(array: [Int8]) throws -> String {
-        return try array.toString()
-    }
-}
 
 class SubTask {
     private let task: String
@@ -66,11 +56,13 @@ class SubTask {
         if readCb != nil {
             let fh = readingPipe.fileHandleForReading
             NSNotificationCenter.defaultCenter().addObserverForName(NSFileHandleDataAvailableNotification, object: fh, queue: nil, usingBlock: { (notification) -> Void in
-                let fileHandle = notification.object! as! NSFileHandle
-                let data = fileHandle.availableData
-                if !self.readCb!(self, data.toArray(), false) {
-                    self.terminate()
+                let data = notification.userInfo![NSFileHandleNotificationDataItem] as! NSData?
+                if data?.length > 0 {
+                    if !self.readCb!(self, data!.toArray(), false) {
+                        self.terminate()
+                    }
                 }
+                notification.object!.readInBackgroundAndNotify();
             })
             fh.waitForDataInBackgroundAndNotify()
             
@@ -114,8 +106,22 @@ class SubTask {
         nTask.terminate()
     }
     
+    func interrupt() {
+        nTask.interrupt()
+    }
+    
     func runAndWait() -> Int32 {
         run()
         return wait()
     }
 }
+
+extension Process {
+    static var environment:[String:String] {
+        get {
+            return NSProcessInfo.processInfo().environment
+        }
+    }
+}
+
+

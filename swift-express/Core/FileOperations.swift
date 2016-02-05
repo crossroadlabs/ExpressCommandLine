@@ -1,10 +1,22 @@
+//===--- FileOperations.swift ------------------------------------------===//
+//Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
-//  FileOperations.swift
-//  swift-express
+//This file is part of Swift Express Command Line
 //
-//  Created by Yegor Popovych on 1/28/16.
-//  Copyright © 2016 Crossroad Labs. All rights reserved.
+//Swift Express Command Line is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
 //
+//Swift Express Command Line is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
+//
+//===-------------------------------------------------------------------===//
 
 import Foundation
 import Regex
@@ -13,108 +25,6 @@ enum FileOpenMode {
     case Read
     case Write
     case Append
-}
-
-extension Array where Element:SEByte {
-    func toData() -> NSData {
-        return NSData(bytes: self, length: self.count)
-    }
-    static func fromData(data: NSData) -> Array<UInt8> {
-        return data.toArray()
-    }
-}
-
-extension NSData {
-    func toArray() -> [UInt8] {
-        return Array<UInt8>(UnsafeBufferPointer(start: UnsafePointer<UInt8>(self.bytes), count: self.length))
-    }
-    static func fromArray(array: [UInt8]) -> NSData {
-        return array.toData()
-    }
-    static func fromArray(array: [Int8]) -> NSData {
-        return array.toData()
-    }
-}
-
-extension String {
-    
-    func ltrim(char: Character = " ") -> String {
-        var index = 0
-        for c in characters {
-            if c != char {
-                break
-            }
-            index++
-        }
-        return substringFromIndex(characters.startIndex.advancedBy(index))
-    }
-    
-    func rtrim(char: Character = " ") -> String {
-        var index = 0
-        for c in characters.reverse() {
-            if c != char {
-                break
-            }
-            index++
-        }
-        return substringToIndex(characters.endIndex.advancedBy(-index))
-    }
-    
-    func trim(char: Character = " ") -> String {
-        return ltrim(char).rtrim(char)
-    }
-    
-    func addPathComponent(component: String) -> String {
-        let trimmed = component.trim("/")
-        let selftrimed = rtrim("/")
-        return selftrimed + "/" + trimmed
-    }
-    
-    func removeLastPathComponent() -> String {
-        let trimmed = rtrim("/")
-        var index = 0
-        for c in trimmed.characters.reverse() {
-            if c == "/" {
-                break;
-            }
-            index++
-        }
-        return trimmed.substringToIndex(characters.endIndex.advancedBy(-index))
-    }
-    
-    func lastPathComponent() -> String {
-        let trimmed = rtrim("/")
-        var index = 0
-        for c in trimmed.characters.reverse() {
-            if c == "/" {
-                break;
-            }
-            index++
-        }
-        return trimmed.substringFromIndex(characters.endIndex.advancedBy(-index))
-    }
-    
-    func toArray() -> [UInt8] {
-        return Array<UInt8>(utf8)
-    }
-    
-    
-    private static let _curDirR = "\\/\\.\\/|\\/\\.$|^\\.\\/".r!
-    private static let _topDirR = "[^\\/\\?\\%\\*\\:\\|\"<>\\.]+/\\.\\.".r!
-    
-    func standardizedPath() -> String {
-        if characters.count == 0 {
-            return self
-        }
-        var output = trim().rtrim("/")
-        if output.characters[output.characters.startIndex] == "~" {
-            output = FileManager.homeDirectory().addPathComponent(output.ltrim("~"))
-        }
-        if output.characters[output.characters.startIndex] != "/" {
-            output = FileManager.currentWorkingDirectory().addPathComponent(output)
-        }
-        return String._curDirR.replaceAll(String._topDirR.replaceAll(output, replacement: ""), replacement: "")
-    }
 }
 
 class File {
@@ -171,7 +81,6 @@ class File {
 }
 
 struct FileManager {
-    
     static func createDirectory(path: String, createIntermediate: Bool) throws {
         try NSFileManager.defaultManager().createDirectoryAtURL(NSURL(fileURLWithPath: path), withIntermediateDirectories: createIntermediate, attributes: nil)
     }

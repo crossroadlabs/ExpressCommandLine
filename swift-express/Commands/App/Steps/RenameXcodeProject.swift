@@ -1,10 +1,22 @@
+//===--- RenameXcodeProject.swift --------------------------------===//
+//Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
-//  RenameXcodeProject.swift
-//  swift-express
+//This file is part of Swift Express Command Line
 //
-//  Created by Yegor Popovych on 2/1/16.
-//  Copyright © 2016 Crossroad Labs. All rights reserved.
+//Swift Express Command Line is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
 //
+//Swift Express Command Line is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
+//
+//===-------------------------------------------------------------===//
 
 import Foundation
 import Regex
@@ -12,12 +24,11 @@ import Regex
 //Rename Xcode project and it's target.
 //Input:
 //  workingFolder
-//  projectName
 //  newProjectName
 //Output:
 //  projectPath - full path to new project
 struct RenameXcodeProject : Step {
-    let dependsOn = [Step]()
+    let dependsOn:[Step] = [FindXcodeProject()]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["workingFolder"] == nil {
@@ -25,10 +36,10 @@ struct RenameXcodeProject : Step {
         }
         let workingFolder = params["workingFolder"]! as! String
         
-        if params["projectName"] == nil {
+        if combinedOutput["projectName"] == nil {
             throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No projectName option.")
         }
-        let projectName = params["projectName"]! as! String
+        let projectName = combinedOutput["projectName"]! as! String
         
         if params["newProjectName"] == nil {
             throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No newProjectName option.")
@@ -55,6 +66,9 @@ struct RenameXcodeProject : Step {
     }
     
     func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        throw SwiftExpressError.SubtaskError(message: "Why callParams called in CarthageInstallLibs?")
+        if ownParams["workingFolder"] == nil {
+            throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No workingFolder option.")
+        }
+        return ["workingFolder": ownParams["workingFolder"]!]
     }
 }

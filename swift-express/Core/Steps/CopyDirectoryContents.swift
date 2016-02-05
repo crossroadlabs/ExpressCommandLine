@@ -1,10 +1,22 @@
+//===--- CopyDirectoryContents.swift ----------------------------------===//
+//Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
-//  CopyDirectoryContents.swift
-//  swift-express
+//This file is part of Swift Express Command Line
 //
-//  Created by Yegor Popovych on 2/1/16.
-//  Copyright © 2016 Crossroad Labs. All rights reserved.
+//Swift Express Command Line is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
 //
+//Swift Express Command Line is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
+//
+//===------------------------------------------------------------------===//
 
 import Foundation
 import Regex
@@ -17,7 +29,7 @@ import Regex
 //  outputFolder: String
 struct CopyDirectoryContents : Step {
     let dependsOn = [Step]()
-    let gitR = "\\.git$".r!
+    let excludeList:[Regex]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["inputFolder"] == nil {
@@ -44,7 +56,10 @@ struct CopyDirectoryContents : Step {
             let contents = try FileManager.listDirectory(inputFolder)
             print("Contents: \(contents)")
             for item in contents {
-                if gitR.matches(item) {
+                let ignore = excludeList.reduce(false, combine: { (prev, r) -> Bool in
+                    return prev || r.matches(item)
+                })
+                if ignore {
                     continue
                 }
                 try FileManager.copyItem(inputFolder.addPathComponent(item), toDirectory: outputFolder)
@@ -62,5 +77,15 @@ struct CopyDirectoryContents : Step {
     
     func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
         throw SwiftExpressError.SubtaskError(message: "Why callParams called in CopyDirectoryContents?")
+    }
+    
+    init(excludeList: [String]? = nil) {
+        if excludeList != nil {
+            self.excludeList = excludeList!.map({ str -> Regex in
+                return str.r!
+            })
+        } else {
+            self.excludeList = ["\\.git$".r!]
+        }
     }
 }

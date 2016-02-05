@@ -1,4 +1,4 @@
-//===--- CarthageInstallLibs.swift -------------------------------===//
+//===--- FindXcodeProject.swift ----------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -19,34 +19,46 @@
 //===-------------------------------------------------------------===//
 
 import Foundation
+import Regex
 
-// Install carthage dependencies.
-//Input:
-// workingFolder
-//Output:
-// None
-struct CarthageInstallLibs : Step {
+// Find Xcode project in directory
+// Input: workingFolder
+// Output:
+//      projectName: String - name of project
+//      projectFileName: String - full name of xcodeproj directory
+struct FindXcodeProject : Step {
     let dependsOn = [Step]()
+    let xcprojR = "(.+)\\.xcodeproj".r!
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["workingFolder"] == nil {
-            throw SwiftExpressError.BadOptions(message: "CarthageInstallLibs: No workingFolder option.")
+            throw SwiftExpressError.BadOptions(message: "FindXcodeProject: No workingFolder option.")
         }
         let workingFolder = params["workingFolder"]! as! String
-        
-        let task = SubTask(task: "/usr/local/bin/carthage", arguments: ["bootstrap", "--platform", "Mac", workingFolder], environment: nil, readCallback: nil, finishCallback: nil)
-        if task.runAndWait() != 0 {
-            let message = try task.readData().toString()
-            print("Carthage error: \(message)")
-            throw SwiftExpressError.SubtaskError(message: message)
+        print("\(workingFolder)")
+        do {
+            let contents = try FileManager.listDirectory(workingFolder)
+            var result: String? = nil
+            var name: String? = nil
+            for item in contents {
+                if let match = xcprojR.findFirst(item) {
+                    result = match.group(0)
+                    name = match.group(1)
+                }
+            }
+            if result == nil || name == nil {
+                throw SwiftExpressError.SubtaskError(message: "FindXcodeProject: Can't find any Xcode project in directory")
+            }
+            return ["projectName": name!, "projectFileName": result!]
+        } catch let err as NSError {
+            throw SwiftExpressError.SomeNSError(error: err)
         }
-        return [String:Any]()
     }
     
     func cleanup(params: [String : Any], output: StepResponse) throws {
     }
     
     func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        throw SwiftExpressError.SubtaskError(message: "Why callParams called in CarthageInstallLibs?")
+        throw SwiftExpressError.SubtaskError(message: "Why callParams called in FindXcodeProject?")
     }
 }
