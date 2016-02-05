@@ -20,7 +20,7 @@
 		967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383B41C5947C0002E27A3 /* swift_expressTests.swift */; };
 		967383C11C5948F4002E27A3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383C01C5948F4002E27A3 /* main.swift */; };
 		967383DE1C5963BD002E27A3 /* SwiftExpress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383DD1C5963BD002E27A3 /* SwiftExpress.swift */; };
-		967383E11C59672F002E27A3 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E01C59672F002E27A3 /* App.swift */; };
+		967383E11C59672F002E27A3 /* Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E01C59672F002E27A3 /* Init.swift */; };
 		967383E31C5979D1002E27A3 /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E21C5979D1002E27A3 /* Step.swift */; };
 		967383E51C597E66002E27A3 /* StepCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E41C597E66002E27A3 /* StepCommand.swift */; };
 		967383EA1C598591002E27A3 /* CreateTempDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E91C598591002E27A3 /* CreateTempDirectory.swift */; };
@@ -80,7 +80,7 @@
 		967383BF1C5947E6002E27A3 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		967383C01C5948F4002E27A3 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		967383DD1C5963BD002E27A3 /* SwiftExpress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftExpress.swift; sourceTree = "<group>"; };
-		967383E01C59672F002E27A3 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		967383E01C59672F002E27A3 /* Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Init.swift; sourceTree = "<group>"; };
 		967383E21C5979D1002E27A3 /* Step.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
 		967383E41C597E66002E27A3 /* StepCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepCommand.swift; sourceTree = "<group>"; };
 		967383E91C598591002E27A3 /* CreateTempDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTempDirectory.swift; sourceTree = "<group>"; };
@@ -194,20 +194,20 @@
 		967383C71C594E89002E27A3 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
-				967383DF1C596718002E27A3 /* App */,
+				967383DF1C596718002E27A3 /* Init */,
 				968A3BCD1C63AF5A00E4AFCC /* Build.swift */,
 				968A3BCF1C63AF7300E4AFCC /* Run.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
 		};
-		967383DF1C596718002E27A3 /* App */ = {
+		967383DF1C596718002E27A3 /* Init */ = {
 			isa = PBXGroup;
 			children = (
 				967383E61C598490002E27A3 /* Steps */,
-				967383E01C59672F002E27A3 /* App.swift */,
+				967383E01C59672F002E27A3 /* Init.swift */,
 			);
-			path = App;
+			path = Init;
 			sourceTree = "<group>";
 		};
 		967383E61C598490002E27A3 /* Steps */ = {
@@ -335,7 +335,7 @@
 				966C941D1C5A35C800A80D20 /* CloneGitRepository.swift in Sources */,
 				960A22EA1C641725005DE6B1 /* Signal.swift in Sources */,
 				963488871C5F981A000D152F /* FindXcodeProject.swift in Sources */,
-				967383E11C59672F002E27A3 /* App.swift in Sources */,
+				967383E11C59672F002E27A3 /* Init.swift in Sources */,
 				96860A5F1C5A893B006DBC55 /* FileOperations.swift in Sources */,
 				9634888B1C5F9878000D152F /* CarthageInstallLibs.swift in Sources */,
 				967383E31C5979D1002E27A3 /* Step.swift in Sources */,

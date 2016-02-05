@@ -30,7 +30,7 @@ func commandRegistry() -> CommandRegistry<SwiftExpressError> {
     let registry = CommandRegistry<SwiftExpressError>()
     
     //Commands
-    registry.register(AppCommand())
+    registry.register(InitCommand())
     registry.register(BuildCommand())
     registry.register(RunCommand())
     
