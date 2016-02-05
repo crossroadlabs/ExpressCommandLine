@@ -54,28 +54,22 @@ class SubTask {
         nTask.standardError = errorPipe
         
         if readCb != nil {
-            let fh = readingPipe.fileHandleForReading
-            NSNotificationCenter.defaultCenter().addObserverForName(NSFileHandleDataAvailableNotification, object: fh, queue: nil, usingBlock: { (notification) -> Void in
-                let data = notification.userInfo![NSFileHandleNotificationDataItem] as! NSData?
-                if data?.length > 0 {
-                    if !self.readCb!(self, data!.toArray(), false) {
+            readingPipe.fileHandleForReading.readabilityHandler = { (fh) -> Void in
+                let data = fh.availableData
+                if data.length > 0 {
+                    if !self.readCb!(self, data.toArray(), false) {
                         self.terminate()
                     }
                 }
-                notification.object!.readInBackgroundAndNotify();
-            })
-            fh.waitForDataInBackgroundAndNotify()
-            
-            let eFh = errorPipe.fileHandleForReading
-            NSNotificationCenter.defaultCenter().addObserverForName(NSFileHandleDataAvailableNotification, object: eFh, queue: nil, usingBlock: { (notification) -> Void in
-                let fileHandle = notification.object! as! NSFileHandle
-                let data = fileHandle.availableData
-                
-                if !self.readCb!(self, data.toArray(), true) {
-                    self.terminate()
+            }
+            errorPipe.fileHandleForReading.readabilityHandler = { (fh) -> Void in
+                let data = fh.availableData
+                if data.length > 0 {
+                    if !self.readCb!(self, data.toArray(), true) {
+                        self.terminate()
+                    }
                 }
-            })
-            eFh.waitForDataInBackgroundAndNotify()
+            }
         }
         if finishCb != nil {
             nTask.terminationHandler = { (fTask : NSTask) -> Void in

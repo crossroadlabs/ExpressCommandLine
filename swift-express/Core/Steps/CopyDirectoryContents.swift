@@ -42,8 +42,6 @@ struct CopyDirectoryContents : Step {
         do {
             let inputFolder = params["inputFolder"]! as! String
             let outputFolder = params["outputFolder"]! as! String
-        
-            print("Output folder: \(outputFolder)")
             
             do {
                 try FileManager.listDirectory(outputFolder)
@@ -54,7 +52,7 @@ struct CopyDirectoryContents : Step {
             var copiedItems = [String]()
         
             let contents = try FileManager.listDirectory(inputFolder)
-            print("Contents: \(contents)")
+            
             for item in contents {
                 let ignore = excludeList.reduce(false, combine: { (prev, r) -> Bool in
                     return prev || r.matches(item)
@@ -64,7 +62,6 @@ struct CopyDirectoryContents : Step {
                 }
                 try FileManager.copyItem(inputFolder.addPathComponent(item), toDirectory: outputFolder)
                 copiedItems.append(item)
-                print("Copied: \(item)")
             }
             return ["copiedItems": copiedItems, "outputFolder": outputFolder]
         } catch let err as NSError {

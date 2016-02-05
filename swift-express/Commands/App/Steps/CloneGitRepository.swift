@@ -28,8 +28,6 @@ struct CloneGitRepository : Step {
     let dependsOn = [Step]()
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        print("Params: \(params)")
-        
         if params["repositoryURL"] == nil {
             throw SwiftExpressError.BadOptions(message: "CloneGitRepository: No repositoryURL option.")
         }
@@ -40,8 +38,6 @@ struct CloneGitRepository : Step {
         
         let repositoryURL = params["repositoryURL"]! as! String
         let outputFolder = params["outputFolder"]! as! String
-        
-        print("Output folder url \(outputFolder)")
         
         try Git.cloneGitRepository(repositoryURL, toPath: outputFolder)
         

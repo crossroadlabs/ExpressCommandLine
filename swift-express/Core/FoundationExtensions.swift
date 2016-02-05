@@ -44,7 +44,20 @@ extension Array where Element:SEByte {
         if count == 0 {
             return ""
         }
-        return String.fromCString(UnsafePointer<Int8>(self))!
+        var arr:Array<Element> = self
+        switch self[count-1] {
+        case let char as Int8:
+            if char != 0 {
+                arr = self + [Int8(0) as! Element]
+            }
+        case let char as UInt8:
+            if char != 0 {
+                arr = self + [UInt8(0) as! Element]
+            }
+        default:
+            arr = self
+        }
+        return String.fromCString(UnsafePointer<Int8>(arr))!
     }
     
     func toData() -> NSData {

@@ -62,7 +62,7 @@ struct BuildStep:Step {
         let name = combinedOutput["projectName"]! as! String
         let file = combinedOutput["projectFileName"]! as! String
         
-        print("Building \(name)...")
+        print("Building \(name) in \(buildType.description) mode...")
         
         let task = SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", path.addPathComponent(file), "-target", name, "-configuration", buildType.description, "build"], environment: nil, readCallback: nil, finishCallback: nil)
         if task.runAndWait() != 0 {
@@ -122,6 +122,6 @@ struct BuildCommandOptions : OptionsType {
     static func evaluate(m: CommandMode) -> Result<BuildCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Argument(usage: "build type. debug or release")
+            <*> m <| Argument(defaultValue: .Debug, usage: "build type. debug or release")
     }
 }

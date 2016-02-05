@@ -35,7 +35,7 @@ struct FindXcodeProject : Step {
             throw SwiftExpressError.BadOptions(message: "FindXcodeProject: No workingFolder option.")
         }
         let workingFolder = params["workingFolder"]! as! String
-        print("\(workingFolder)")
+        
         do {
             let contents = try FileManager.listDirectory(workingFolder)
             var result: String? = nil

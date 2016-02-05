@@ -34,11 +34,14 @@ struct CarthageInstallLibs : Step {
         }
         let workingFolder = params["workingFolder"]! as! String
         
-        let task = SubTask(task: "/usr/local/bin/carthage", arguments: ["bootstrap", "--platform", "Mac", workingFolder], environment: nil, readCallback: nil, finishCallback: nil)
+        let task = SubTask(task: "/usr/local/bin/carthage", arguments: ["bootstrap", "--platform", "Mac", "--project-directory", workingFolder], environment: nil, readCallback: { (task, data, isError) -> Bool in
+            do {
+                print(try data.toString(), terminator:"")
+            } catch {}
+            return true
+            }, finishCallback: nil)
         if task.runAndWait() != 0 {
-            let message = try task.readData().toString()
-            print("Carthage error: \(message)")
-            throw SwiftExpressError.SubtaskError(message: message)
+            throw SwiftExpressError.SubtaskError(message: "CarthageInstallLibs: bootstrap failed")
         }
         return [String:Any]()
     }
