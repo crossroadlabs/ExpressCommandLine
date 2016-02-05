@@ -1,4 +1,4 @@
-//===--- CreateTempDirectory.swift -------------------------------------===//
+//===--- CloneGitRepository.swift -------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -16,39 +16,39 @@
 //You should have received a copy of the GNU General Public License
 //along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
 //
-//===-------------------------------------------------------------------===//
+//===------------------------------------------------------------------===//
 
 import Foundation
 
-// Will create temp directory and put it inside "tempDirectory" option
-struct CreateTempDirectory : Step {
-    
+// Clones repository to folder.
+// Input: repositoryURL : String
+// Input: outputFolder : String
+// Output: clonedFolder: String
+struct CloneGitRepository : Step {
     let dependsOn = [Step]()
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        let tempDir = FileManager.temporaryDirectory().addPathComponent("swift-express-\(UInt32.random(100000, upper: 999999))")
-        
-        do {
-            try FileManager.createDirectory(tempDir, createIntermediate: true)
-        } catch let err as NSError {
-            throw SwiftExpressError.SomeNSError(error: err)
+        if params["repositoryURL"] == nil {
+            throw SwiftExpressError.BadOptions(message: "CloneGitRepository: No repositoryURL option.")
         }
-        return ["tempDirectory": tempDir]
+        
+        if params["outputFolder"] == nil {
+            throw SwiftExpressError.BadOptions(message: "CloneGitRepository: No outputFolder option.")
+        }
+        
+        let repositoryURL = params["repositoryURL"]! as! String
+        let outputFolder = params["outputFolder"]! as! String
+        
+        try Git.cloneGitRepository(repositoryURL, toPath: outputFolder)
+        
+        return ["clonedFolder": outputFolder]
     }
     
     func cleanup(params:[String: Any], output: StepResponse) throws {
-        if let tempDir = output["tempDirectory"] as! String? {
-            do {
-                try FileManager.removeItem(tempDir)
-            } catch let err as NSError {
-                throw SwiftExpressError.SomeNSError(error: err)
-            }
-        } else {
-            throw SwiftExpressError.BadOptions(message:"No tempDirectory option")
-        }
     }
     
     func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
-        throw SwiftExpressError.SubtaskError(message: "Why callParams called in CreateTempDirectory?")
+        throw SwiftExpressError.SubtaskError(message: "Why callParams called in CloneGitRepository?")
     }
+    
 }

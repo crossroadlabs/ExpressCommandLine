@@ -18,8 +18,6 @@
 //
 //===--------------------------------------------------------------------------------===//
 
-
-
 import Commandant
 
 enum SwiftExpressError : ErrorType {
@@ -32,7 +30,12 @@ func commandRegistry() -> CommandRegistry<SwiftExpressError> {
     let registry = CommandRegistry<SwiftExpressError>()
     
     //Commands
-    registry.register(AppCommand())
+    registry.register(InitCommand())
+    registry.register(BuildCommand())
+    registry.register(RunCommand())
+    
+    let helpCommand = HelpCommand(registry: registry)
+    registry.register(helpCommand)
     
     return registry
 }

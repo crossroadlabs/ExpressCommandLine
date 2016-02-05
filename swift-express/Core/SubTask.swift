@@ -20,44 +20,34 @@
 
 import Foundation
 
-protocol SEByte {}
-extension UInt8 : SEByte {}
-extension Int8 : SEByte {}
-
-extension Array where Element:SEByte {
-    func toString() throws -> String {
-        if count == 0 {
-            return ""
-        }
-        return String.fromCString(UnsafePointer<Int8>(self))!
-    }
-}
-
-extension String {
-    static func fromArray(array: [UInt8]) throws -> String {
-        return try array.toString()
-    }
-    static func fromArray(array: [Int8]) throws -> String {
-        return try array.toString()
-    }
-}
-
 class SubTask {
     private let task: String
-    private let arguments: [String]?
+    private let arguments: [String]
     private let readCb: ((SubTask, [UInt8], Bool) -> Bool)?
     private let finishCb: ((SubTask, Int32) -> ())?
     private let env:[String:String]?
+    private var finished:Bool
     
     private let nTask : NSTask
+    private let queue : dispatch_queue_t?
     
     init(task: String, arguments: [String]?, environment:[String:String]?, readCallback: ((task: SubTask, data:[UInt8], isError: Bool) -> Bool)?, finishCallback: ((task:SubTask, status:Int32) -> ())?) {
         self.task = task
-        self.arguments = arguments
+        if arguments != nil {
+            self.arguments = arguments!
+        } else {
+            self.arguments = [String]()
+        }
         self.readCb = readCallback
         self.finishCb = finishCallback
         self.env = environment
+        finished = false
         nTask = NSTask()
+        if self.readCb != nil {
+            queue = dispatch_queue_create(task, DISPATCH_QUEUE_SERIAL)
+        } else {
+            queue = nil
+        }
     }
     
     func run() {
@@ -75,38 +65,39 @@ class SubTask {
         let errorPipe = NSPipe()
         nTask.standardError = errorPipe
         
-        if readCb != nil {
-            let fh = readingPipe.fileHandleForReading
-            NSNotificationCenter.defaultCenter().addObserverForName(NSFileHandleDataAvailableNotification, object: fh, queue: nil, usingBlock: { (notification) -> Void in
-                let fileHandle = notification.object! as! NSFileHandle
-                let data = fileHandle.availableData
-                if !self.readCb!(self, data.toArray(), false) {
-                    self.terminate()
-                }
-            })
-            fh.waitForDataInBackgroundAndNotify()
-            
-            let eFh = errorPipe.fileHandleForReading
-            NSNotificationCenter.defaultCenter().addObserverForName(NSFileHandleDataAvailableNotification, object: eFh, queue: nil, usingBlock: { (notification) -> Void in
-                let fileHandle = notification.object! as! NSFileHandle
-                let data = fileHandle.availableData
-                
-                if !self.readCb!(self, data.toArray(), true) {
-                    self.terminate()
-                }
-            })
-            eFh.waitForDataInBackgroundAndNotify()
-        }
-        if finishCb != nil {
-            nTask.terminationHandler = { (fTask : NSTask) -> Void in
+        nTask.terminationHandler = { (fTask : NSTask) -> Void in
+            self.finished = true
+            if self.finishCb != nil {
                 self.finishCb!(self, fTask.terminationStatus)
             }
         }
         nTask.launch()
+        
+        if readCb != nil {
+            let inputIo = dispatch_io_create(DISPATCH_IO_STREAM, readingPipe.fileHandleForReading.fileDescriptor, queue!, { (result) -> Void in })
+            dispatch_io_read(inputIo, 0, Int.max, queue!, { (end, data, error) -> Void in
+                if dispatch_data_get_size(data) > 0 {
+                    if !self.readCb!(self, (data as! NSData).toArray(), false) {
+                        self.terminate()
+                    }
+                }
+            })
+            
+            let errorIo = dispatch_io_create(DISPATCH_IO_STREAM, errorPipe.fileHandleForReading.fileDescriptor, queue!, { (result) -> Void in })
+            dispatch_io_read(errorIo, 0, Int.max, queue!, { (end, data, error) -> Void in
+                if dispatch_data_get_size(data) > 0 {
+                    if !self.readCb!(self, (data as! NSData).toArray(), true) {
+                        self.terminate()
+                    }
+                }
+            })
+        }
+        
     }
     
     func wait() -> Int32 {
         nTask.waitUntilExit()
+        finished = true
         return nTask.terminationStatus
     }
     
@@ -126,8 +117,22 @@ class SubTask {
         nTask.terminate()
     }
     
+    func interrupt() {
+        nTask.interrupt()
+    }
+    
     func runAndWait() -> Int32 {
         run()
         return wait()
     }
 }
+
+extension Process {
+    static var environment:[String:String] {
+        get {
+            return NSProcessInfo.processInfo().environment
+        }
+    }
+}
+
+

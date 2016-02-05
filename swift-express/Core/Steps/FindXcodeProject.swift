@@ -35,19 +35,24 @@ struct FindXcodeProject : Step {
             throw SwiftExpressError.BadOptions(message: "FindXcodeProject: No workingFolder option.")
         }
         let workingFolder = params["workingFolder"]! as! String
-        let contents = try FileManager.listDirectory(workingFolder)
-        var result: String? = nil
-        var name: String? = nil
-        for item in contents {
-            if let match = xcprojR.findFirst(item) {
-                result = match.group(0)
-                name = match.group(1)
+        
+        do {
+            let contents = try FileManager.listDirectory(workingFolder)
+            var result: String? = nil
+            var name: String? = nil
+            for item in contents {
+                if let match = xcprojR.findFirst(item) {
+                    result = match.group(0)
+                    name = match.group(1)
+                }
             }
+            if result == nil || name == nil {
+                throw SwiftExpressError.SubtaskError(message: "FindXcodeProject: Can't find any Xcode project in directory")
+            }
+            return ["projectName": name!, "projectFileName": result!]
+        } catch let err as NSError {
+            throw SwiftExpressError.SomeNSError(error: err)
         }
-        if result == nil || name == nil {
-            throw SwiftExpressError.SubtaskError(message: "FindXcodeProject: Can't find any Xcode project in directory")
-        }
-        return ["projectName": name!, "projectFileName": result]
     }
     
     func cleanup(params: [String : Any], output: StepResponse) throws {

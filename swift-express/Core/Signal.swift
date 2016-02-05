@@ -1,4 +1,5 @@
-//===--- main.swift ------------------------------===//
+//
+//===--- Signal.swift --------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -16,16 +17,30 @@
 //You should have received a copy of the GNU General Public License
 //along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
 //
-//===---------------------------------------------===//
+//===-------------------------------------------------------------------===//
 
-commandRegistry().main(arguments: Process.arguments, defaultVerb: "help") { (error) -> () in
-    switch error {
-    case .SubtaskError(let message):
-        print("Sorry, error occurred")
-        print("Error: \(message)")
-    case .SomeNSError(let err):
-        print("Error: ", err)
-    default:
-        print("Unknown Error")
-    }
+import Foundation
+
+enum Signal:Int32 {
+    case HUP    = 1
+    case INT    = 2
+    case QUIT   = 3
+    case ABRT   = 6
+    case KILL   = 9
+    case ALRM   = 14
+    case TERM   = 15
+}
+
+typealias SigactionHandler = @convention(c)(Int32) -> Void
+
+func trap_signal(signum:Signal, action:SigactionHandler) {
+    var sigAction = sigaction()
+    
+    #if os(Linux)
+        sigAction.__sigaction_handler = unsafeBitCast(action, sigaction.__Unnamed_union___sigaction_handler.self)
+    #else
+        sigAction.__sigaction_u = unsafeBitCast(action, __sigaction_u.self)
+    #endif
+    
+    sigaction(signum.rawValue, &sigAction, nil)
 }

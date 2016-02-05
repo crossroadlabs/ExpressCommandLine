@@ -1,4 +1,4 @@
-//===--- App.swift -------------------------------===//
+//===--- Init.swift -------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -21,9 +21,9 @@
 import Commandant
 import Result
 
-struct AppStep : Step {
+struct InitStep : Step {
     let dependsOn:[Step] = [CreateTempDirectory(), CloneGitRepository(),
-        CopyDirectoryContents(), FindXcodeProject(), RenameXcodeProject(), CarthageInstallLibs()]
+        CopyDirectoryContents(excludeList: ["^\\.git$", "^LICENSE$", "^NOTICE$", "^README.md$"]), RenameXcodeProject(), CarthageInstallLibs()]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         // Nothing to do. All tasks done
@@ -47,10 +47,8 @@ struct AppStep : Step {
         case _ as CopyDirectoryContents:
             let path = (ownParams["path"]! as! String).addPathComponent(ownParams["name"]! as! String)
             return ["inputFolder": previousStepsOutput["clonedFolder"]!, "outputFolder": path]
-        case _ as FindXcodeProject:
-            return ["workingFolder": previousStepsOutput["outputFolder"]!]
         case _ as RenameXcodeProject:
-            return ["projectName": previousStepsOutput["projectName"]!, "workingFolder": previousStepsOutput["outputFolder"]!, "newProjectName": ownParams["name"]!]
+            return ["workingFolder": previousStepsOutput["outputFolder"]!, "newProjectName": ownParams["name"]!]
         case _ as CarthageInstallLibs:
             return ["workingFolder": previousStepsOutput["outputFolder"]!]
         default:
@@ -59,15 +57,15 @@ struct AppStep : Step {
     }
 }
 
-struct AppCommand: StepCommand {
-    typealias Options = AppCommandOptions
+struct InitCommand: StepCommand {
+    typealias Options = InitCommandOptions
     
-    let verb = "app"
-    let function = "Creates new SwiftExpress application"
+    let verb = "init"
+    let function = "Creates new Express application project"
     let step: Step
     
     init() {
-        self.step = AppStep()
+        self.step = InitStep()
     }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
@@ -75,18 +73,18 @@ struct AppCommand: StepCommand {
     }
 }
 
-struct AppCommandOptions : OptionsType {
+struct InitCommandOptions : OptionsType {
     let name: String
     let template: String
     let path: String
     
-    static func create(template: String)(path: String)(name: String) -> AppCommandOptions {
-        return AppCommandOptions(name: name, template: template, path: path)
+    static func create(template: String)(path: String)(name: String) -> InitCommandOptions {
+        return InitCommandOptions(name: name, template: template, path: path)
     }
     
-    static func evaluate(m: CommandMode) -> Result<AppCommandOptions, CommandantError<SwiftExpressError>> {
+    static func evaluate(m: CommandMode) -> Result<InitCommandOptions, CommandantError<SwiftExpressError>> {
         return create
-            <*> m <| Option(key: "template", defaultValue: "https://github.com/crossroadlabs/swift-express-project-template.git", usage: "git url for project template")
+            <*> m <| Option(key: "template", defaultValue: "https://github.com/crossroadlabs/ExpressTemplate.git", usage: "git url for project template")
             <*> m <| Option(key: "path", defaultValue: ".", usage: "output directory")
             <*> m <| Argument(usage: "name of application")
     }
