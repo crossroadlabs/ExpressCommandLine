@@ -42,9 +42,10 @@ struct RunStep : Step {
         
         print ("Running \(name)...")
         
-        let binaryPath = path.addPathComponent("dist").addPathComponent(buildType.description).addPathComponent("\(name).app").addPathComponent("Contents").addPathComponent("MacOS").addPathComponent(name)
+        let binaryPath = "dist".addPathComponent(buildType.description).addPathComponent("\(name).app").addPathComponent("Contents").addPathComponent("MacOS").addPathComponent(name)
+
         
-        RunStep.task = SubTask(task: binaryPath, arguments: nil, environment: nil, readCallback: { (task, data, isError) -> Bool in
+        RunStep.task = SubTask(task: "/bin/sh", arguments: ["-c", "cd \"\(path)\" && \"\(binaryPath)\""], environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
             } catch {}

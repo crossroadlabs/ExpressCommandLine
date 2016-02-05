@@ -59,6 +59,20 @@ struct RenameXcodeProject : Step {
         pbFile.seek(0)
         pbFile.resize(0)
         try pbFile.write(newFileData.toArray())
+        
+        let schemeFile = workingFolder.addPathComponent(newProj).addPathComponent("xcshareddata").addPathComponent("xcschemes").addPathComponent(projectName+".xcscheme")
+        if FileManager.isFileExists(schemeFile) {
+            let schName = newName+".xcscheme"
+            try FileManager.renameItem(schemeFile, newName: schName)
+            let schFile = try File(path: schemeFile.removeLastPathComponent().addPathComponent(schName), mode: .Append)
+            let schFileContents = try schFile.readToEnd().toString()
+            let newSchFileContents = nameRegex.replaceAll(schFileContents, replacement: newName)
+            
+            schFile.seek(0)
+            schFile.resize(0)
+            try schFile.write(newSchFileContents.toArray())
+        }
+        
         return [String:Any]()
     }
     

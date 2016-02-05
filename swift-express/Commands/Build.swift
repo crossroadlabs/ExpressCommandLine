@@ -64,7 +64,7 @@ struct BuildStep:Step {
         
         print("Building \(name) in \(buildType.description) mode...")
         
-        let task = SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", path.addPathComponent(file), "-target", name, "-configuration", buildType.description, "build"], environment: nil, readCallback: nil, finishCallback: nil)
+        let task = SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", path.addPathComponent(file), "-scheme", name, "-configuration", buildType.description, "build"], environment: nil, readCallback: nil, finishCallback: nil)
         if task.runAndWait() != 0 {
             let message = try task.readErrorData().toString()
             throw SwiftExpressError.SubtaskError(message: message)

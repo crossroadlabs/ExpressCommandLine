@@ -98,6 +98,16 @@ struct FileManager {
         return try NSFileManager.defaultManager().contentsOfDirectoryAtPath(path)
     }
     
+    static func isFileExists(path: String) -> Bool {
+        var isDir: ObjCBool = false
+        return NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) && !isDir
+    }
+    
+    static func isDirectoryExists(path: String) -> Bool {
+        var isDir: ObjCBool = false
+        return NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) && isDir
+    }
+    
     static func moveItem(atPath: String, toPath: String) throws {
         try NSFileManager.defaultManager().moveItemAtPath(atPath, toPath: toPath)
     }
