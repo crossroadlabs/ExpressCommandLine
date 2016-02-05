@@ -74,22 +74,25 @@ class SubTask {
         nTask.launch()
         
         if readCb != nil {
-            let inputIo = dispatch_io_create(DISPATCH_IO_STREAM, readingPipe.fileHandleForReading.fileDescriptor, queue!, { (result) -> Void in })
-            dispatch_io_read(inputIo, 0, Int.max, queue!, { (end, data, error) -> Void in
-                if dispatch_data_get_size(data) > 0 {
-                    if !self.readCb!(self, (data as! NSData).toArray(), false) {
-                        self.terminate()
+            dispatch_sync(queue!, { () -> Void in
+                let inputIo = dispatch_io_create(DISPATCH_IO_STREAM, readingPipe.fileHandleForReading.fileDescriptor, self.queue!, { (result) -> Void in })
+                dispatch_io_read(inputIo, 0, Int.max, self.queue!, { (end, data, error) -> Void in
+                    if dispatch_data_get_size(data) > 0 {
+                        if !self.readCb!(self, (data as! NSData).toArray(), false) {
+                            self.terminate()
+                        }
                     }
-                }
-            })
-            
-            let errorIo = dispatch_io_create(DISPATCH_IO_STREAM, errorPipe.fileHandleForReading.fileDescriptor, queue!, { (result) -> Void in })
-            dispatch_io_read(errorIo, 0, Int.max, queue!, { (end, data, error) -> Void in
-                if dispatch_data_get_size(data) > 0 {
-                    if !self.readCb!(self, (data as! NSData).toArray(), true) {
-                        self.terminate()
+                })
+                
+                let errorIo = dispatch_io_create(DISPATCH_IO_STREAM, errorPipe.fileHandleForReading.fileDescriptor, self.queue!, { (result) -> Void in })
+                dispatch_io_read(errorIo, 0, Int.max, self.queue!, { (end, data, error) -> Void in
+                    if dispatch_data_get_size(data) > 0 {
+                        if !self.readCb!(self, (data as! NSData).toArray(), true) {
+                            self.terminate()
+                        }
                     }
-                }
+                })
+
             })
         }
         
