@@ -32,6 +32,7 @@
 		9692AE211C5A535400DD9F5C /* Commandant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */; };
 		9692AE221C5A535400DD9F5C /* Commandant.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9692AE241C5A535400DD9F5C /* Result.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1E1C5A4BA100DD9F5C /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		969CFAFE1C6570670009A663 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969CFAFD1C6570670009A663 /* Version.swift */; };
 		96CCD7C61C5A6B8200E503E0 /* SubTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C51C5A6B8200E503E0 /* SubTask.swift */; };
 		96CCD7C81C5A788D00E503E0 /* Git.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C71C5A788D00E503E0 /* Git.swift */; };
 /* End PBXBuildFile section */
@@ -90,6 +91,7 @@
 		968A3BCF1C63AF7300E4AFCC /* Run.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Run.swift; sourceTree = "<group>"; };
 		9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Commandant.framework; path = Carthage/Build/Mac/Commandant.framework; sourceTree = "<group>"; };
 		9692AE1E1C5A4BA100DD9F5C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
+		969CFAFD1C6570670009A663 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		96CCD7C51C5A6B8200E503E0 /* SubTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubTask.swift; sourceTree = "<group>"; };
 		96CCD7C71C5A788D00E503E0 /* Git.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Git.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,6 +199,7 @@
 				967383DF1C596718002E27A3 /* Init */,
 				968A3BCD1C63AF5A00E4AFCC /* Build.swift */,
 				968A3BCF1C63AF7300E4AFCC /* Run.swift */,
+				969CFAFD1C6570670009A663 /* Version.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				960A22EA1C641725005DE6B1 /* Signal.swift in Sources */,
 				963488871C5F981A000D152F /* FindXcodeProject.swift in Sources */,
 				967383E11C59672F002E27A3 /* Init.swift in Sources */,
+				969CFAFE1C6570670009A663 /* Version.swift in Sources */,
 				96860A5F1C5A893B006DBC55 /* FileOperations.swift in Sources */,
 				9634888B1C5F9878000D152F /* CarthageInstallLibs.swift in Sources */,
 				967383E31C5979D1002E27A3 /* Step.swift in Sources */,
