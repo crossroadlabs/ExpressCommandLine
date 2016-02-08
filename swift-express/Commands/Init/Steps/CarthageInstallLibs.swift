@@ -33,14 +33,17 @@ struct CarthageInstallLibs : Step {
             throw SwiftExpressError.BadOptions(message: "CarthageInstallLibs: No workingFolder option.")
         }
         let workingFolder = params["workingFolder"]! as! String
-        
-        let task = SubTask(task: "/usr/local/bin/carthage", arguments: ["bootstrap", "--platform", "Mac", "--project-directory", workingFolder], environment: nil, readCallback: { (task, data, isError) -> Bool in
+        var result:Int32 = 0
+        SubTask(task: "/usr/local/bin/carthage", arguments: ["bootstrap", "--platform", "Mac"], workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
             } catch {}
             return true
-            }, finishCallback: nil)
-        if task.runAndWait() != 0 {
+            }, finishCallback: { task, status in
+                result = status
+        }).run()
+        SubTask.waitForAllTaskTermination()
+        if result != 0 {
             throw SwiftExpressError.SubtaskError(message: "CarthageInstallLibs: bootstrap failed")
         }
         return [String:Any]()
