@@ -29,7 +29,7 @@ import Regex
 //  outputFolder: String
 struct CopyDirectoryContents : Step {
     let dependsOn = [Step]()
-    let gitR = "\\.git$".r!
+    let excludeList:[Regex]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["inputFolder"] == nil {
@@ -42,8 +42,6 @@ struct CopyDirectoryContents : Step {
         do {
             let inputFolder = params["inputFolder"]! as! String
             let outputFolder = params["outputFolder"]! as! String
-        
-            print("Output folder: \(outputFolder)")
             
             do {
                 try FileManager.listDirectory(outputFolder)
@@ -54,14 +52,16 @@ struct CopyDirectoryContents : Step {
             var copiedItems = [String]()
         
             let contents = try FileManager.listDirectory(inputFolder)
-            print("Contents: \(contents)")
+            
             for item in contents {
-                if gitR.matches(item) {
+                let ignore = excludeList.reduce(false, combine: { (prev, r) -> Bool in
+                    return prev || r.matches(item)
+                })
+                if ignore {
                     continue
                 }
                 try FileManager.copyItem(inputFolder.addPathComponent(item), toDirectory: outputFolder)
                 copiedItems.append(item)
-                print("Copied: \(item)")
             }
             return ["copiedItems": copiedItems, "outputFolder": outputFolder]
         } catch let err as NSError {
@@ -74,5 +74,15 @@ struct CopyDirectoryContents : Step {
     
     func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
         throw SwiftExpressError.SubtaskError(message: "Why callParams called in CopyDirectoryContents?")
+    }
+    
+    init(excludeList: [String]? = nil) {
+        if excludeList != nil {
+            self.excludeList = excludeList!.map({ str -> Regex in
+                return str.r!
+            })
+        } else {
+            self.excludeList = ["\\.git$".r!]
+        }
     }
 }

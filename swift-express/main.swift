@@ -18,7 +18,6 @@
 //
 //===---------------------------------------------===//
 
-
 commandRegistry().main(arguments: Process.arguments, defaultVerb: "help") { (error) -> () in
     switch error {
     case .SubtaskError(let message):
