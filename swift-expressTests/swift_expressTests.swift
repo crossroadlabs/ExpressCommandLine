@@ -19,7 +19,6 @@
 //===---------------------------------------------===//
 
 import XCTest
-@testable import swift_express
 
 class swift_expressTests: XCTestCase {
     
@@ -36,6 +35,16 @@ class swift_expressTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+    }
+    
+    func testArrayToString() {
+        let arr:[UInt8] = [97, 98, 97, 99, 97, 98, 97, 0]
+        let str = try! arr.toString()
+        XCTAssert("abacaba" == str, "Array to string conversion error")
+        
+        let notClosedArr:[Int8] = [97, 98, 97, 99, 97, 98, 97]
+        let notClosedStr = try! notClosedArr.toString()
+        XCTAssertEqual(notClosedStr, "abacaba", "Array without trailing zero conversion error")
     }
     
     func testPerformanceExample() {
