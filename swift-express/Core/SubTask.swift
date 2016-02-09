@@ -19,6 +19,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftTryCatch
 
 extension dispatch_data_t {
     func toArray() -> [UInt8] {
@@ -70,7 +71,7 @@ class SubTask {
         nTask = NSTask()
     }
     
-    func run() {
+    func run() throws {
         nTask.launchPath = task
         nTask.arguments = arguments
         if env != nil {
@@ -110,7 +111,17 @@ class SubTask {
                 }
             }
         }
-        nTask.launch()
+        
+        var exception:NSException? = nil
+        
+        SwiftTryCatch.tryBlock({ () -> Void in
+            self.nTask.launch()
+        }, catchBlock: { (exc) -> Void in
+            exception = exc
+        }, finallyBlock: {})
+        if exception != nil {
+            throw SwiftExpressError.SubtaskError(message: "Task launch error: \(exception!)")
+        }
     }
     
     func writeData(data: [UInt8]) {

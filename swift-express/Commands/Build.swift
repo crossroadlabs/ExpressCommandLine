@@ -68,7 +68,7 @@ struct BuildStep:Step {
         var result : Int32 = 0
         var resultString:String = ""
         
-        SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", file, "-scheme", name, "-configuration", buildType.description, "build"], workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
+        try SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", file, "-scheme", name, "-configuration", buildType.description, "build"], workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 if isError {
                     resultString +=  try data.toString()

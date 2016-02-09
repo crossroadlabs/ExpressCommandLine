@@ -23,7 +23,7 @@ import Foundation
 struct Git {
     static func cloneGitRepository(fromURL: String, toPath: String) throws {
         var result: Int32 = 0
-        SubTask(task: "/usr/bin/env", arguments: ["git", "clone", fromURL, toPath], workingDirectory: nil, environment: nil, readCallback: { (task, data, isError) -> Bool in
+        try SubTask(task: "/usr/bin/env", arguments: ["git", "clone", fromURL, toPath], workingDirectory: nil, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
             } catch {}

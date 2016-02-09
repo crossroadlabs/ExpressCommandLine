@@ -42,7 +42,7 @@ struct CarthageInstallLibs : Step {
         }
         let workingFolder = params["workingFolder"]! as! String
         var result:Int32 = 0
-        SubTask(task: "/usr/local/bin/carthage", arguments: [updateCommand, "--platform", platform], workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
+        try SubTask(task: "/usr/local/bin/carthage", arguments: [updateCommand, "--platform", platform], workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
             } catch {}
