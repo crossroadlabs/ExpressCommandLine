@@ -24,6 +24,7 @@ enum SwiftExpressError : ErrorType {
     case SubtaskError(message: String)
     case SomeNSError(error: NSError)
     case BadOptions(message: String)
+    case UnknownError(error: ErrorType)
 }
 
 func commandRegistry() -> CommandRegistry<SwiftExpressError> {

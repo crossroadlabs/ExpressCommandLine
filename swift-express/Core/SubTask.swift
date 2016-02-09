@@ -86,10 +86,10 @@ class SubTask {
         
         dispatch_group_enter(SubTask.group)
         nTask.terminationHandler = { (fTask : NSTask) -> Void in
-            dispatch_group_leave(SubTask.group)
             if self.finishCb != nil {
                 self.finishCb!(self, fTask.terminationStatus)
             }
+            dispatch_group_leave(SubTask.group)
         }
         
         if readCb != nil {

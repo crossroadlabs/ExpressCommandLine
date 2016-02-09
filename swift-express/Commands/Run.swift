@@ -73,10 +73,6 @@ struct RunStep : Step {
     func cleanup(params: [String : Any], output: StepResponse) throws {
         
     }
-    
-    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        return ownParams
-    }
 }
 
 struct RunCommand : StepCommand {

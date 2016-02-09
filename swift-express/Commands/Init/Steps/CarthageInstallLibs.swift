@@ -19,6 +19,7 @@
 //===-------------------------------------------------------------===//
 
 import Foundation
+import Regex
 
 // Install carthage dependencies.
 //Input:
@@ -28,13 +29,20 @@ import Foundation
 struct CarthageInstallLibs : Step {
     let dependsOn = [Step]()
     
+    let platform = "Mac"
+    let updateCommand: String
+    
+    init(updateCommand: String = "bootstrap") {
+        self.updateCommand = updateCommand
+    }
+    
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["workingFolder"] == nil {
             throw SwiftExpressError.BadOptions(message: "CarthageInstallLibs: No workingFolder option.")
         }
         let workingFolder = params["workingFolder"]! as! String
         var result:Int32 = 0
-        SubTask(task: "/usr/local/bin/carthage", arguments: ["bootstrap", "--platform", "Mac"], workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
+        SubTask(task: "/usr/local/bin/carthage", arguments: [updateCommand, "--platform", platform], workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
             } catch {}
@@ -50,9 +58,33 @@ struct CarthageInstallLibs : Step {
     }
     
     func cleanup(params: [String : Any], output: StepResponse) throws {
+        let workingFolder = params["workingFolder"]! as! String
+        let plRe = platform.r!
+        let cartBuildFolder = workingFolder.addPathComponent("Carthage").addPathComponent("Build")
+        do {
+            let plfms = try FileManager.listDirectory(cartBuildFolder)
+            for plf in plfms {
+                if plRe.matches(plf) {
+                    continue
+                }
+                try FileManager.removeItem(cartBuildFolder.addPathComponent(plf))
+            }
+        } catch {
+            print("CarthageInstallLibs: Some error on cleanup \(error)")
+        }
+        
     }
     
-    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        throw SwiftExpressError.SubtaskError(message: "Why callParams called in CarthageInstallLibs?")
+    func revert(params:[String: Any]?, output: [String: Any]?, error: SwiftExpressError?) {
+        if let workingFolder = params?["workingFolder"] {
+            do {
+                let cartPath = (workingFolder as! String).addPathComponent("Carthage")
+                if FileManager.isDirectoryExists(cartPath) {
+                    try FileManager.removeItem(cartPath)
+                }
+            } catch {
+                print("Can't revert CarthageInstallLibs: \(error)")
+            }
+        }
     }
 }

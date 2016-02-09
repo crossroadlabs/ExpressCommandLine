@@ -20,6 +20,7 @@
 
 import Commandant
 import Result
+import Regex
 
 enum BuildType : Equatable, CustomStringConvertible {
     case Debug
@@ -85,7 +86,29 @@ struct BuildStep:Step {
     }
     
     func cleanup(params:[String: Any], output: StepResponse) throws {
-
+    }
+    
+    func revert(params: [String : Any]?, output: [String : Any]?, error: SwiftExpressError?) {
+        switch error {
+        case .SubtaskError(_)?:
+            if let path = params?["path"] as? String {
+                let buildDir = path.addPathComponent("dist")
+                if FileManager.isDirectoryExists(buildDir) {
+                    let hiddenRe = "^\\.[^\\.]+".r!
+                    do {
+                        let builds = try FileManager.listDirectory(buildDir)
+                        for build in builds {
+                            if hiddenRe.matches(build) {
+                                continue
+                            }
+                            try FileManager.removeItem(buildDir.addPathComponent(build))
+                        }
+                    } catch {}
+                }
+            }
+        default:
+            return
+        }
     }
     
     func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
@@ -100,7 +123,7 @@ extension BuildType:ArgumentType {
     static let name = "build-type"
     static func fromString(string: String) -> BuildType? {
         switch string {
-        case "", "debug":
+        case "debug":
             return .Debug
         case "release":
             return .Release
