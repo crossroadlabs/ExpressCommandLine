@@ -75,8 +75,8 @@ struct CarthageInstallLibs : Step {
         
     }
     
-    func revert(params:[String: Any]?, output: [String: Any]?, error: SwiftExpressError?) {
-        if let workingFolder = params?["workingFolder"] {
+    func revert(params:[String: Any], output: [String: Any]?, error: SwiftExpressError?) {
+        if let workingFolder = params["workingFolder"] {
             do {
                 let cartPath = (workingFolder as! String).addPathComponent("Carthage")
                 if FileManager.isDirectoryExists(cartPath) {

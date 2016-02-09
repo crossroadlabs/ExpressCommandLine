@@ -88,10 +88,10 @@ struct BuildStep:Step {
     func cleanup(params:[String: Any], output: StepResponse) throws {
     }
     
-    func revert(params: [String : Any]?, output: [String : Any]?, error: SwiftExpressError?) {
+    func revert(params: [String : Any], output: [String : Any]?, error: SwiftExpressError?) {
         switch error {
         case .SubtaskError(_)?:
-            if let path = params?["path"] as? String {
+            if let path = params["path"] as? String {
                 let buildDir = path.addPathComponent("dist")
                 if FileManager.isDirectoryExists(buildDir) {
                     let hiddenRe = "^\\.[^\\.]+".r!
