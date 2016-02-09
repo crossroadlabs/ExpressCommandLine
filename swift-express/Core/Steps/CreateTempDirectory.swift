@@ -48,7 +48,7 @@ struct CreateTempDirectory : Step {
         }
     }
     
-    func revert(params: [String : Any]?, output: [String : Any]?, error: SwiftExpressError?) {
+    func revert(params: [String : Any], output: [String : Any]?, error: SwiftExpressError?) {
         if let output = output {
             if let dir = output["tempDirectory"] as? String {
                 if FileManager.isDirectoryExists(dir) {

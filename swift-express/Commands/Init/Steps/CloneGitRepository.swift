@@ -53,7 +53,7 @@ struct CloneGitRepository : Step {
     func cleanup(params:[String: Any], output: StepResponse) throws {
     }
     
-    func revert(params:[String: Any]?, output: [String: Any]?, error: SwiftExpressError?) {
+    func revert(params:[String: Any], output: [String: Any]?, error: SwiftExpressError?) {
         switch error {
         case .BadOptions(let message)?:
             if message == folderExistsMessage {
@@ -61,7 +61,7 @@ struct CloneGitRepository : Step {
             }
             fallthrough
         default:
-            if let outputFolder = params?["outputFolder"] as? String {
+            if let outputFolder = params["outputFolder"] as? String {
                 if FileManager.isDirectoryExists(outputFolder) {
                     do {
                         try FileManager.removeItem(outputFolder)

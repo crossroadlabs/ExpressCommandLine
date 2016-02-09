@@ -78,7 +78,7 @@ struct CopyDirectoryContents : Step {
     func cleanup(params: [String : Any], output: StepResponse) throws {
     }
     
-    func revert(params: [String : Any]?, output: [String : Any]?, error: SwiftExpressError?) {
+    func revert(params: [String : Any], output: [String : Any]?, error: SwiftExpressError?) {
         switch error {
         case .BadOptions(let message)?:
             if message == alreadyExistsError {
@@ -86,7 +86,7 @@ struct CopyDirectoryContents : Step {
             }
             fallthrough
         default:
-            if let outputFolder = params?["outputFolder"] as? String {
+            if let outputFolder = params["outputFolder"] as? String {
                 do {
                     try FileManager.removeItem(outputFolder)
                 } catch {
