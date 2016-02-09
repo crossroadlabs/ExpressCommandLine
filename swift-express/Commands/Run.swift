@@ -42,15 +42,14 @@ struct RunStep : Step {
         
         print ("Running \(name)...")
         
-        let binaryPath = "dist".addPathComponent(buildType.description).addPathComponent("\(name).app").addPathComponent("Contents").addPathComponent("MacOS").addPathComponent(name)
+        let binaryPath = path.addPathComponent("dist").addPathComponent(buildType.description).addPathComponent("\(name).app").addPathComponent("Contents").addPathComponent("MacOS").addPathComponent(name)
 
-        
-        RunStep.task = SubTask(task: "/bin/sh", arguments: ["-c", "cd \"\(path)\" && \"\(binaryPath)\""], environment: nil, readCallback: { (task, data, isError) -> Bool in
+        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
             } catch {}
             return true
-        }, finishCallback: nil)
+            }, finishCallback: nil)
         
         trap_signal(.INT, action: { signal -> Void in
             if RunStep.task != nil {
@@ -65,16 +64,14 @@ struct RunStep : Step {
             }
         })
         
-        RunStep.task!.runAndWait()
+        RunStep.task!.run()
+        SubTask.waitForAllTaskTermination()
+        
         return [String:Any]()
     }
     
     func cleanup(params: [String : Any], output: StepResponse) throws {
         
-    }
-    
-    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        return ownParams
     }
 }
 

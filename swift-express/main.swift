@@ -21,11 +21,12 @@
 commandRegistry().main(arguments: Process.arguments, defaultVerb: "help") { (error) -> () in
     switch error {
     case .SubtaskError(let message):
-        print("Sorry, error occurred")
-        print("Error: \(message)")
+        print("Subtask Error: \(message)")
     case .SomeNSError(let err):
-        print("Error: ", err)
-    default:
-        print("Unknown Error")
+        print("NSError: ", err)
+    case .BadOptions(let message):
+        print("Bad options: \(message)")
+    case .UnknownError(let err):
+        print("Unknown Error: \(err)")
     }
 }
