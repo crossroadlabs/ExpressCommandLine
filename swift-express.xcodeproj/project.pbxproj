@@ -33,6 +33,8 @@
 		9692AE221C5A535400DD9F5C /* Commandant.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9692AE241C5A535400DD9F5C /* Result.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9692AE1E1C5A4BA100DD9F5C /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		969CFAFE1C6570670009A663 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969CFAFD1C6570670009A663 /* Version.swift */; };
+		96A751291C69755A002D8AC5 /* SwiftTryCatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */; };
+		96A7512A1C69755A002D8AC5 /* SwiftTryCatch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		96CCD7C61C5A6B8200E503E0 /* SubTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C51C5A6B8200E503E0 /* SubTask.swift */; };
 		96CCD7C81C5A788D00E503E0 /* Git.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C71C5A788D00E503E0 /* Git.swift */; };
 /* End PBXBuildFile section */
@@ -56,6 +58,7 @@
 			files = (
 				9692AE221C5A535400DD9F5C /* Commandant.framework in Embed Frameworks */,
 				9634888D1C5FB183000D152F /* Regex.framework in Embed Frameworks */,
+				96A7512A1C69755A002D8AC5 /* SwiftTryCatch.framework in Embed Frameworks */,
 				9692AE241C5A535400DD9F5C /* Result.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -92,6 +95,7 @@
 		9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Commandant.framework; path = Carthage/Build/Mac/Commandant.framework; sourceTree = "<group>"; };
 		9692AE1E1C5A4BA100DD9F5C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
 		969CFAFD1C6570670009A663 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftTryCatch.framework; path = Carthage/Build/Mac/SwiftTryCatch.framework; sourceTree = "<group>"; };
 		96CCD7C51C5A6B8200E503E0 /* SubTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubTask.swift; sourceTree = "<group>"; };
 		96CCD7C71C5A788D00E503E0 /* Git.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Git.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +107,7 @@
 			files = (
 				9692AE211C5A535400DD9F5C /* Commandant.framework in Frameworks */,
 				9634888C1C5FB183000D152F /* Regex.framework in Frameworks */,
+				96A751291C69755A002D8AC5 /* SwiftTryCatch.framework in Frameworks */,
 				9692AE201C5A4BA100DD9F5C /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -160,6 +165,7 @@
 		967383C21C594916002E27A3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */,
 				963488841C5F9587000D152F /* Regex.framework */,
 				9692AE1D1C5A4BA100DD9F5C /* Commandant.framework */,
 				9692AE1E1C5A4BA100DD9F5C /* Result.framework */,

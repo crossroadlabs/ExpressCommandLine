@@ -64,7 +64,7 @@ struct RunStep : Step {
             }
         })
         
-        RunStep.task!.run()
+        try RunStep.task!.run()
         SubTask.waitForAllTaskTermination()
         
         return [String:Any]()
