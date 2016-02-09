@@ -20,6 +20,7 @@
 
 import Commandant
 import Result
+import Regex
 
 enum BuildType : Equatable, CustomStringConvertible {
     case Debug
@@ -64,16 +65,50 @@ struct BuildStep:Step {
         
         print("Building \(name) in \(buildType.description) mode...")
         
-        let task = SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", path.addPathComponent(file), "-scheme", name, "-configuration", buildType.description, "build"], environment: nil, readCallback: nil, finishCallback: nil)
-        if task.runAndWait() != 0 {
-            let message = try task.readErrorData().toString()
-            throw SwiftExpressError.SubtaskError(message: message)
+        var result : Int32 = 0
+        var resultString:String = ""
+        
+        SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", file, "-scheme", name, "-configuration", buildType.description, "build"], workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
+            do {
+                if isError {
+                    resultString +=  try data.toString()
+                }
+            } catch {}
+            return true
+            }, finishCallback: { task, status in
+            result = status
+        }).run()
+        SubTask.waitForAllTaskTermination()
+        if result != 0 {
+            throw SwiftExpressError.SubtaskError(message: resultString)
         }
         return [String: Any]()
     }
     
     func cleanup(params:[String: Any], output: StepResponse) throws {
-
+    }
+    
+    func revert(params: [String : Any]?, output: [String : Any]?, error: SwiftExpressError?) {
+        switch error {
+        case .SubtaskError(_)?:
+            if let path = params?["path"] as? String {
+                let buildDir = path.addPathComponent("dist")
+                if FileManager.isDirectoryExists(buildDir) {
+                    let hiddenRe = "^\\.[^\\.]+".r!
+                    do {
+                        let builds = try FileManager.listDirectory(buildDir)
+                        for build in builds {
+                            if hiddenRe.matches(build) {
+                                continue
+                            }
+                            try FileManager.removeItem(buildDir.addPathComponent(build))
+                        }
+                    } catch {}
+                }
+            }
+        default:
+            return
+        }
     }
     
     func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
@@ -88,7 +123,7 @@ extension BuildType:ArgumentType {
     static let name = "build-type"
     static func fromString(string: String) -> BuildType? {
         switch string {
-        case "", "debug":
+        case "debug":
             return .Debug
         case "release":
             return .Release

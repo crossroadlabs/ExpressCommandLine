@@ -22,13 +22,17 @@ import Foundation
 
 struct Git {
     static func cloneGitRepository(fromURL: String, toPath: String) throws {
-        let task = SubTask(task: "/usr/bin/env", arguments: ["git", "clone", fromURL, toPath], environment: nil, readCallback: { (task, data, isError) -> Bool in
+        var result: Int32 = 0
+        SubTask(task: "/usr/bin/env", arguments: ["git", "clone", fromURL, toPath], workingDirectory: nil, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
             } catch {}
             return true
-            }, finishCallback: nil)
-        if task.runAndWait() != 0 {
+            }, finishCallback: { task, status in
+                result = status
+        }).run()
+        SubTask.waitForAllTaskTermination()
+        if result != 0 {
             throw SwiftExpressError.SubtaskError(message: "git clone failed")
         }
     }
