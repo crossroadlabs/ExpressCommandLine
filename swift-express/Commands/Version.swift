@@ -1,4 +1,4 @@
-//===--- SwiftExpress.swift ---------------------------------------------------------===//
+//===--- Version.swift --------------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -16,27 +16,20 @@
 //You should have received a copy of the GNU General Public License
 //along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
 //
-//===--------------------------------------------------------------------------------===//
+//===---------------------------------------------------------------------------===//
 
 import Commandant
+import Result
 
-enum SwiftExpressError : ErrorType {
-    case SubtaskError(message: String)
-    case SomeNSError(error: NSError)
-    case BadOptions(message: String)
+struct VersionCommand: CommandType {
+    let verb = "version"
+    let function = "Display the current version of Swift Express Command Line"
+    
+    func run(options: NoOptions<SwiftExpressError>) -> Result<(), SwiftExpressError> {
+        #if os(OSX)
+            print("Swift Express Command Line \(NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"]!)")
+        #endif
+        return .Success(())
+    }
 }
 
-func commandRegistry() -> CommandRegistry<SwiftExpressError> {
-    let registry = CommandRegistry<SwiftExpressError>()
-    
-    //Commands
-    registry.register(InitCommand())
-    registry.register(BuildCommand())
-    registry.register(RunCommand())
-    registry.register(VersionCommand())
-    
-    let helpCommand = HelpCommand(registry: registry)
-    registry.register(helpCommand)
-    
-    return registry
-}

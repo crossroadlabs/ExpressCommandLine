@@ -1,4 +1,5 @@
-//===--- SwiftExpress.swift ---------------------------------------------------------===//
+//
+//===--- Signal.swift --------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -16,27 +17,30 @@
 //You should have received a copy of the GNU General Public License
 //along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
 //
-//===--------------------------------------------------------------------------------===//
+//===-------------------------------------------------------------------===//
 
-import Commandant
+import Foundation
 
-enum SwiftExpressError : ErrorType {
-    case SubtaskError(message: String)
-    case SomeNSError(error: NSError)
-    case BadOptions(message: String)
+enum Signal:Int32 {
+    case HUP    = 1
+    case INT    = 2
+    case QUIT   = 3
+    case ABRT   = 6
+    case KILL   = 9
+    case ALRM   = 14
+    case TERM   = 15
 }
 
-func commandRegistry() -> CommandRegistry<SwiftExpressError> {
-    let registry = CommandRegistry<SwiftExpressError>()
+typealias SigactionHandler = @convention(c)(Int32) -> Void
+
+func trap_signal(signum:Signal, action:SigactionHandler) {
+    var sigAction = sigaction()
     
-    //Commands
-    registry.register(InitCommand())
-    registry.register(BuildCommand())
-    registry.register(RunCommand())
-    registry.register(VersionCommand())
+    #if os(Linux)
+        sigAction.__sigaction_handler = unsafeBitCast(action, sigaction.__Unnamed_union___sigaction_handler.self)
+    #else
+        sigAction.__sigaction_u = unsafeBitCast(action, __sigaction_u.self)
+    #endif
     
-    let helpCommand = HelpCommand(registry: registry)
-    registry.register(helpCommand)
-    
-    return registry
+    sigaction(signum.rawValue, &sigAction, nil)
 }

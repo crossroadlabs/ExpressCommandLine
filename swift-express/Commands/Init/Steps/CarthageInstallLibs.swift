@@ -1,4 +1,4 @@
-//===--- RenameXcodeProject.swift --------------------------------===//
+//===--- CarthageInstallLibs.swift -------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -19,47 +19,30 @@
 //===-------------------------------------------------------------===//
 
 import Foundation
-import Regex
 
-//Rename Xcode project and it's target.
+// Install carthage dependencies.
 //Input:
-//  workingFolder
-//  projectName
-//  newProjectName
+// workingFolder
 //Output:
-//  projectPath - full path to new project
-struct RenameXcodeProject : Step {
+// None
+struct CarthageInstallLibs : Step {
     let dependsOn = [Step]()
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["workingFolder"] == nil {
-            throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No workingFolder option.")
+            throw SwiftExpressError.BadOptions(message: "CarthageInstallLibs: No workingFolder option.")
         }
         let workingFolder = params["workingFolder"]! as! String
         
-        if params["projectName"] == nil {
-            throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No projectName option.")
+        let task = SubTask(task: "/usr/local/bin/carthage", arguments: ["bootstrap", "--platform", "Mac", "--project-directory", workingFolder], environment: nil, readCallback: { (task, data, isError) -> Bool in
+            do {
+                print(try data.toString(), terminator:"")
+            } catch {}
+            return true
+            }, finishCallback: nil)
+        if task.runAndWait() != 0 {
+            throw SwiftExpressError.SubtaskError(message: "CarthageInstallLibs: bootstrap failed")
         }
-        let projectName = params["projectName"]! as! String
-        
-        if params["newProjectName"] == nil {
-            throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No newProjectName option.")
-        }
-        let newName = params["newProjectName"]! as! String
-        let newProj = newName + ".xcodeproj"
-        
-        try FileManager.renameItem(workingFolder.addPathComponent(projectName+".xcodeproj"), newName: newProj)
-        
-        let pbProjName = newProj.addPathComponent("project.pbxproj")
-        let pbFile = try File(path: workingFolder.addPathComponent(pbProjName), mode: .Append)
-        
-        let nameRegex = projectName.r!
-        let fileContents = try pbFile.readToEnd().toString()
-        let newFileData = nameRegex.replaceAll(fileContents, replacement: newName)
-
-        pbFile.seek(0)
-        pbFile.resize(0)
-        try pbFile.write(newFileData.toArray())
         return [String:Any]()
     }
     
