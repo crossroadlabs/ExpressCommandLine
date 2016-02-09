@@ -15,6 +15,9 @@
 		9634888C1C5FB183000D152F /* Regex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; };
 		9634888D1C5FB183000D152F /* Regex.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		963AC8341C5988DE00362B15 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963AC8331C5988DE00362B15 /* Random.swift */; };
+		964A33761C6A491B0085D16C /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A3BCA1C63AAC400E4AFCC /* FoundationExtensions.swift */; };
+		964A33771C6A49C70085D16C /* FileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96860A5E1C5A893B006DBC55 /* FileOperations.swift */; };
+		964A33791C6A4A140085D16C /* Regex.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		966C941D1C5A35C800A80D20 /* CloneGitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */; };
 		967383A71C5947C0002E27A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 967383A61C5947C0002E27A3 /* Assets.xcassets */; };
 		967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383B41C5947C0002E27A3 /* swift_expressTests.swift */; };
@@ -50,6 +53,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		964A33781C6A49FD0085D16C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				964A33791C6A4A140085D16C /* Regex.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		967383DC1C5957C2002E27A3 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -267,6 +280,7 @@
 				967383AC1C5947C0002E27A3 /* Sources */,
 				967383AD1C5947C0002E27A3 /* Frameworks */,
 				967383AE1C5947C0002E27A3 /* Resources */,
+				964A33781C6A49FD0085D16C /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -366,6 +380,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				964A33761C6A491B0085D16C /* FoundationExtensions.swift in Sources */,
+				964A33771C6A49C70085D16C /* FileOperations.swift in Sources */,
 				967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,11 +517,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/Mac";
 				INFOPLIST_FILE = "swift-expressTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-expressTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/swift-express.app/Contents/MacOS/swift-express";
 			};
 			name = Debug;
 		};
@@ -514,11 +530,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/Mac";
 				INFOPLIST_FILE = "swift-expressTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-expressTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/swift-express.app/Contents/MacOS/swift-express";
 			};
 			name = Release;
 		};
