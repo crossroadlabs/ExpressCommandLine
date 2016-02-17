@@ -22,7 +22,7 @@ deploy:
   provider: script
   script:
   - echo tap: "$TAP_REPO_URL"
-  - echo dir: "$TAP_DIR"
+  #- echo dir: "$TAP_DIR"
   #- git clone "$TAP_REPO_URL" "$TAP_DIR"
   #- cd "$TAP_DIR"
   #- sed "s/version \"[\.0-9]*\"/version \"${VERSION}\"/g" Formula/swift-express.rb > Formula/swift-express.rb
