@@ -19,9 +19,10 @@ script:
 notifications:
   email: false
 deploy:
-  provider: script
-  script:
-  - echo tap: "$TAP_REPO_URL"
+  #provider: script
+  #script:
+  after_deploy:
+  #- echo tap: "$TAP_REPO_URL"
   #- echo dir: "$TAP_DIR"
   #- git clone "$TAP_REPO_URL" "$TAP_DIR"
   #- cd "$TAP_DIR"
