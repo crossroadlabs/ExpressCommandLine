@@ -22,6 +22,8 @@ deploy:
   provider: script
   script: echo "Will deploy now"
   after_deploy:
+  - echo test message
+  - echo test message2
   - echo tap: "$TAP_REPO_URL"
   - echo dir: "$TAP_DIR"
   - git clone "$TAP_REPO_URL" "$TAP_DIR"
