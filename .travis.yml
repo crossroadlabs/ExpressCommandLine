@@ -20,7 +20,7 @@ notifications:
   email: false
 deploy:
   provider: script
-  #script:
+  script: echo "Will deploy now"
   after_deploy:
   - echo tap: "$TAP_REPO_URL"
   - echo dir: "$TAP_DIR"
