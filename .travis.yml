@@ -12,3 +12,4 @@ script:
   - xcodebuild test -project $PROJECT_NAME.xcodeproj -scheme $PROJECT_NAME
 notifications:
   email: false
+
