@@ -21,8 +21,9 @@ notifications:
   email: false
 deploy:
   provider: script
-  script: env
-#echo "Will deploy now"
+  script:
+  - env
+  - echo "Will deploy now"
   after_deploy:
   - echo test message
   - echo test message2
