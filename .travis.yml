@@ -8,14 +8,14 @@ env:
   - secure: Zcf2Nzd/HL7brcqMk/fTdaPGgyls5l7DDPk2ReNxrvecUpzKF0HeAlxf6XSPJ0Tm5LZZMFPI/6NqV1SMh+Somuk/cCGwqS62WbPJ2OAlfbNEeW4UOepvqJBhIB5t1BmJLtmJxuJFCXpKPg8LFkDIYQGPItQ7RNvgpb1AuZlL29AZkVGwO8FuB915gAoFHC/NFWcmt9Vy5JHxByIZcwmLoAw9csiQz4RK7jR7y+P5Q2Ka7JnXfg0bYIs7z5FvJ+pVGy43ud3kHCpV/iOCxM4ZafyqUVqdz9V9Qilmsv3NjWIJb9d8+czHENg9lYi79SMlrZNPGu6J/Fqk97Pqz5jNRTxe+bbkAfRZIqu1xgns0xOhI9KyTTefWDqXgwhp4bCToK7GP8JOmeGyzwxUvPSB1+msHRdjBbeTLInTZ8xFtQ+fF6UoJdpFlQ0QZHiHJlbTJOw1ie1zSql4wNTyQ+reFJ5JqtyQzWXPGi7SONh/qjjouvAjBZ/xlpIT9/4AzrD8gb8C6LqKba/IlOGt5SLBC64e6ZHpD4L8gEQOJaMwC8x0QooewagK2RL75A59DZ6HDhAuRSfCwwIdSUvikJEpnb4GqM9T2ZwRAcspN4COYH7Bao7dke3RiVhWfsdg+u5pmH/2Fnmfv8fiur3XjEk7s7zQ2+bSBluFF8zHAFNSFx8=
   - TAP_REPO_URL="https://dileping:${GH_TOKEN}@github.com/crossroadlabs/homebrew-tap.git"
 before_install:
-- brew update
-- brew unlink carthage
-- brew install carthage
-- brew link carthage
+#- brew update
+#- brew unlink carthage
+#- brew install carthage
+#- brew link carthage
 before_script:
-- carthage bootstrap --platform osx
+#- carthage bootstrap --platform osx
 script:
-- xcodebuild test -project $PROJECT_NAME.xcodeproj -scheme $PROJECT_NAME
+#- xcodebuild test -project $PROJECT_NAME.xcodeproj -scheme $PROJECT_NAME
 notifications:
   email: false
 deploy:
