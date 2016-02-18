@@ -9,4 +9,4 @@ git pull
 cat Formula/swift-express.rb
 cd $OLD_PWD
 rm -rf "$TAP_DIR"
-
+echo build done
