@@ -31,6 +31,8 @@ struct CopyDirectoryContents : Step {
     let dependsOn = [Step]()
     let excludeList:[Regex]
     
+    let alreadyExistsError = "CopyDirectoryContents: Output folder already exists."
+    
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["inputFolder"] == nil {
             throw SwiftExpressError.BadOptions(message: "CopyDirectoryContents: No inputFolder option.")
@@ -43,9 +45,9 @@ struct CopyDirectoryContents : Step {
             let inputFolder = params["inputFolder"]! as! String
             let outputFolder = params["outputFolder"]! as! String
             
-            do {
-                try FileManager.listDirectory(outputFolder)
-            } catch {
+            if FileManager.isDirectoryExists(outputFolder) || FileManager.isFileExists(outputFolder) {
+                throw SwiftExpressError.BadOptions(message: alreadyExistsError)
+            } else {
                 try FileManager.createDirectory(outputFolder, createIntermediate: true)
             }
         
@@ -64,16 +66,34 @@ struct CopyDirectoryContents : Step {
                 copiedItems.append(item)
             }
             return ["copiedItems": copiedItems, "outputFolder": outputFolder]
+        } catch let err as SwiftExpressError {
+            throw err
         } catch let err as NSError {
             throw SwiftExpressError.SomeNSError(error: err)
+        } catch {
+            throw SwiftExpressError.UnknownError(error: error)
         }
     }
     
     func cleanup(params: [String : Any], output: StepResponse) throws {
     }
     
-    func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
-        throw SwiftExpressError.SubtaskError(message: "Why callParams called in CopyDirectoryContents?")
+    func revert(params: [String : Any], output: [String : Any]?, error: SwiftExpressError?) {
+        switch error {
+        case .BadOptions(let message)?:
+            if message == alreadyExistsError {
+                return
+            }
+            fallthrough
+        default:
+            if let outputFolder = params["outputFolder"] as? String {
+                do {
+                    try FileManager.removeItem(outputFolder)
+                } catch {
+                    print("CopyDirectoryContents: Can't remove output folder on revert \(outputFolder)")
+                }
+            }
+        }
     }
     
     init(excludeList: [String]? = nil) {

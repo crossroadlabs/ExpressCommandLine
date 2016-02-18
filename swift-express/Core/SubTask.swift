@@ -19,19 +19,38 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftTryCatch
+
+extension dispatch_data_t {
+    func toArray() -> [UInt8] {
+        var bytes: UnsafePointer<Void> = nil
+        var bytesLength:Int = 0
+        guard dispatch_data_create_map(self, &bytes, &bytesLength) != nil else {
+            return [UInt8]()
+        }
+        return Array<UInt8>(UnsafeMutableBufferPointer<UInt8>(start: UnsafeMutablePointer<UInt8>(bytes), count: bytesLength))
+    }
+}
 
 class SubTask {
     private let task: String
     private let arguments: [String]
     private let readCb: ((SubTask, [UInt8], Bool) -> Bool)?
     private let finishCb: ((SubTask, Int32) -> ())?
-    private let env:[String:String]?
-    private var finished:Bool
+    private var env:[String:String]?
+    private let workingDirectory: String?
     
     private let nTask : NSTask
-    private let queue : dispatch_queue_t?
     
-    init(task: String, arguments: [String]?, environment:[String:String]?, readCallback: ((task: SubTask, data:[UInt8], isError: Bool) -> Bool)?, finishCallback: ((task:SubTask, status:Int32) -> ())?) {
+    /// A GCD group which to wait completion
+    private static let group = dispatch_group_create()
+    
+    /// wait for all task termination
+    static func waitForAllTaskTermination() {
+        dispatch_group_wait(SubTask.group, DISPATCH_TIME_FOREVER)
+    }
+    
+    init(task: String, arguments: [String]?, workingDirectory: String?, environment:[String:String]?, readCallback: ((task: SubTask, data:[UInt8], isError: Bool) -> Bool)?, finishCallback: ((task:SubTask, status:Int32) -> ())?) {
         self.task = task
         if arguments != nil {
             self.arguments = arguments!
@@ -40,68 +59,69 @@ class SubTask {
         }
         self.readCb = readCallback
         self.finishCb = finishCallback
-        self.env = environment
-        finished = false
-        nTask = NSTask()
-        if self.readCb != nil {
-            queue = dispatch_queue_create(task, DISPATCH_QUEUE_SERIAL)
+        if environment == nil {
+            self.env = Process.environment
+            self.env!["NSUnbufferedIO"] = "YES"
         } else {
-            queue = nil
+            self.env = environment
+            self.env!["NSUnbufferedIO"] = "YES"
         }
+        self.workingDirectory = workingDirectory
+        
+        nTask = NSTask()
     }
     
-    func run() {
+    func run() throws {
         nTask.launchPath = task
         nTask.arguments = arguments
         if env != nil {
             nTask.environment = env
         }
+        if workingDirectory != nil {
+            nTask.currentDirectoryPath = workingDirectory!
+        }
         
         nTask.standardInput = NSPipe()
+        nTask.standardOutput = NSPipe()
+        nTask.standardError = NSPipe()
         
-        let readingPipe = NSPipe()
-        nTask.standardOutput = readingPipe
-        
-        let errorPipe = NSPipe()
-        nTask.standardError = errorPipe
-        
+        dispatch_group_enter(SubTask.group)
         nTask.terminationHandler = { (fTask : NSTask) -> Void in
-            self.finished = true
             if self.finishCb != nil {
                 self.finishCb!(self, fTask.terminationStatus)
             }
+            dispatch_group_leave(SubTask.group)
         }
-        nTask.launch()
         
         if readCb != nil {
-            dispatch_sync(queue!, { () -> Void in
-                let inputIo = dispatch_io_create(DISPATCH_IO_STREAM, readingPipe.fileHandleForReading.fileDescriptor, self.queue!, { (result) -> Void in })
-                dispatch_io_read(inputIo, 0, Int.max, self.queue!, { (end, data, error) -> Void in
-                    if dispatch_data_get_size(data) > 0 {
-                        if !self.readCb!(self, (data as! NSData).toArray(), false) {
-                            self.terminate()
-                        }
+            nTask.standardOutput!.fileHandleForReading.readabilityHandler = { fh in
+                let data = fh.availableData
+                if data.length != 0 {
+                    if !self.readCb!(self, data.toArray(), false) {
+                        self.terminate()
                     }
-                })
-                
-                let errorIo = dispatch_io_create(DISPATCH_IO_STREAM, errorPipe.fileHandleForReading.fileDescriptor, self.queue!, { (result) -> Void in })
-                dispatch_io_read(errorIo, 0, Int.max, self.queue!, { (end, data, error) -> Void in
-                    if dispatch_data_get_size(data) > 0 {
-                        if !self.readCb!(self, (data as! NSData).toArray(), true) {
-                            self.terminate()
-                        }
+                }
+            }
+            nTask.standardError!.fileHandleForReading.readabilityHandler = { fh in
+                let data = fh.availableData
+                if data.length != 0 {
+                    if !self.readCb!(self, data.toArray(), true) {
+                        self.terminate()
                     }
-                })
-
-            })
+                }
+            }
         }
         
-    }
-    
-    func wait() -> Int32 {
-        nTask.waitUntilExit()
-        finished = true
-        return nTask.terminationStatus
+        var exception:NSException? = nil
+        
+        SwiftTryCatch.tryBlock({ () -> Void in
+            self.nTask.launch()
+        }, catchBlock: { (exc) -> Void in
+            exception = exc
+        }, finallyBlock: {})
+        if exception != nil {
+            throw SwiftExpressError.SubtaskError(message: "Task launch error: \(exception!)")
+        }
     }
     
     func writeData(data: [UInt8]) {
@@ -122,11 +142,6 @@ class SubTask {
     
     func interrupt() {
         nTask.interrupt()
-    }
-    
-    func runAndWait() -> Int32 {
-        run()
-        return wait()
     }
 }
 

@@ -48,7 +48,18 @@ struct CreateTempDirectory : Step {
         }
     }
     
-    func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
-        throw SwiftExpressError.SubtaskError(message: "Why callParams called in CreateTempDirectory?")
+    func revert(params: [String : Any], output: [String : Any]?, error: SwiftExpressError?) {
+        if let output = output {
+            if let dir = output["tempDirectory"] as? String {
+                if FileManager.isDirectoryExists(dir) {
+                    do {
+                        try FileManager.removeItem(dir)
+                    } catch {
+                        print("CreateTempDirectory: Can't remove directory \(error)")
+                    }
+                }
+                
+            }
+        }
     }
 }

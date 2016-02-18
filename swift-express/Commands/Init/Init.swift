@@ -34,10 +34,6 @@ struct InitStep : Step {
         // Nothing to do
     }
     
-    func revert(params: [String : Any], output: StepResponse, error: SwiftExpressError) {
-        print("Some critical error occured: \(error)");
-    }
-    
     func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
         switch forStep {
         case _ as CloneGitRepository:

@@ -27,6 +27,8 @@ import Foundation
 struct CloneGitRepository : Step {
     let dependsOn = [Step]()
     
+    let folderExistsMessage = "CloneGitRepository: Output Folder already exists"
+    
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         if params["repositoryURL"] == nil {
             throw SwiftExpressError.BadOptions(message: "CloneGitRepository: No repositoryURL option.")
@@ -39,6 +41,10 @@ struct CloneGitRepository : Step {
         let repositoryURL = params["repositoryURL"]! as! String
         let outputFolder = params["outputFolder"]! as! String
         
+//        if FileManager.isDirectoryExists(outputFolder) || FileManager.isFileExists(outputFolder) {
+//            throw SwiftExpressError.BadOptions(message: folderExistsMessage)
+//        }
+        
         try Git.cloneGitRepository(repositoryURL, toPath: outputFolder)
         
         return ["clonedFolder": outputFolder]
@@ -47,8 +53,23 @@ struct CloneGitRepository : Step {
     func cleanup(params:[String: Any], output: StepResponse) throws {
     }
     
-    func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
-        throw SwiftExpressError.SubtaskError(message: "Why callParams called in CloneGitRepository?")
+    func revert(params:[String: Any], output: [String: Any]?, error: SwiftExpressError?) {
+        switch error {
+        case .BadOptions(let message)?:
+            if message == folderExistsMessage {
+                return
+            }
+            fallthrough
+        default:
+            if let outputFolder = params["outputFolder"] as? String {
+                if FileManager.isDirectoryExists(outputFolder) {
+                    do {
+                        try FileManager.removeItem(outputFolder)
+                    } catch {
+                        print("CloneGitRepository: Can't remove output folder on revert. \(error)")
+                    }
+                }
+            }
+        }
     }
-    
 }
