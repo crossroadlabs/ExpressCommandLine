@@ -21,6 +21,7 @@ notifications:
   email: false
 deploy:
   provider: script
+  skip_cleanup: true
   script:
     - echo "Will deploy now"
     - env
