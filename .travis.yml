@@ -22,8 +22,8 @@ notifications:
 deploy:
   provider: script
   script:
-    - env
     - echo "Will deploy now"
+    - env
   after_deploy:
     - echo test message
     - echo test message2
