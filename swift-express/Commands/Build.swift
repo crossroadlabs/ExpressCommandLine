@@ -34,6 +34,15 @@ enum BuildType : Equatable, CustomStringConvertible {
             return "Release"
         }
     }
+    
+    var spmValue: String {
+        switch self {
+        case .Debug:
+            return "debug"
+        case .Release:
+            return "release"
+        }
+    }
 }
 
 func ==(lhs: BuildType, rhs: BuildType) -> Bool {

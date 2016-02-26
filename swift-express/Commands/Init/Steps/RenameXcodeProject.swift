@@ -26,7 +26,7 @@ import Regex
 //  workingFolder
 //  newProjectName
 //Output:
-//  projectPath - full path to new project
+//  oldProjectName
 struct RenameXcodeProject : Step {
     let dependsOn:[Step] = [FindXcodeProject()]
     
@@ -73,7 +73,7 @@ struct RenameXcodeProject : Step {
             try schFile.write(newSchFileContents.toArray())
         }
         
-        return [String:Any]()
+        return ["oldProjectName": projectName]
     }
     
     func cleanup(params: [String : Any], output: StepResponse) throws {
