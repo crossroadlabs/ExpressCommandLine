@@ -31,9 +31,11 @@ struct CarthageInstallLibs : Step {
     
     let platform = "Mac"
     let updateCommand: String
+    let force:Bool
     
-    init(updateCommand: String = "bootstrap") {
+    init(updateCommand: String = "bootstrap", force: Bool = true) {
         self.updateCommand = updateCommand
+        self.force = force
     }
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
@@ -41,6 +43,12 @@ struct CarthageInstallLibs : Step {
             throw SwiftExpressError.BadOptions(message: "CarthageInstallLibs: No workingFolder option.")
         }
         let workingFolder = params["workingFolder"]! as! String
+        
+        if !force && FileManager.isDirectoryExists(workingFolder.addPathComponent("Carthage").addPathComponent("Build")) {
+            //All ok. We already have build dependencies
+            return [String:Any]()
+        }
+        
         var result:Int32 = 0
         try SubTask(task: "/usr/local/bin/carthage", arguments: [updateCommand, "--platform", platform], workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {

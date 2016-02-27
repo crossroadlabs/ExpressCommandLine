@@ -23,7 +23,7 @@ import Result
 
 struct InitStep : Step {
     let dependsOn:[Step] = [CreateTempDirectory(), CloneGitRepository(),
-        CopyDirectoryContents(excludeList: ["^\\.git$", "^LICENSE$", "^NOTICE$", "^README.md$"]), RenameXcodeProject(), CarthageInstallLibs()]
+        CopyDirectoryContents(excludeList: ["^\\.git$", "^LICENSE$", "^NOTICE$", "^README.md$"]), RenameXcodeProject(), RenamePackageSwift()]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         // Nothing to do. All tasks done
@@ -45,6 +45,8 @@ struct InitStep : Step {
             return ["inputFolder": previousStepsOutput["clonedFolder"]!, "outputFolder": path]
         case _ as RenameXcodeProject:
             return ["workingFolder": previousStepsOutput["outputFolder"]!, "newProjectName": ownParams["name"]!]
+        case _ as RenamePackageSwift:
+            return ["workingFolder": previousStepsOutput["outputFolder"]!, "newProjectName": ownParams["name"]!, "projectName":previousStepsOutput["oldProjectName"]!]
         case _ as CarthageInstallLibs:
             return ["workingFolder": previousStepsOutput["outputFolder"]!]
         default:

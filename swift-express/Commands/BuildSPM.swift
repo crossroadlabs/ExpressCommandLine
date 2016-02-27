@@ -1,4 +1,4 @@
-//===--- Build.swift -----------------------------------------------------------===//
+//===--- BuildSPM.swift -------------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -18,44 +18,11 @@
 //
 //===---------------------------------------------------------------------------===//
 
-import Commandant
+import Foundation
 import Result
-import Regex
 
-enum BuildType : Equatable, CustomStringConvertible {
-    case Debug
-    case Release
-    
-    var description: String {
-        switch self {
-        case .Debug:
-            return "Debug"
-        case .Release:
-            return "Release"
-        }
-    }
-    
-    var spmValue: String {
-        switch self {
-        case .Debug:
-            return "debug"
-        case .Release:
-            return "release"
-        }
-    }
-}
-
-func ==(lhs: BuildType, rhs: BuildType) -> Bool {
-    switch (lhs, rhs) {
-    case (.Debug, .Debug), (.Release, .Release):
-        return true
-    default:
-        return false
-    }
-}
-
-struct BuildStep:Step {
-    let dependsOn:[Step] = [FindXcodeProject(), CarthageInstallLibs(updateCommand: "bootstrap", force: false)]
+struct BuildSPMStep:Step {
+    let dependsOn:[Step] = [BuildDepsSPM(force: false)]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         
@@ -69,15 +36,13 @@ struct BuildStep:Step {
         
         let path = params["path"]! as! String
         let buildType = params["buildType"]! as! BuildType
-        let name = combinedOutput["projectName"]! as! String
-        let file = combinedOutput["projectFileName"]! as! String
         
-        print("Building \(name) in \(buildType.description) mode...")
+        print("Building in \(buildType.description) mode with Swift Package Manager...")
         
         var result : Int32 = 0
         var resultString:String = ""
         
-        try SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", file, "-scheme", name, "-configuration", buildType.description, "build"], workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
+        try SubTask(task: "/usr/bin/env", arguments: ["swift", "build", "-c", buildType.spmValue], workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 if isError {
                     resultString +=  try data.toString()
@@ -85,7 +50,7 @@ struct BuildStep:Step {
             } catch {}
             return true
             }, finishCallback: { task, status in
-            result = status
+                result = status
         }).run()
         SubTask.waitForAllTaskTermination()
         if result != 0 {
@@ -101,7 +66,7 @@ struct BuildStep:Step {
         switch error {
         case .SubtaskError(_)?:
             if let path = params["path"] as? String {
-                let buildDir = path.addPathComponent("dist")
+                let buildDir = path.addPathComponent(".build")
                 if FileManager.isDirectoryExists(buildDir) {
                     let hiddenRe = "^\\.[^\\.]+".r!
                     do {
@@ -122,50 +87,20 @@ struct BuildStep:Step {
     
     func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
         if ownParams["path"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No path option.")
+            throw SwiftExpressError.BadOptions(message: "BuildSPM: No path option.")
         }
         return ["workingFolder": ownParams["path"]!]
     }
 }
 
-extension BuildType:ArgumentType {
-    static let name = "build-type"
-    static func fromString(string: String) -> BuildType? {
-        switch string {
-        case "debug":
-            return .Debug
-        case "release":
-            return .Release
-        default:
-            return nil
-        }
-    }
-}
-
-struct BuildCommand : StepCommand {
+struct BuildSPMCommand : StepCommand {
     typealias Options = BuildCommandOptions
     
-    let verb = "build"
-    let function = "build Express project"
-    let step: Step = BuildStep()
+    let verb = "build-spm"
+    let function = "build Express project with Swift Package Manager"
+    let step: Step = BuildSPMStep()
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
         return Result(["buildType": opts.buildType, "path": opts.path.standardizedPath()])
-    }
-}
-
-struct BuildCommandOptions : OptionsType {
-    let path: String
-    let buildType: BuildType
-    
-    
-    static func create(path: String)(buildType: BuildType) -> BuildCommandOptions {
-        return BuildCommandOptions(path: path, buildType: buildType)
-    }
-    
-    static func evaluate(m: CommandMode) -> Result<BuildCommandOptions, CommandantError<SwiftExpressError>> {
-        return create
-            <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Argument(defaultValue: .Debug, usage: "build type. debug or release")
     }
 }

@@ -32,8 +32,12 @@ func commandRegistry() -> CommandRegistry<SwiftExpressError> {
     
     //Commands
     registry.register(InitCommand())
+    registry.register(BuildDepsCommand())
     registry.register(BuildCommand())
     registry.register(RunCommand())
+    registry.register(BuildDepsSPMCommand())
+    registry.register(BuildSPMCommand())
+    registry.register(RunSPMCommand())
     registry.register(VersionCommand())
     
     let helpCommand = HelpCommand(registry: registry)
