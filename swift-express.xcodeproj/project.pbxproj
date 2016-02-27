@@ -11,10 +11,12 @@
 		963488831C5F9253000D152F /* CopyDirectoryContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488821C5F9253000D152F /* CopyDirectoryContents.swift */; };
 		963488871C5F981A000D152F /* FindXcodeProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488861C5F981A000D152F /* FindXcodeProject.swift */; };
 		963488891C5F9846000D152F /* RenameXcodeProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488881C5F9846000D152F /* RenameXcodeProject.swift */; };
-		9634888B1C5F9878000D152F /* CarthageInstallLibs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */; };
 		9634888C1C5FB183000D152F /* Regex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; };
 		9634888D1C5FB183000D152F /* Regex.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		963AC8341C5988DE00362B15 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963AC8331C5988DE00362B15 /* Random.swift */; };
+		963ED1C21C81D46D002351EE /* BuildDeps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ED1C11C81D46D002351EE /* BuildDeps.swift */; };
+		963ED1C41C81D564002351EE /* CarthageInstallLibs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ED1C31C81D564002351EE /* CarthageInstallLibs.swift */; };
+		963ED1C61C81DBDC002351EE /* BuildDepsSPM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ED1C51C81DBDC002351EE /* BuildDepsSPM.swift */; };
 		964A33761C6A491B0085D16C /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A3BCA1C63AAC400E4AFCC /* FoundationExtensions.swift */; };
 		964A33771C6A49C70085D16C /* FileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96860A5E1C5A893B006DBC55 /* FileOperations.swift */; };
 		964A33791C6A4A140085D16C /* Regex.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -88,8 +90,10 @@
 		963488841C5F9587000D152F /* Regex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Regex.framework; path = Carthage/Build/Mac/Regex.framework; sourceTree = "<group>"; };
 		963488861C5F981A000D152F /* FindXcodeProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindXcodeProject.swift; sourceTree = "<group>"; };
 		963488881C5F9846000D152F /* RenameXcodeProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameXcodeProject.swift; sourceTree = "<group>"; };
-		9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarthageInstallLibs.swift; sourceTree = "<group>"; };
 		963AC8331C5988DE00362B15 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
+		963ED1C11C81D46D002351EE /* BuildDeps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildDeps.swift; sourceTree = "<group>"; };
+		963ED1C31C81D564002351EE /* CarthageInstallLibs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarthageInstallLibs.swift; sourceTree = "<group>"; };
+		963ED1C51C81DBDC002351EE /* BuildDepsSPM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildDepsSPM.swift; sourceTree = "<group>"; };
 		966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloneGitRepository.swift; sourceTree = "<group>"; };
 		967383A11C5947BF002E27A3 /* swift-express.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-express.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		967383A61C5947C0002E27A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -224,9 +228,11 @@
 				967383DF1C596718002E27A3 /* Init */,
 				968A3BCD1C63AF5A00E4AFCC /* Build.swift */,
 				968A3BCF1C63AF7300E4AFCC /* Run.swift */,
-				969CFAFD1C6570670009A663 /* Version.swift */,
+				963ED1C11C81D46D002351EE /* BuildDeps.swift */,
 				96AB7D241C80FBED00F638F9 /* BuildSPM.swift */,
 				96AB7D261C80FD4800F638F9 /* RunSPM.swift */,
+				963ED1C51C81DBDC002351EE /* BuildDepsSPM.swift */,
+				969CFAFD1C6570670009A663 /* Version.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -245,7 +251,6 @@
 			children = (
 				966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */,
 				963488881C5F9846000D152F /* RenameXcodeProject.swift */,
-				9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */,
 				96AB7D221C80E27700F638F9 /* RenamePackageSwift.swift */,
 			);
 			path = Steps;
@@ -254,6 +259,7 @@
 		968A3BCC1C63AC5500E4AFCC /* Steps */ = {
 			isa = PBXGroup;
 			children = (
+				963ED1C31C81D564002351EE /* CarthageInstallLibs.swift */,
 				967383E91C598591002E27A3 /* CreateTempDirectory.swift */,
 				963488821C5F9253000D152F /* CopyDirectoryContents.swift */,
 				963488861C5F981A000D152F /* FindXcodeProject.swift */,
@@ -369,9 +375,9 @@
 				963488871C5F981A000D152F /* FindXcodeProject.swift in Sources */,
 				967383E11C59672F002E27A3 /* Init.swift in Sources */,
 				969CFAFE1C6570670009A663 /* Version.swift in Sources */,
+				963ED1C61C81DBDC002351EE /* BuildDepsSPM.swift in Sources */,
 				96AB7D231C80E27700F638F9 /* RenamePackageSwift.swift in Sources */,
 				96860A5F1C5A893B006DBC55 /* FileOperations.swift in Sources */,
-				9634888B1C5F9878000D152F /* CarthageInstallLibs.swift in Sources */,
 				967383E31C5979D1002E27A3 /* Step.swift in Sources */,
 				96AB7D251C80FBED00F638F9 /* BuildSPM.swift in Sources */,
 				96AB7D271C80FD4800F638F9 /* RunSPM.swift in Sources */,
@@ -383,7 +389,9 @@
 				968A3BCB1C63AAC400E4AFCC /* FoundationExtensions.swift in Sources */,
 				963488891C5F9846000D152F /* RenameXcodeProject.swift in Sources */,
 				967383E51C597E66002E27A3 /* StepCommand.swift in Sources */,
+				963ED1C41C81D564002351EE /* CarthageInstallLibs.swift in Sources */,
 				968A3BCE1C63AF5A00E4AFCC /* Build.swift in Sources */,
+				963ED1C21C81D46D002351EE /* BuildDeps.swift in Sources */,
 				963AC8341C5988DE00362B15 /* Random.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

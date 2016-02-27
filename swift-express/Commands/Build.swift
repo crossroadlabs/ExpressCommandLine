@@ -55,7 +55,7 @@ func ==(lhs: BuildType, rhs: BuildType) -> Bool {
 }
 
 struct BuildStep:Step {
-    let dependsOn:[Step] = [FindXcodeProject()]
+    let dependsOn:[Step] = [FindXcodeProject(), CarthageInstallLibs(updateCommand: "bootstrap", force: false)]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         
