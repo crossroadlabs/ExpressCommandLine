@@ -20,6 +20,18 @@ swift-express init YourProject
 * `--template git-url` allows specifying the project template git URL. Defaults to `https://github.com/crossroadlabs/ExpressTemplate.git`.
 * `--path path/to/dir` specifies where to create the application. Defaults to the current directory.
 
+### Install project dependencies
+
+This one for downloading project dependencies (frameworks and libs)
+
+```sh
+swift-express build-deps
+```
+
+Optional parameters:
+
+* `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
+
 ### Build project
 
 Command line build interface for [Swift Express](https://github.com/crossroadlabs/Express) projects.
@@ -68,12 +80,29 @@ This one prints short documentation for all the commands available.
 swift-express help
 ```
 
+### Swift Package Manager commands
+
+These commands work with Swift Package Manager. They are analogs for standard commands, but with SPM as package manager.
+
+```sh
+swift-express build-deps-spm
+```
+```sh
+swift-express build-spm
+```
+```sh
+swift-express run-spm
+```
+
+Parameters are the same as in standard commands
+
 ## Installation
 
 Please refer to the main Swift Express article here: [https://github.com/crossroadlabs/Express](https://github.com/crossroadlabs/Express)
 
 ## Changelog
 
+* v0.2: Swift Package Manager support
 * v0.1: Initial Public Release
 
 ## Contributing
