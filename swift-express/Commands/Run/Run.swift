@@ -1,4 +1,4 @@
-//===--- RunSPM.swift ----------------------------------------------------------===//
+//===--- Run.swift -----------------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -18,11 +18,12 @@
 //
 //===---------------------------------------------------------------------------===//
 
-import Foundation
+import Commandant
 import Result
 
-struct RunSPMStep : Step {
-    let dependsOn:[Step] = [BuildSPMStep()]
+
+struct RunStep : Step {
+    let dependsOn:[Step] = [BuildStep()]
     
     static var task: SubTask? = nil
     
@@ -37,11 +38,12 @@ struct RunSPMStep : Step {
         
         let path = params["path"]! as! String
         let buildType = params["buildType"]! as! BuildType
+        let name = combinedOutput["projectName"]! as! String
         
-        print ("Running app...")
+        print ("Running \(name)...")
         
-        let binaryPath = path.addPathComponent(".build").addPathComponent(buildType.spmValue).addPathComponent("app")
-        
+        let binaryPath = path.addPathComponent("dist").addPathComponent(buildType.description).addPathComponent("\(name).app").addPathComponent("Contents").addPathComponent("MacOS").addPathComponent(name)
+
         RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
@@ -73,12 +75,18 @@ struct RunSPMStep : Step {
     }
 }
 
-struct RunSPMCommand : StepCommand {
+struct RunCommand : StepCommand {
     typealias Options = BuildCommandOptions
     
-    let verb = "run-spm"
-    let function = "run Express project with Swift Package Manager"
-    let step: Step = RunSPMStep()
+    let verb = "run"
+    let function = "run Express project"
+    
+    func step(opts: Options) -> Step {
+        if opts.spm || !opts.carthage {
+            return RunSPMStep()
+        }
+        return RunStep()
+    }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
         return Result(["buildType": opts.buildType, "path": opts.path.standardizedPath()])

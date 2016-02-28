@@ -60,10 +60,9 @@ struct InitCommand: StepCommand {
     
     let verb = "init"
     let function = "Creates new Express application project"
-    let step: Step
     
-    init() {
-        self.step = InitStep()
+    func step(opts: Options) -> Step {
+        return InitStep()
     }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {

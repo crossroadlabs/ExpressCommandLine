@@ -1,4 +1,4 @@
-//===--- Run.swift -----------------------------------------------------------===//
+//===--- RunSPM.swift ----------------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -18,12 +18,11 @@
 //
 //===---------------------------------------------------------------------------===//
 
-import Commandant
+import Foundation
 import Result
 
-
-struct RunStep : Step {
-    let dependsOn:[Step] = [BuildStep()]
+struct RunSPMStep : Step {
+    let dependsOn:[Step] = [BuildSPMStep()]
     
     static var task: SubTask? = nil
     
@@ -38,12 +37,11 @@ struct RunStep : Step {
         
         let path = params["path"]! as! String
         let buildType = params["buildType"]! as! BuildType
-        let name = combinedOutput["projectName"]! as! String
         
-        print ("Running \(name)...")
+        print ("Running app...")
         
-        let binaryPath = path.addPathComponent("dist").addPathComponent(buildType.description).addPathComponent("\(name).app").addPathComponent("Contents").addPathComponent("MacOS").addPathComponent(name)
-
+        let binaryPath = path.addPathComponent(".build").addPathComponent(buildType.spmValue).addPathComponent("app")
+        
         RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
@@ -72,17 +70,5 @@ struct RunStep : Step {
     
     func cleanup(params: [String : Any], output: StepResponse) throws {
         
-    }
-}
-
-struct RunCommand : StepCommand {
-    typealias Options = BuildCommandOptions
-    
-    let verb = "run"
-    let function = "run Express project"
-    let step: Step = RunStep()
-    
-    func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
-        return Result(["buildType": opts.buildType, "path": opts.path.standardizedPath()])
     }
 }
