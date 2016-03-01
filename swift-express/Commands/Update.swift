@@ -40,7 +40,7 @@ struct RemoveAndUpdateStep: Step {
 }
 
 struct UpdateCommand : StepCommand {
-    typealias Options = BootstrapCommandOptions
+    typealias Options = UpdateCommandOptions
     
     let verb = "update"
     let function = "update and build Express project dependencies"
@@ -50,12 +50,31 @@ struct UpdateCommand : StepCommand {
             return RemoveAndUpdateStep(dependsOn: [RemoveItemsStep(items: ["Packages"]), CheckoutSPM(force: true)])
         }
         if opts.fetch {
-            return RemoveAndUpdateStep(dependsOn: [RemoveItemsStep(items: ["Carthage", "Cartfile.resolved"]), CarthageInstallLibs(updateCommand: "checkout", force: true)])
+            return CarthageInstallLibs(updateCommand: "update", force: true, fetchOnly: true)
         }
-        return CarthageInstallLibs(updateCommand: "update", force: true)
+        return CarthageInstallLibs(updateCommand: "update", force: true, fetchOnly: false)
     }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
         return Result(["workingFolder": opts.path.standardizedPath()])
+    }
+}
+
+struct UpdateCommandOptions : OptionsType {
+    let path: String
+    let spm: Bool
+    let carthage: Bool
+    let fetch: Bool
+    
+    static func create(path: String)(spm: Bool)(carthage: Bool)(fetch: Bool) -> UpdateCommandOptions {
+        return UpdateCommandOptions(path: path, spm: spm, carthage: carthage, fetch: fetch)
+    }
+    
+    static func evaluate(m: CommandMode) -> Result<UpdateCommandOptions, CommandantError<SwiftExpressError>> {
+        return create
+            <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
+            <*> m <| Option(key: "spm", defaultValue: false, usage: "use SPM as package manager")
+            <*> m <| Option(key: "carthage", defaultValue: true, usage: "use Carthage as package manager")
+            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch")
     }
 }

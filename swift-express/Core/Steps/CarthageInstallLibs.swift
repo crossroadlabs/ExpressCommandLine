@@ -32,10 +32,12 @@ struct CarthageInstallLibs : Step {
     let platform = "Mac"
     let updateCommand: String
     let force:Bool
+    let fetchOnly: Bool
     
-    init(updateCommand: String = "bootstrap", force: Bool = true) {
+    init(updateCommand: String = "bootstrap", force: Bool = true, fetchOnly: Bool = false) {
         self.updateCommand = updateCommand
         self.force = force
+        self.fetchOnly = fetchOnly
     }
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
@@ -50,7 +52,12 @@ struct CarthageInstallLibs : Step {
         }
         
         var result:Int32 = 0
-        try SubTask(task: "/usr/local/bin/carthage", arguments: [updateCommand, "--platform", platform], workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
+        var args = [updateCommand, "--platform", platform]
+        if fetchOnly {
+            args.insert("--no-build", atIndex: 1)
+        }
+        
+        try SubTask(task: "/usr/local/bin/carthage", arguments: args, workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
             do {
                 print(try data.toString(), terminator:"")
             } catch {}

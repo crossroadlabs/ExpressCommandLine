@@ -99,8 +99,11 @@ struct BootstrapCommand : StepCommand {
         if opts.spm || !opts.carthage {
             return CheckoutSPM(force: true)
         }
+        if opts.noRefetch {
+            return CarthageInstallLibs(updateCommand: "build", force: true)
+        }
         if opts.fetch {
-            return CarthageInstallLibs(updateCommand: "checkout", force: true)
+            return CarthageInstallLibs(updateCommand: "bootstrap", force: true, fetchOnly: true)
         }
         return CarthageInstallLibs(updateCommand: "bootstrap", force: true)
     }
@@ -115,9 +118,10 @@ struct BootstrapCommandOptions : OptionsType {
     let spm: Bool
     let carthage: Bool
     let fetch: Bool
+    let noRefetch: Bool
     
-    static func create(path: String)(spm: Bool)(carthage: Bool)(fetch: Bool) -> BootstrapCommandOptions {
-        return BootstrapCommandOptions(path: path, spm: spm, carthage: carthage, fetch: fetch)
+    static func create(path: String)(spm: Bool)(carthage: Bool)(fetch: Bool)(noRefetch: Bool) -> BootstrapCommandOptions {
+        return BootstrapCommandOptions(path: path, spm: spm, carthage: carthage, fetch: fetch, noRefetch: noRefetch)
     }
     
     static func evaluate(m: CommandMode) -> Result<BootstrapCommandOptions, CommandantError<SwiftExpressError>> {
@@ -125,6 +129,7 @@ struct BootstrapCommandOptions : OptionsType {
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
             <*> m <| Option(key: "spm", defaultValue: false, usage: "use SPM as package manager")
             <*> m <| Option(key: "carthage", defaultValue: true, usage: "use Carthage as package manager")
-            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch")
+            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch. Always true for SPM (ignored if --no-fetch presents)")
+            <*> m <| Option(key: "no-refetch", defaultValue: false, usage: "build without fetch. Always false for SPM.")
     }
 }
