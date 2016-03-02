@@ -36,7 +36,7 @@ struct CheckoutSPM : Step {
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         guard let workingFolder = params["workingFolder"] as! String? else {
-            throw SwiftExpressError.BadOptions(message: "UpdateSPM: No workingFolder option.")
+            throw SwiftExpressError.BadOptions(message: "CheckoutSPM: No workingFolder option.")
         }
         
         let pkgFolder = workingFolder.addPathComponent("Packages")
@@ -56,7 +56,7 @@ struct CheckoutSPM : Step {
         }).run()
         SubTask.waitForAllTaskTermination()
         if result != 0 {
-            throw SwiftExpressError.SubtaskError(message: "UpdateSPM: package fetch failed")
+            throw SwiftExpressError.SubtaskError(message: "CheckoutSPM: package fetch failed")
         }
         
         return [String:Any]()
@@ -64,7 +64,7 @@ struct CheckoutSPM : Step {
     
     func cleanup(params:[String: Any], output: StepResponse) throws {
         guard let workingFolder = params["workingFolder"] as! String? else {
-            throw SwiftExpressError.BadOptions(message: "UpdateSPM: No workingFolder option.")
+            throw SwiftExpressError.BadOptions(message: "CheckoutSPM: No workingFolder option.")
         }
         let pkgFolder = workingFolder.addPathComponent("Packages")
         for pkg in try FileManager.listDirectory(pkgFolder) {
@@ -83,7 +83,7 @@ struct CheckoutSPM : Step {
                     try FileManager.removeItem(pkgFolder)
                 }
             } catch {
-                print("Can't revert UpdateSPM: \(error)")
+                print("Can't revert CheckoutSPM: \(error)")
             }
         }
     }

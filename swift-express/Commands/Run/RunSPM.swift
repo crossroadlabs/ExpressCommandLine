@@ -21,22 +21,27 @@
 import Foundation
 import Result
 
+func + <K,V> (left: Dictionary<K,V>, right: Dictionary<K,V>?) -> Dictionary<K,V> {
+    guard let right = right else { return left }
+    return left.reduce(right) {
+        var new = $0 as [K:V]
+        new.updateValue($1.1, forKey: $1.0)
+        return new
+    }
+}
+
 struct RunSPMStep : Step {
     let dependsOn:[Step] = [BuildSPMStep()]
     
     static var task: SubTask? = nil
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["path"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No path option.")
+        guard let path = params["path"] as! String? else {
+            throw SwiftExpressError.BadOptions(message: "RunSPM: No path option.")
         }
-        
-        if params["buildType"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No buildType option.")
+        guard let buildType = params["buildType"] as! BuildType? else {
+            throw SwiftExpressError.BadOptions(message: "RunSPM: No buildType option.")
         }
-        
-        let path = params["path"]! as! String
-        let buildType = params["buildType"]! as! BuildType
         
         print ("Running app...")
         
@@ -70,5 +75,9 @@ struct RunSPMStep : Step {
     
     func cleanup(params: [String : Any], output: StepResponse) throws {
         
+    }
+    
+    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
+        return ownParams + ["force": false]
     }
 }
