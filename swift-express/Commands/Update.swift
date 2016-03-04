@@ -75,6 +75,6 @@ struct UpdateCommandOptions : OptionsType {
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
             <*> m <| Option(key: "spm", defaultValue: false, usage: "use SPM as package manager")
             <*> m <| Option(key: "carthage", defaultValue: true, usage: "use Carthage as package manager")
-            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch")
+            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch. Always true for SPM")
     }
 }
