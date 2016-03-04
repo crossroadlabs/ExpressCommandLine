@@ -75,20 +75,12 @@ extension Int32 {
 
 extension UInt {
     static func random(lower: UInt = min, upper: UInt = max) -> UInt {
-        switch (__WORDSIZE) {
-        case 32: return UInt(UInt32.random(UInt32(lower), upper: UInt32(upper)))
-        case 64: return UInt(UInt64.random(UInt64(lower), upper: UInt64(upper)))
-        default: return lower
-        }
+        return UInt(UInt64.random(UInt64(lower), upper: UInt64(upper)))
     }
 }
 
 extension Int {
     static func random(lower: Int = min, upper: Int = max) -> Int {
-        switch (__WORDSIZE) {
-        case 32: return Int(Int32.random(Int32(lower), upper: Int32(upper)))
-        case 64: return Int(Int64.random(Int64(lower), upper: Int64(upper)))
-        default: return lower
-        }
+        return Int(Int64.random(Int64(lower), upper: Int64(upper)))
     }
 }

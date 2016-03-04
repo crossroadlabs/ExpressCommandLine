@@ -23,7 +23,7 @@
 		964A33791C6A4A140085D16C /* Regex.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		966C941D1C5A35C800A80D20 /* CloneGitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */; };
 		967383A71C5947C0002E27A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 967383A61C5947C0002E27A3 /* Assets.xcassets */; };
-		967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383B41C5947C0002E27A3 /* swift_expressTests.swift */; };
+		967383B51C5947C0002E27A3 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383B41C5947C0002E27A3 /* Tests.swift */; };
 		967383C11C5948F4002E27A3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383C01C5948F4002E27A3 /* main.swift */; };
 		967383DE1C5963BD002E27A3 /* SwiftExpress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383DD1C5963BD002E27A3 /* SwiftExpress.swift */; };
 		967383E11C59672F002E27A3 /* Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E01C59672F002E27A3 /* Init.swift */; };
@@ -101,7 +101,7 @@
 		967383A61C5947C0002E27A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		967383AB1C5947C0002E27A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		967383B01C5947C0002E27A3 /* swift-expressTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-expressTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		967383B41C5947C0002E27A3 /* swift_expressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_expressTests.swift; sourceTree = "<group>"; };
+		967383B41C5947C0002E27A3 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		967383B61C5947C0002E27A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		967383BF1C5947E6002E27A3 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		967383C01C5948F4002E27A3 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -199,10 +199,11 @@
 		967383B31C5947C0002E27A3 /* swift-expressTests */ = {
 			isa = PBXGroup;
 			children = (
-				967383B41C5947C0002E27A3 /* swift_expressTests.swift */,
+				967383B41C5947C0002E27A3 /* Tests.swift */,
 				967383B61C5947C0002E27A3 /* Info.plist */,
 			);
-			path = "swift-expressTests";
+			name = "swift-expressTests";
+			path = "Tests/swift-express";
 			sourceTree = SOURCE_ROOT;
 		};
 		967383C21C594916002E27A3 /* Frameworks */ = {
@@ -422,7 +423,7 @@
 			files = (
 				964A33761C6A491B0085D16C /* FoundationExtensions.swift in Sources */,
 				964A33771C6A49C70085D16C /* FileOperations.swift in Sources */,
-				967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */,
+				967383B51C5947C0002E27A3 /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -558,7 +559,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/Mac";
-				INFOPLIST_FILE = "swift-expressTests/Info.plist";
+				INFOPLIST_FILE = "Tests/swift-express/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-expressTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -571,7 +572,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/Mac";
-				INFOPLIST_FILE = "swift-expressTests/Info.plist";
+				INFOPLIST_FILE = "Tests/swift-express/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-expressTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

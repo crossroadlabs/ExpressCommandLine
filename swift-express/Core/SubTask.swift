@@ -35,37 +35,24 @@ extension dispatch_data_t {
 class SubTask {
     private let task: String
     private let arguments: [String]
-    private let readCb: ((SubTask, [UInt8], Bool) -> Bool)?
+    private let useAppOutput: Bool
     private let finishCb: ((SubTask, Int32) -> ())?
     private var env:[String:String]?
     private let workingDirectory: String?
     
     private let nTask : NSTask
     
-    /// A GCD group which to wait completion
-    private static let group = dispatch_group_create()
-    
-    /// wait for all task termination
-    static func waitForAllTaskTermination() {
-        dispatch_group_wait(SubTask.group, DISPATCH_TIME_FOREVER)
-    }
-    
-    init(task: String, arguments: [String]?, workingDirectory: String?, environment:[String:String]?, readCallback: ((task: SubTask, data:[UInt8], isError: Bool) -> Bool)?, finishCallback: ((task:SubTask, status:Int32) -> ())?) {
+    init(task: String, arguments: [String]? = nil, workingDirectory: String? = nil, environment:[String:String]? = nil, useAppOutput: Bool = false, finishCallback: ((task:SubTask, status:Int32) -> ())? = nil) {
         self.task = task
         if arguments != nil {
             self.arguments = arguments!
         } else {
             self.arguments = [String]()
         }
-        self.readCb = readCallback
+        self.useAppOutput = useAppOutput
         self.finishCb = finishCallback
-        if environment == nil {
-            self.env = Process.environment
-            self.env!["NSUnbufferedIO"] = "YES"
-        } else {
-            self.env = environment
-            self.env!["NSUnbufferedIO"] = "YES"
-        }
+       
+        self.env = environment
         self.workingDirectory = workingDirectory
         
         nTask = NSTask()
@@ -82,35 +69,22 @@ class SubTask {
         }
         
         nTask.standardInput = NSPipe()
-        nTask.standardOutput = NSPipe()
-        nTask.standardError = NSPipe()
         
-        dispatch_group_enter(SubTask.group)
+        
         nTask.terminationHandler = { (fTask : NSTask) -> Void in
             if self.finishCb != nil {
                 self.finishCb!(self, fTask.terminationStatus)
             }
-            dispatch_group_leave(SubTask.group)
         }
         
-        if readCb != nil {
-            nTask.standardOutput!.fileHandleForReading.readabilityHandler = { fh in
-                let data = fh.availableData
-                if data.length != 0 {
-                    if !self.readCb!(self, data.toArray(), false) {
-                        self.terminate()
-                    }
-                }
-            }
-            nTask.standardError!.fileHandleForReading.readabilityHandler = { fh in
-                let data = fh.availableData
-                if data.length != 0 {
-                    if !self.readCb!(self, data.toArray(), true) {
-                        self.terminate()
-                    }
-                }
-            }
+        if useAppOutput {
+            nTask.standardOutput = NSFileHandle.fileHandleWithStandardOutput()
+            nTask.standardError = NSFileHandle.fileHandleWithStandardError()
+        } else {
+            nTask.standardOutput = NSPipe()
+            nTask.standardError = NSPipe()
         }
+        
         
         var exception:NSException? = nil
         
@@ -124,16 +98,28 @@ class SubTask {
         }
     }
     
+    func runAndWait() throws -> Int32 {
+        try run()
+        nTask.waitUntilExit()
+        return nTask.terminationStatus
+    }
+    
     func writeData(data: [UInt8]) {
         (nTask.standardInput! as! NSPipe).fileHandleForWriting.writeData(data.toData())
     }
     
     func readData() -> [UInt8] {
-        return (nTask.standardOutput! as! NSPipe).fileHandleForReading.readDataToEndOfFile().toArray()
+        if !useAppOutput {
+            return (nTask.standardOutput! as! NSPipe).fileHandleForReading.readDataToEndOfFile().toArray()
+        }
+        return []
     }
     
     func readErrorData() -> [UInt8] {
-        return (nTask.standardError! as! NSPipe).fileHandleForReading.readDataToEndOfFile().toArray()
+        if !useAppOutput {
+            return (nTask.standardError! as! NSPipe).fileHandleForReading.readDataToEndOfFile().toArray()
+        }
+        return []
     }
     
     func terminate() {
@@ -142,14 +128,6 @@ class SubTask {
     
     func interrupt() {
         nTask.interrupt()
-    }
-}
-
-extension Process {
-    static var environment:[String:String] {
-        get {
-            return NSProcessInfo.processInfo().environment
-        }
     }
 }
 

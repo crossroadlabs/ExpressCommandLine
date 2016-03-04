@@ -51,23 +51,15 @@ struct CarthageInstallLibs : Step {
             return [String:Any]()
         }
         
-        var result:Int32 = 0
+        
         var args = [updateCommand, "--platform", platform]
         if fetchOnly {
             args.insert("--no-build", atIndex: 1)
         }
         
-        try SubTask(task: "/usr/local/bin/carthage", arguments: args, workingDirectory: workingFolder, environment: nil, readCallback: { (task, data, isError) -> Bool in
-            do {
-                print(try data.toString(), terminator:"")
-            } catch {}
-            return true
-            }, finishCallback: { task, status in
-                result = status
-        }).run()
-        SubTask.waitForAllTaskTermination()
+        let result = try SubTask(task: "/usr/local/bin/carthage", arguments: args, workingDirectory: workingFolder, environment: nil, useAppOutput: true).runAndWait()
         if result != 0 {
-            throw SwiftExpressError.SubtaskError(message: "CarthageInstallLibs: bootstrap failed")
+            throw SwiftExpressError.SubtaskError(message: "CarthageInstallLibs: bootstrap failed. Exit code \(result)")
         }
         return [String:Any]()
     }

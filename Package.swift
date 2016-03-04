@@ -1,4 +1,4 @@
-//===--- Git.swift -----------------------------------------------------===//
+//===--- Package.swift ----------------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -16,15 +16,16 @@
 //You should have received a copy of the GNU General Public License
 //along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
 //
-//===-------------------------------------------------------------------===//
+//===---------------------------------------------------------------------------===//
 
-import Foundation
+import PackageDescription
 
-struct Git {
-    static func cloneGitRepository(fromURL: String, toPath: String) throws {
-        let result = try SubTask(task: "/usr/bin/env", arguments: ["git", "clone", fromURL, toPath], workingDirectory: nil, environment: nil, useAppOutput: true).runAndWait()
-        if result != 0 {
-            throw SwiftExpressError.SubtaskError(message: "git clone failed")
-        }
-    }
-}
+let package = Package(
+    name: "swift-express",
+    targets: [
+        Target(
+            name: "swift-express"
+        )
+    ],
+    dependencies: [.Package(url: "https://github.com/Carthage/Commandant.git", majorVersion: 0)]
+)

@@ -47,12 +47,7 @@ struct RunSPMStep : Step {
         
         let binaryPath = path.addPathComponent(".build").addPathComponent(buildType.spmValue).addPathComponent("app")
         
-        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
-            do {
-                print(try data.toString(), terminator:"")
-            } catch {}
-            return true
-            }, finishCallback: nil)
+        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true)
         
         trap_signal(.INT, action: { signal -> Void in
             if RunStep.task != nil {
@@ -67,8 +62,7 @@ struct RunSPMStep : Step {
             }
         })
         
-        try RunStep.task!.run()
-        SubTask.waitForAllTaskTermination()
+        try RunStep.task!.runAndWait()
         
         return [String:Any]()
     }
