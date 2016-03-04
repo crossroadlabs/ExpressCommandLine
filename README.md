@@ -25,11 +25,30 @@ swift-express init YourProject
 This one for downloading project dependencies (frameworks and libs)
 
 ```sh
-swift-express build-deps
+swift-express bootstrap
 ```
 
 Optional parameters:
 
+* `--spm` use Swift Package Manager instead of Carthage. Default is false. Always true on Linux.
+* `--carthage` use Carthage as package manager. Default is true. Always false on Linux.
+* `--fetch` fetch dependencies without building. Default is false. Always true for SPM.
+* `--no-refetch` build dependencies without fetching. Default is false. Always false for SPM. 
+* `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
+
+### Update project dependencies
+
+This one for updating already installed project dependencies (frameworks and libs)
+
+```sh
+swift-express update
+```
+
+Optional parameters:
+
+* `--spm` use Swift Package Manager instead of Carthage. Default is false. Always true on Linux.
+* `--carthage` use Carthage as package manager. Default is true. Always false on Linux.
+* `--fetch` fetch dependencies without building. Default is false. Always true for SPM.
 * `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
 
 ### Build project
@@ -50,6 +69,10 @@ Default configuration is `debug`
 
 Optional parameters:
 
+* `--spm` use Swift Package Manager as build tool. Default is false. Always true on Linux.
+* `--xcode` use Xcode as build tool. Default is true. Always false on Linux.
+* `--dispatch` build with Dispatch support. Default is false. Always true on OS X.
+* `--force` force rebuild. Default is false.
 * `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
 
 ### Run the app
@@ -70,6 +93,8 @@ Default configuration is `debug`
 
 Optional parameters:
 
+* `--spm` run app built by Swift Package Manager. Default is false. Always true on Linux.
+* `--xcode` run app built by Xcode. Default is true. Always false on Linux.
 * `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
 
 ### Print help
@@ -80,21 +105,11 @@ This one prints short documentation for all the commands available.
 swift-express help
 ```
 
-### Swift Package Manager commands
-
-These commands work with Swift Package Manager. They are analogs for standard commands, but with SPM as package manager.
+Also can print short documentation for command
 
 ```sh
-swift-express build-deps-spm
+swift-express help bootstrap
 ```
-```sh
-swift-express build-spm
-```
-```sh
-swift-express run-spm
-```
-
-Parameters are the same as in standard commands
 
 ## Installation
 
@@ -102,7 +117,7 @@ Please refer to the main Swift Express article here: [https://github.com/crossro
 
 ## Changelog
 
-* v0.2: Swift Package Manager support
+* v0.2: Swift Package Manager support.
 * v0.1: Initial Public Release
 
 ## Contributing
