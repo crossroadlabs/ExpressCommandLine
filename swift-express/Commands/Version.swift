@@ -20,6 +20,7 @@
 
 import Commandant
 import Result
+import Foundation
 
 struct VersionCommand: CommandType {
     let verb = "version"

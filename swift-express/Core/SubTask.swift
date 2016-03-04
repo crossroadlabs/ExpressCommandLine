@@ -19,18 +19,9 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import SwiftTryCatch
-
-extension dispatch_data_t {
-    func toArray() -> [UInt8] {
-        var bytes: UnsafePointer<Void> = nil
-        var bytesLength:Int = 0
-        guard dispatch_data_create_map(self, &bytes, &bytesLength) != nil else {
-            return [UInt8]()
-        }
-        return Array<UInt8>(UnsafeMutableBufferPointer<UInt8>(start: UnsafeMutablePointer<UInt8>(bytes), count: bytesLength))
-    }
-}
+#if !os(Linux)
+    import SwiftTryCatch
+#endif
 
 class SubTask {
     private let task: String
@@ -86,16 +77,20 @@ class SubTask {
         }
         
         
-        var exception:NSException? = nil
+        #if !os(Linux)
+            var exception:NSException? = nil
         
-        SwiftTryCatch.tryBlock({ () -> Void in
+            SwiftTryCatch.tryBlock({ () -> Void in
+                self.nTask.launch()
+            }, catchBlock: { (exc) -> Void in
+                exception = exc
+            }, finallyBlock: {})
+            if exception != nil {
+                throw SwiftExpressError.SubtaskError(message: "Task launch error: \(exception!)")
+            }
+        #else
             self.nTask.launch()
-        }, catchBlock: { (exc) -> Void in
-            exception = exc
-        }, finallyBlock: {})
-        if exception != nil {
-            throw SwiftExpressError.SubtaskError(message: "Task launch error: \(exception!)")
-        }
+        #endif
     }
     
     func runAndWait() throws -> Int32 {

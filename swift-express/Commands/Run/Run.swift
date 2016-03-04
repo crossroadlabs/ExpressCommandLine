@@ -20,6 +20,7 @@
 
 import Commandant
 import Result
+import Foundation
 
 
 struct RunStep : Step {
@@ -77,8 +78,14 @@ struct RunCommandOptions : OptionsType {
     let xcode: Bool
     let buildType: BuildType
     
-    static func create(path: String)(spm: Bool)(xcode: Bool)(buildType: BuildType) -> RunCommandOptions {
-        return RunCommandOptions(path: path, spm: spm, xcode: xcode, buildType: buildType)
+    static func create(path: String) -> (Bool -> (Bool -> (BuildType -> RunCommandOptions))) {
+        return { (spm: Bool) in
+            { (xcode: Bool) in
+                { (buildType: BuildType) in 
+                    RunCommandOptions(path: path, spm: spm, xcode: xcode, buildType: buildType)
+                }
+            }
+        }
     }
     
     static func evaluate(m: CommandMode) -> Result<RunCommandOptions, CommandantError<SwiftExpressError>> {

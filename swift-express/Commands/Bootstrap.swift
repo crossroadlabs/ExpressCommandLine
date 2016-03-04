@@ -20,6 +20,7 @@
 
 import Result
 import Commandant
+import Foundation
 
 // Install carthage dependencies.
 //Input:
@@ -111,8 +112,16 @@ struct BootstrapCommandOptions : OptionsType {
     let fetch: Bool
     let noRefetch: Bool
     
-    static func create(path: String)(spm: Bool)(carthage: Bool)(fetch: Bool)(noRefetch: Bool) -> BootstrapCommandOptions {
-        return BootstrapCommandOptions(path: path, spm: spm, carthage: carthage, fetch: fetch, noRefetch: noRefetch)
+    static func create(path: String) -> (Bool -> (Bool -> (Bool -> (Bool -> BootstrapCommandOptions)))) {
+        return { (spm: Bool) in 
+            { (carthage: Bool) in 
+                { (fetch: Bool) in 
+                    { (noRefetch: Bool) in
+                        BootstrapCommandOptions(path: path, spm: spm, carthage: carthage, fetch: fetch, noRefetch: noRefetch)
+                    }
+                }
+            }
+        }
     }
     
     static func evaluate(m: CommandMode) -> Result<BootstrapCommandOptions, CommandantError<SwiftExpressError>> {

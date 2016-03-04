@@ -20,6 +20,7 @@
 
 import Result
 import Commandant
+import Foundation
 
 struct RemoveAndUpdateStep: Step {
     var dependsOn: [Step]
@@ -66,8 +67,14 @@ struct UpdateCommandOptions : OptionsType {
     let carthage: Bool
     let fetch: Bool
     
-    static func create(path: String)(spm: Bool)(carthage: Bool)(fetch: Bool) -> UpdateCommandOptions {
-        return UpdateCommandOptions(path: path, spm: spm, carthage: carthage, fetch: fetch)
+    static func create(path: String) -> (Bool -> (Bool -> (Bool -> UpdateCommandOptions))) {
+        return { (spm: Bool) in 
+            { (carthage: Bool) in 
+                { (fetch: Bool) in
+                    UpdateCommandOptions(path: path, spm: spm, carthage: carthage, fetch: fetch)
+                }
+            }
+        }
     }
     
     static func evaluate(m: CommandMode) -> Result<UpdateCommandOptions, CommandantError<SwiftExpressError>> {

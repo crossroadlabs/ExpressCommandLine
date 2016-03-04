@@ -21,6 +21,7 @@
 import Commandant
 import Result
 import Regex
+import Foundation
 
 enum BuildType : Equatable, CustomStringConvertible {
     case Debug
@@ -169,8 +170,18 @@ struct BuildCommandOptions : OptionsType {
     let dispatch: Bool
     let buildType: BuildType
     
-    static func create(path: String)(spm: Bool)(xcode: Bool)(force: Bool)(dispatch: Bool)(buildType: BuildType) -> BuildCommandOptions {
-        return BuildCommandOptions(path: path, spm: spm, xcode: xcode, force: force, dispatch: dispatch, buildType: buildType)
+    static func create(path: String) -> (Bool -> (Bool -> (Bool -> (Bool -> (BuildType -> BuildCommandOptions))))) {
+        return { (spm: Bool) in 
+            { (xcode: Bool) in 
+                { (force: Bool) in
+                    { (dispatch: Bool) in 
+                        { (buildType: BuildType) in
+                            BuildCommandOptions(path: path, spm: spm, xcode: xcode, force: force, dispatch: dispatch, buildType: buildType)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     static func evaluate(m: CommandMode) -> Result<BuildCommandOptions, CommandantError<SwiftExpressError>> {

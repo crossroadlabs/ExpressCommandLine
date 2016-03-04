@@ -26,7 +26,7 @@ struct CreateTempDirectory : Step {
     let dependsOn = [Step]()
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        let tempDir = FileManager.temporaryDirectory().addPathComponent("swift-express-\(UInt32.random(100000, upper: 999999))")
+        let tempDir = FileManager.temporaryDirectory().addPathComponent("swift-express-\(random(999999, min: 100000))")
         
         do {
             try FileManager.createDirectory(tempDir, createIntermediate: true)

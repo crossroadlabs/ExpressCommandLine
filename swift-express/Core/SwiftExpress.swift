@@ -19,6 +19,7 @@
 //===--------------------------------------------------------------------------------===//
 
 import Commandant
+import Foundation
 
 enum SwiftExpressError : ErrorType {
     case SubtaskError(message: String)
