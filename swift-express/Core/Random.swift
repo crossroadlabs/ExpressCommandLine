@@ -34,6 +34,6 @@ private struct Random {
 
 private let rnd = Random()
 
-func random(max: Int = Int.max, min: Int = Int.min) -> Int {
-    return Int(truncatingBitPattern: UInt(truncatingBitPattern:rnd.random()) % max) + min
+func random(max: UInt = UInt.max, min: UInt = UInt.min) -> UInt {
+    return (UInt(truncatingBitPattern:rnd.random()) % (max - min)) + min
 }
