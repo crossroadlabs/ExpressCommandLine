@@ -22,39 +22,31 @@ import Foundation
 import Result
 
 struct BuildSPMStep:Step {
-    let dependsOn:[Step] = [BuildDepsSPM(force: false)]
+    let dependsOn:[Step] = [CheckoutSPM(force: false)]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        
-        if params["path"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No path option.")
+        guard let path = params["path"] as! String? else {
+            throw SwiftExpressError.BadOptions(message: "BuildSPM: No path option.")
         }
-        
-        if params["buildType"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No buildType option.")
+        guard let buildType = params["buildType"] as! BuildType? else {
+            throw SwiftExpressError.BadOptions(message: "BuildSPM: No buildType option.")
         }
-        
-        let path = params["path"]! as! String
-        let buildType = params["buildType"]! as! BuildType
+        guard let force = params["force"] as! Bool? else {
+            throw SwiftExpressError.BadOptions(message: "BuildSPM: No force option.")
+        }
         
         print("Building in \(buildType.description) mode with Swift Package Manager...")
         
-        var result : Int32 = 0
-        var resultString:String = ""
+        if force {
+            let buildpath = path.addPathComponent(".build").addPathComponent(buildType.spmValue)
+            if FileManager.isDirectoryExists(buildpath) {
+                try FileManager.removeItem(buildpath)
+            }
+        }
         
-        try SubTask(task: "/usr/bin/env", arguments: ["swift", "build", "-c", buildType.spmValue], workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
-            do {
-                if isError {
-                    resultString +=  try data.toString()
-                }
-            } catch {}
-            return true
-            }, finishCallback: { task, status in
-                result = status
-        }).run()
-        SubTask.waitForAllTaskTermination()
+        let result = try SubTask(task: "/usr/bin/env", arguments: ["swift", "build", "-c", buildType.spmValue], workingDirectory: path, environment: nil, useAppOutput: true).runAndWait()
         if result != 0 {
-            throw SwiftExpressError.SubtaskError(message: resultString)
+            throw SwiftExpressError.SubtaskError(message: "Build task exited with status \(result)")
         }
         return [String: Any]()
     }
@@ -90,17 +82,5 @@ struct BuildSPMStep:Step {
             throw SwiftExpressError.BadOptions(message: "BuildSPM: No path option.")
         }
         return ["workingFolder": ownParams["path"]!]
-    }
-}
-
-struct BuildSPMCommand : StepCommand {
-    typealias Options = BuildCommandOptions
-    
-    let verb = "build-spm"
-    let function = "build Express project with Swift Package Manager"
-    let step: Step = BuildSPMStep()
-    
-    func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
-        return Result(["buildType": opts.buildType, "path": opts.path.standardizedPath()])
     }
 }

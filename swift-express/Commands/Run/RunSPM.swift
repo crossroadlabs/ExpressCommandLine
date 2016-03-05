@@ -21,33 +21,33 @@
 import Foundation
 import Result
 
+func + <K,V> (left: Dictionary<K,V>, right: Dictionary<K,V>?) -> Dictionary<K,V> {
+    guard let right = right else { return left }
+    return left.reduce(right) {
+        var new = $0 as [K:V]
+        new.updateValue($1.1, forKey: $1.0)
+        return new
+    }
+}
+
 struct RunSPMStep : Step {
     let dependsOn:[Step] = [BuildSPMStep()]
     
     static var task: SubTask? = nil
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["path"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No path option.")
+        guard let path = params["path"] as! String? else {
+            throw SwiftExpressError.BadOptions(message: "RunSPM: No path option.")
         }
-        
-        if params["buildType"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No buildType option.")
+        guard let buildType = params["buildType"] as! BuildType? else {
+            throw SwiftExpressError.BadOptions(message: "RunSPM: No buildType option.")
         }
-        
-        let path = params["path"]! as! String
-        let buildType = params["buildType"]! as! BuildType
         
         print ("Running app...")
         
         let binaryPath = path.addPathComponent(".build").addPathComponent(buildType.spmValue).addPathComponent("app")
         
-        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
-            do {
-                print(try data.toString(), terminator:"")
-            } catch {}
-            return true
-            }, finishCallback: nil)
+        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true)
         
         trap_signal(.INT, action: { signal -> Void in
             if RunStep.task != nil {
@@ -62,8 +62,7 @@ struct RunSPMStep : Step {
             }
         })
         
-        try RunStep.task!.run()
-        SubTask.waitForAllTaskTermination()
+        try RunStep.task!.runAndWait()
         
         return [String:Any]()
     }
@@ -71,16 +70,8 @@ struct RunSPMStep : Step {
     func cleanup(params: [String : Any], output: StepResponse) throws {
         
     }
-}
-
-struct RunSPMCommand : StepCommand {
-    typealias Options = BuildCommandOptions
     
-    let verb = "run-spm"
-    let function = "run Express project with Swift Package Manager"
-    let step: Step = RunSPMStep()
-    
-    func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
-        return Result(["buildType": opts.buildType, "path": opts.path.standardizedPath()])
+    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
+        return ownParams + ["force": false]
     }
 }

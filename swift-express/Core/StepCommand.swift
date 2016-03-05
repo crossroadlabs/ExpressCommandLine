@@ -24,7 +24,7 @@ import Result
 protocol StepCommand : CommandType {
     typealias Options: OptionsType
     
-    var step : Step { get }
+    func step(opts: Options) -> Step
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError>
 }
@@ -34,7 +34,7 @@ extension StepCommand {
         switch self.getOptions(options) {
         case .Success(let opts):
             do {
-                try StepRunner(step: self.step).run(opts)
+                try StepRunner(step: step(options)).run(opts)
                 print("Task: \"\(self.verb)\" done.")
                 return Result(())
             } catch {

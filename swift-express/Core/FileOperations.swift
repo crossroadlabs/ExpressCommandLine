@@ -47,8 +47,8 @@ class File {
     }
     
     deinit {
-        file!.synchronizeFile()
-        file!.closeFile()
+        file?.synchronizeFile()
+        file?.closeFile()
     }
     
     func read(length: Int) -> [UInt8] {
@@ -81,6 +81,34 @@ class File {
 }
 
 struct FileManager {
+    // Copy not implemented on Linux, so this is own implementation
+    private static func copyFile(atPath: String, toPath: String) throws {
+        let inFile = try File(path: atPath)
+        if !isFileExists(toPath) {
+            NSFileManager.defaultManager().createFileAtPath(toPath, contents: nil, attributes: nil)
+        }
+        let outFile = try File(path: toPath, mode: .Write)
+        var bytes = inFile.read(4096)
+        while bytes.count > 0 {
+            try outFile.write(bytes)
+            bytes = inFile.read(4096)
+        }
+    }
+    
+    private static func copyDirectory(atPath: String, toPath: String) throws {
+        if !isDirectoryExists(toPath) {
+            try createDirectory(toPath, createIntermediate: true)
+        }
+        for item in try listDirectory(atPath) {
+            let itemPath = atPath.addPathComponent(item)
+            if isFileExists(itemPath) {
+                try copyFile(itemPath, toPath: toPath.addPathComponent(item))
+            } else {
+                try copyDirectory(itemPath, toPath: toPath.addPathComponent(item))
+            }
+        }
+    }
+    
     static func createDirectory(path: String, createIntermediate: Bool) throws {
         try NSFileManager.defaultManager().createDirectoryAtURL(NSURL(fileURLWithPath: path), withIntermediateDirectories: createIntermediate, attributes: nil)
     }
@@ -91,7 +119,13 @@ struct FileManager {
     
     static func copyItem(atPath: String, toDirectory: String) throws {
         let toPath = toDirectory.addPathComponent(atPath.lastPathComponent())
-        try NSFileManager.defaultManager().copyItemAtURL(NSURL(fileURLWithPath: atPath), toURL: NSURL(fileURLWithPath: toPath))
+        if isFileExists(atPath) {
+            try copyFile(atPath, toPath: toPath)
+        } else {
+            try copyDirectory(atPath, toPath: toPath)
+        }
+        //Not implemented in linux. Using own implementation
+        //try NSFileManager.defaultManager().copyItemAtURL(NSURL(fileURLWithPath: atPath), toURL: NSURL(fileURLWithPath: toPath))
     }
     
     static func listDirectory(path: String) throws -> [String] {

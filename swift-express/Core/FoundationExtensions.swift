@@ -84,7 +84,7 @@ extension String {
             if c != char {
                 break
             }
-            index++
+            index += 1
         }
         return substringFromIndex(characters.startIndex.advancedBy(index))
     }
@@ -95,7 +95,7 @@ extension String {
             if c != char {
                 break
             }
-            index++
+            index += 1
         }
         return substringToIndex(characters.endIndex.advancedBy(-index))
     }
@@ -117,7 +117,7 @@ extension String {
             if c == "/" {
                 break;
             }
-            index++
+            index += 1
         }
         return trimmed.substringToIndex(characters.endIndex.advancedBy(-index))
     }
@@ -129,7 +129,7 @@ extension String {
             if c == "/" {
                 break;
             }
-            index++
+            index += 1
         }
         return trimmed.substringFromIndex(characters.endIndex.advancedBy(-index))
     }

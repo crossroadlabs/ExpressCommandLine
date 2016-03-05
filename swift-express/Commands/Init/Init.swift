@@ -20,6 +20,7 @@
 
 import Commandant
 import Result
+import Foundation
 
 struct InitStep : Step {
     let dependsOn:[Step] = [CreateTempDirectory(), CloneGitRepository(),
@@ -60,10 +61,9 @@ struct InitCommand: StepCommand {
     
     let verb = "init"
     let function = "Creates new Express application project"
-    let step: Step
     
-    init() {
-        self.step = InitStep()
+    func step(opts: Options) -> Step {
+        return InitStep()
     }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
@@ -76,8 +76,12 @@ struct InitCommandOptions : OptionsType {
     let template: String
     let path: String
     
-    static func create(template: String)(path: String)(name: String) -> InitCommandOptions {
-        return InitCommandOptions(name: name, template: template, path: path)
+    static func create(template: String) -> (String -> (String -> InitCommandOptions)) {
+        return { (path: String) in 
+            { (name: String) in
+                InitCommandOptions(name: name, template: template, path: path)
+            }
+        }
     }
     
     static func evaluate(m: CommandMode) -> Result<InitCommandOptions, CommandantError<SwiftExpressError>> {
