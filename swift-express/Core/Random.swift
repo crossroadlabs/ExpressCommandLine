@@ -27,13 +27,13 @@ private struct Random {
     init() {
         srand(UInt32(truncatingBitPattern:time(nil)))
     }
-    func random() -> Int32 {
-        return rand()
+    func random() -> UInt64 {
+        return  UInt64(abs(rand())) &* UInt64(abs(rand()))
     }
 }
 
 private let rnd = Random()
 
-func random(max: Int = Int.max, min: Int = Int.min) -> Int {
-    return Int(rnd.random()) % max + min
+func random(max: UInt = UInt.max, min: UInt = UInt.min) -> UInt {
+    return (UInt(truncatingBitPattern:rnd.random()) % (max - min)) + min
 }
