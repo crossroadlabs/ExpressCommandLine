@@ -50,21 +50,18 @@ struct CheckoutSPM : Step {
         if result != 0 {
             throw SwiftExpressError.SubtaskError(message: "CheckoutSPM: package fetch failed. Exit code \(result)")
         }
-        
-        return [String:Any]()
-    }
-    
-    func cleanup(params:[String: Any], output: StepResponse) throws {
-        guard let workingFolder = params["workingFolder"] as! String? else {
-            throw SwiftExpressError.BadOptions(message: "CheckoutSPM: No workingFolder option.")
-        }
-        let pkgFolder = workingFolder.addPathComponent("Packages")
+
         for pkg in try FileManager.listDirectory(pkgFolder) {
             let testsDir = pkgFolder.addPathComponent(pkg).addPathComponent("Tests")
             if FileManager.isDirectoryExists(testsDir) {
                 try FileManager.removeItem(testsDir)
             }
         }
+        
+        return [String:Any]()
+    }
+    
+    func cleanup(params:[String: Any], output: StepResponse) throws {
     }
     
     func revert(params: [String : Any], output: [String : Any]?, error: SwiftExpressError?) {
