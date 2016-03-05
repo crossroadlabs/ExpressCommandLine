@@ -24,7 +24,7 @@ import Foundation
 
 
 struct RunStep : Step {
-    let dependsOn:[Step] = []
+    let dependsOn:[Step] = [FindXcodeProject()]
     
     static var task: SubTask? = nil
     
@@ -65,6 +65,10 @@ struct RunStep : Step {
     
     func cleanup(params: [String : Any], output: StepResponse) throws {
         
+    }
+    
+    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
+        return ["workingFolder": ownParams["path"]!]
     }
     
 //    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
