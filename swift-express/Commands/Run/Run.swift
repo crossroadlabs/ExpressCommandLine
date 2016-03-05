@@ -24,18 +24,18 @@ import Foundation
 
 
 struct RunStep : Step {
-    let dependsOn:[Step] = [BuildStep()]
+    let dependsOn:[Step] = []
     
     static var task: SubTask? = nil
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        guard let path = params["path"] as! String? else {
+        guard let path = params["path"] as? String else {
             throw SwiftExpressError.BadOptions(message: "Run: No path option.")
         }
-        guard let buildType = params["buildType"] as! BuildType? else {
+        guard let buildType = params["buildType"] as? BuildType else {
             throw SwiftExpressError.BadOptions(message: "Run: No buildType option.")
         }
-        guard let name = combinedOutput["projectName"] as! String? else {
+        guard let name = combinedOutput["projectName"] as? String else {
             throw SwiftExpressError.BadOptions(message: "Run: Can't find Xcode project.")
         }
         
@@ -67,9 +67,9 @@ struct RunStep : Step {
         
     }
     
-    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        return ownParams + ["force": false]
-    }
+//    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
+//        return ownParams ++ ["force": false]
+//    }
 }
 
 struct RunCommandOptions : OptionsType {
@@ -91,8 +91,8 @@ struct RunCommandOptions : OptionsType {
     static func evaluate(m: CommandMode) -> Result<RunCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Option(key: "spm", defaultValue: false, usage: "use SPM as build tool")
-            <*> m <| Option(key: "xcode", defaultValue: true, usage: "use Xcode as build tool")
+            <*> m <| Option(key: "spm", defaultValue: DEFAULTS_USE_SPM, usage: "use SPM as build tool")
+            <*> m <| Option(key: "xcode", defaultValue: DEFAULTS_USE_XCODE, usage: "use Xcode as build tool")
             <*> m <| Argument(defaultValue: .Debug, usage: "build type. debug or release")
     }
 }
@@ -104,7 +104,7 @@ struct RunCommand : StepCommand {
     let function = "run Express project"
     
     func step(opts: Options) -> Step {
-        if opts.spm || !opts.xcode {
+        if opts.spm || !opts.xcode || IS_LINUX {
             return RunSPMStep()
         }
         return RunStep()

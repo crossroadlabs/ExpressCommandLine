@@ -21,6 +21,20 @@
 import Commandant
 import Foundation
 
+#if os(Linux)
+    let DEFAULTS_USE_SPM = true
+    let DEFAULTS_USE_XCODE = false
+    let DEFAULTS_BUILD_DISPATCH = false
+    let IS_LINUX = true
+#else
+    let DEFAULTS_USE_SPM = false
+    let DEFAULTS_USE_XCODE = true
+    let DEFAULTS_BUILD_DISPATCH = true
+    let IS_LINUX = false
+#endif
+
+let DEFAULTS_USE_CARTHAGE = DEFAULTS_USE_XCODE
+
 enum SwiftExpressError : ErrorType {
     case SubtaskError(message: String)
     case SomeNSError(error: NSError)

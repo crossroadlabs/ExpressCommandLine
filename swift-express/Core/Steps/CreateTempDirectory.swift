@@ -37,7 +37,7 @@ struct CreateTempDirectory : Step {
     }
     
     func cleanup(params:[String: Any], output: StepResponse) throws {
-        if let tempDir = output["tempDirectory"] as! String? {
+        if let tempDir = output["tempDirectory"] as? String {
             do {
                 try FileManager.removeItem(tempDir)
             } catch let err as NSError {

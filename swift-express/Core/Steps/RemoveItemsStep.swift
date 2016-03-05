@@ -35,8 +35,8 @@ struct RemoveItemsStep : Step {
     }
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        guard let workingFolder = params["workingFolder"] as! String? else {
-            throw SwiftExpressError.BadOptions(message: "UpdateSPM: No workingFolder option.")
+        guard let workingFolder = params["workingFolder"] as? String else {
+            throw SwiftExpressError.BadOptions(message: "RemoveItems: No workingFolder option.")
         }
         
         var removeItems = [String]()

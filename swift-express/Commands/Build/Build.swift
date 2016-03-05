@@ -59,19 +59,19 @@ struct BuildStep:Step {
     let dependsOn:[Step] = [FindXcodeProject(), CarthageInstallLibs(updateCommand: "bootstrap", force: false)]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        guard let path = params["path"] as! String? else {
+        guard let path = params["path"] as? String else {
             throw SwiftExpressError.BadOptions(message: "Build: No path option.")
         }
-        guard let buildType = params["buildType"] as! BuildType? else {
+        guard let buildType = params["buildType"] as? BuildType else {
             throw SwiftExpressError.BadOptions(message: "Build: No buildType option.")
         }
-        guard let force = params["force"] as! Bool? else {
+        guard let force = params["force"] as? Bool else {
             throw SwiftExpressError.BadOptions(message: "Build: No force option.")
         }
-        guard let name = combinedOutput["projectName"] as! String? else {
+        guard let name = combinedOutput["projectName"] as? String else {
             throw SwiftExpressError.BadOptions(message: "Build: Can't find Xcode project in working folder.")
         }
-        guard let file = combinedOutput["projectFileName"] as! String? else {
+        guard let file = combinedOutput["projectFileName"] as? String else {
             throw SwiftExpressError.BadOptions(message: "Build: Can't find Xcode project in working folder.")
         }
         
@@ -151,14 +151,19 @@ struct BuildCommand : StepCommand {
     var step: Step = BuildStep()
     
     func step(opts: Options) -> Step {
-        if opts.spm || !opts.xcode {
+        if opts.spm || !opts.xcode || IS_LINUX {
             return BuildSPMStep()
         }
         return BuildStep()
     }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
-        return Result(["buildType": opts.buildType, "path": opts.path.standardizedPath(), "force": opts.force])
+        return Result([
+                "buildType": opts.buildType,
+                "path": opts.path.standardizedPath(),
+                "force": opts.force,
+                "dispatch": opts.dispatch
+        ])
     }
 }
 
@@ -187,10 +192,10 @@ struct BuildCommandOptions : OptionsType {
     static func evaluate(m: CommandMode) -> Result<BuildCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Option(key: "spm", defaultValue: false, usage: "use SPM as build tool")
-            <*> m <| Option(key: "xcode", defaultValue: true, usage: "use Xcode as build tool")
+            <*> m <| Option(key: "spm", defaultValue: DEFAULTS_USE_SPM, usage: "use SPM as build tool")
+            <*> m <| Option(key: "xcode", defaultValue: DEFAULTS_USE_XCODE, usage: "use Xcode as build tool")
             <*> m <| Option(key: "force", defaultValue: false, usage: "force build even if already compiled")
-            <*> m <| Option(key: "dispatch", defaultValue: false, usage: "use Dispatch library. Always true on OS X")
+            <*> m <| Option(key: "dispatch", defaultValue: DEFAULTS_BUILD_DISPATCH, usage: "use Dispatch library. Always true on OS X")
             <*> m <| Argument(defaultValue: .Debug, usage: "build type. debug or release")
     }
 }

@@ -41,10 +41,9 @@ struct CarthageInstallLibs : Step {
     }
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["workingFolder"] == nil {
+        guard let workingFolder = params["workingFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "CarthageInstallLibs: No workingFolder option.")
         }
-        let workingFolder = params["workingFolder"]! as! String
         
         if !force && FileManager.isDirectoryExists(workingFolder.addPathComponent("Carthage").addPathComponent("Build")) {
             //All ok. We already have build dependencies
