@@ -31,10 +31,9 @@ struct FindXcodeProject : Step {
     let xcprojR = "(.+)\\.xcodeproj".r!
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["workingFolder"] == nil {
+        guard let workingFolder = params["workingFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "FindXcodeProject: No workingFolder option.")
         }
-        let workingFolder = params["workingFolder"]! as! String
         
         do {
             let contents = try FileManager.listDirectory(workingFolder)

@@ -20,10 +20,11 @@
 
 import Commandant
 import Result
+import Foundation
 
 struct InitStep : Step {
     let dependsOn:[Step] = [CreateTempDirectory(), CloneGitRepository(),
-        CopyDirectoryContents(excludeList: ["^\\.git$", "^LICENSE$", "^NOTICE$", "^README.md$"]), RenameXcodeProject(), CarthageInstallLibs()]
+        CopyDirectoryContents(excludeList: ["^\\.git$", "^LICENSE$", "^NOTICE$", "^README.md$"]), RenameXcodeProject(), RenamePackageSwift()]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         // Nothing to do. All tasks done
@@ -45,6 +46,8 @@ struct InitStep : Step {
             return ["inputFolder": previousStepsOutput["clonedFolder"]!, "outputFolder": path]
         case _ as RenameXcodeProject:
             return ["workingFolder": previousStepsOutput["outputFolder"]!, "newProjectName": ownParams["name"]!]
+        case _ as RenamePackageSwift:
+            return ["workingFolder": previousStepsOutput["outputFolder"]!, "newProjectName": ownParams["name"]!, "projectName":previousStepsOutput["oldProjectName"]!]
         case _ as CarthageInstallLibs:
             return ["workingFolder": previousStepsOutput["outputFolder"]!]
         default:
@@ -58,10 +61,9 @@ struct InitCommand: StepCommand {
     
     let verb = "init"
     let function = "Creates new Express application project"
-    let step: Step
     
-    init() {
-        self.step = InitStep()
+    func step(opts: Options) -> Step {
+        return InitStep()
     }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
@@ -74,8 +76,12 @@ struct InitCommandOptions : OptionsType {
     let template: String
     let path: String
     
-    static func create(template: String)(path: String)(name: String) -> InitCommandOptions {
-        return InitCommandOptions(name: name, template: template, path: path)
+    static func create(template: String) -> (String -> (String -> InitCommandOptions)) {
+        return { (path: String) in 
+            { (name: String) in
+                InitCommandOptions(name: name, template: template, path: path)
+            }
+        }
     }
     
     static func evaluate(m: CommandMode) -> Result<InitCommandOptions, CommandantError<SwiftExpressError>> {

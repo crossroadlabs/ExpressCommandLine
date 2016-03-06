@@ -20,15 +20,14 @@
 
 import Commandant
 import Result
+import Foundation
 
 struct VersionCommand: CommandType {
     let verb = "version"
     let function = "Display the current version of Swift Express Command Line"
     
     func run(options: NoOptions<SwiftExpressError>) -> Result<(), SwiftExpressError> {
-        #if os(OSX)
-            print("Swift Express Command Line \(NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"]!)")
-        #endif
+        print("Swift Express Command Line \(CMD_LINE_VERSION)")
         return .Success(())
     }
 }

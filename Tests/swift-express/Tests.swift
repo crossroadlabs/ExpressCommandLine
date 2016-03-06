@@ -1,4 +1,4 @@
-//===--- swift_expressTests.swift ----------------===//
+//===--- Tests.swift ------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -20,22 +20,7 @@
 
 import XCTest
 
-class swift_expressTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
+class Tests: XCTestCase {
     
     func testArrayToString() {
         let arr:[UInt8] = [97, 98, 97, 99, 97, 98, 97, 0]
@@ -46,12 +31,15 @@ class swift_expressTests: XCTestCase {
         let notClosedStr = try! notClosedArr.toString()
         XCTAssertEqual(notClosedStr, "abacaba", "Array without trailing zero conversion error")
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
+
 }
+
+#if os(Linux)
+extension Tests : XCTestCaseProvider {
+	var allTests : [(String, () throws -> Void)] {
+		return [
+			("testArrayToString", testArrayToString),
+		]
+	}
+}
+#endif

@@ -1,4 +1,4 @@
-//===--- Run.swift -----------------------------------------------------------===//
+//===--- RunSPM.swift ----------------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -18,38 +18,38 @@
 //
 //===---------------------------------------------------------------------------===//
 
-import Commandant
+import Foundation
 import Result
 
+infix operator ++ {}
 
-struct RunStep : Step {
-    let dependsOn:[Step] = [BuildStep()]
+func ++ <K,V> (left: Dictionary<K,V>, right: Dictionary<K,V>?) -> Dictionary<K,V> {
+    guard let right = right else { return left }
+    return left.reduce(right) {
+        var new = $0 as [K:V]
+        new.updateValue($1.1, forKey: $1.0)
+        return new
+    }
+}
+
+struct RunSPMStep : Step {
+    let dependsOn:[Step] = []
     
     static var task: SubTask? = nil
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["path"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No path option.")
+        guard let path = params["path"] as? String else {
+            throw SwiftExpressError.BadOptions(message: "RunSPM: No path option.")
+        }
+        guard let buildType = params["buildType"] as? BuildType else {
+            throw SwiftExpressError.BadOptions(message: "RunSPM: No buildType option.")
         }
         
-        if params["buildType"] == nil {
-            throw SwiftExpressError.BadOptions(message: "Build: No buildType option.")
-        }
+        print ("Running app...")
         
-        let path = params["path"]! as! String
-        let buildType = params["buildType"]! as! BuildType
-        let name = combinedOutput["projectName"]! as! String
+        let binaryPath = path.addPathComponent(".build").addPathComponent(buildType.spmValue).addPathComponent("app")
         
-        print ("Running \(name)...")
-        
-        let binaryPath = path.addPathComponent("dist").addPathComponent(buildType.description).addPathComponent("\(name).app").addPathComponent("Contents").addPathComponent("MacOS").addPathComponent(name)
-
-        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
-            do {
-                print(try data.toString(), terminator:"")
-            } catch {}
-            return true
-            }, finishCallback: nil)
+        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true)
         
         trap_signal(.INT, action: { signal -> Void in
             if RunStep.task != nil {
@@ -64,8 +64,7 @@ struct RunStep : Step {
             }
         })
         
-        try RunStep.task!.run()
-        SubTask.waitForAllTaskTermination()
+        try RunStep.task!.runAndWait()
         
         return [String:Any]()
     }
@@ -73,16 +72,8 @@ struct RunStep : Step {
     func cleanup(params: [String : Any], output: StepResponse) throws {
         
     }
-}
-
-struct RunCommand : StepCommand {
-    typealias Options = BuildCommandOptions
     
-    let verb = "run"
-    let function = "run Express project"
-    let step: Step = RunStep()
-    
-    func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
-        return Result(["buildType": opts.buildType, "path": opts.path.standardizedPath()])
-    }
+//    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
+//        return ownParams ++ ["force": false, "dispatch": DEFAULTS_BUILD_DISPATCH]
+//    }
 }

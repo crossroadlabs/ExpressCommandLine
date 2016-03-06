@@ -21,6 +21,7 @@
 import Commandant
 import Result
 import Regex
+import Foundation
 
 enum BuildType : Equatable, CustomStringConvertible {
     case Debug
@@ -32,6 +33,15 @@ enum BuildType : Equatable, CustomStringConvertible {
             return "Debug"
         case .Release:
             return "Release"
+        }
+    }
+    
+    var spmValue: String {
+        switch self {
+        case .Debug:
+            return "debug"
+        case .Release:
+            return "release"
         }
     }
 }
@@ -46,41 +56,41 @@ func ==(lhs: BuildType, rhs: BuildType) -> Bool {
 }
 
 struct BuildStep:Step {
-    let dependsOn:[Step] = [FindXcodeProject()]
+    let dependsOn:[Step] = [FindXcodeProject(), CarthageInstallLibs(updateCommand: "bootstrap", force: false)]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        
-        if params["path"] == nil {
+        guard let path = params["path"] as? String else {
             throw SwiftExpressError.BadOptions(message: "Build: No path option.")
         }
-        
-        if params["buildType"] == nil {
+        guard let buildType = params["buildType"] as? BuildType else {
             throw SwiftExpressError.BadOptions(message: "Build: No buildType option.")
         }
-        
-        let path = params["path"]! as! String
-        let buildType = params["buildType"]! as! BuildType
-        let name = combinedOutput["projectName"]! as! String
-        let file = combinedOutput["projectFileName"]! as! String
+        guard let force = params["force"] as? Bool else {
+            throw SwiftExpressError.BadOptions(message: "Build: No force option.")
+        }
+        guard let name = combinedOutput["projectName"] as? String else {
+            throw SwiftExpressError.BadOptions(message: "Build: Can't find Xcode project in working folder.")
+        }
+        guard let file = combinedOutput["projectFileName"] as? String else {
+            throw SwiftExpressError.BadOptions(message: "Build: Can't find Xcode project in working folder.")
+        }
         
         print("Building \(name) in \(buildType.description) mode...")
         
-        var result : Int32 = 0
-        var resultString:String = ""
+        if force {
+            let appdir = path.addPathComponent("dist").addPathComponent(buildType.description)
+            if FileManager.isDirectoryExists(appdir) {
+                try FileManager.removeItem(appdir)
+            }
+            let objdir = path.addPathComponent("dist").addPathComponent(name+".build").addPathComponent(buildType.description)
+            if FileManager.isDirectoryExists(objdir) {
+                try FileManager.removeItem(objdir)
+            }
+        }
         
-        try SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", file, "-scheme", name, "-configuration", buildType.description, "build"], workingDirectory: path, environment: nil, readCallback: { (task, data, isError) -> Bool in
-            do {
-                if isError {
-                    resultString +=  try data.toString()
-                }
-            } catch {}
-            return true
-            }, finishCallback: { task, status in
-            result = status
-        }).run()
-        SubTask.waitForAllTaskTermination()
+        let result = try SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", file, "-scheme", name, "-configuration", buildType.description, "build"], workingDirectory: path, environment: nil, useAppOutput: true).runAndWait()
         if result != 0 {
-            throw SwiftExpressError.SubtaskError(message: resultString)
+            throw SwiftExpressError.SubtaskError(message: "Build task failed. Exit code \(result)")
         }
         return [String: Any]()
     }
@@ -138,25 +148,54 @@ struct BuildCommand : StepCommand {
     
     let verb = "build"
     let function = "build Express project"
-    let step: Step = BuildStep()
+    var step: Step = BuildStep()
+    
+    func step(opts: Options) -> Step {
+        if opts.spm || !opts.xcode || IS_LINUX {
+            return BuildSPMStep()
+        }
+        return BuildStep()
+    }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
-        return Result(["buildType": opts.buildType, "path": opts.path.standardizedPath()])
+        return Result([
+                "buildType": opts.buildType,
+                "path": opts.path.standardizedPath(),
+                "force": opts.force,
+                "dispatch": opts.dispatch
+        ])
     }
 }
 
 struct BuildCommandOptions : OptionsType {
     let path: String
+    let spm: Bool
+    let xcode: Bool
+    let force: Bool
+    let dispatch: Bool
     let buildType: BuildType
     
-    
-    static func create(path: String)(buildType: BuildType) -> BuildCommandOptions {
-        return BuildCommandOptions(path: path, buildType: buildType)
+    static func create(path: String) -> (Bool -> (Bool -> (Bool -> (Bool -> (BuildType -> BuildCommandOptions))))) {
+        return { (spm: Bool) in 
+            { (xcode: Bool) in 
+                { (force: Bool) in
+                    { (dispatch: Bool) in 
+                        { (buildType: BuildType) in
+                            BuildCommandOptions(path: path, spm: spm, xcode: xcode, force: force, dispatch: dispatch, buildType: buildType)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     static func evaluate(m: CommandMode) -> Result<BuildCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
+            <*> m <| Option(key: "spm", defaultValue: DEFAULTS_USE_SPM, usage: "use SPM as build tool")
+            <*> m <| Option(key: "xcode", defaultValue: DEFAULTS_USE_XCODE, usage: "use Xcode as build tool")
+            <*> m <| Option(key: "force", defaultValue: false, usage: "force build even if already compiled")
+            <*> m <| Option(key: "dispatch", defaultValue: DEFAULTS_BUILD_DISPATCH, usage: "use Dispatch library. Always true on OS X")
             <*> m <| Argument(defaultValue: .Debug, usage: "build type. debug or release")
     }
 }

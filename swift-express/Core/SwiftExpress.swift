@@ -19,6 +19,25 @@
 //===--------------------------------------------------------------------------------===//
 
 import Commandant
+import Foundation
+
+let CMD_LINE_VERSION = "0.2.0"
+
+#if os(Linux)
+    let IS_LINUX = true
+    
+    let DEFAULTS_USE_SPM = true
+    let DEFAULTS_USE_XCODE = false
+    let DEFAULTS_BUILD_DISPATCH = false
+#else
+    let IS_LINUX = false
+    
+    let DEFAULTS_USE_SPM = false
+    let DEFAULTS_USE_XCODE = true
+    let DEFAULTS_BUILD_DISPATCH = true
+#endif
+
+let DEFAULTS_USE_CARTHAGE = DEFAULTS_USE_XCODE
 
 enum SwiftExpressError : ErrorType {
     case SubtaskError(message: String)
@@ -32,6 +51,8 @@ func commandRegistry() -> CommandRegistry<SwiftExpressError> {
     
     //Commands
     registry.register(InitCommand())
+    registry.register(BootstrapCommand())
+    registry.register(UpdateCommand())
     registry.register(BuildCommand())
     registry.register(RunCommand())
     registry.register(VersionCommand())

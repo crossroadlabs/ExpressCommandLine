@@ -11,16 +11,19 @@
 		963488831C5F9253000D152F /* CopyDirectoryContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488821C5F9253000D152F /* CopyDirectoryContents.swift */; };
 		963488871C5F981A000D152F /* FindXcodeProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488861C5F981A000D152F /* FindXcodeProject.swift */; };
 		963488891C5F9846000D152F /* RenameXcodeProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963488881C5F9846000D152F /* RenameXcodeProject.swift */; };
-		9634888B1C5F9878000D152F /* CarthageInstallLibs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */; };
 		9634888C1C5FB183000D152F /* Regex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; };
 		9634888D1C5FB183000D152F /* Regex.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		963AC8341C5988DE00362B15 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963AC8331C5988DE00362B15 /* Random.swift */; };
+		963ED1C41C81D564002351EE /* CarthageInstallLibs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ED1C31C81D564002351EE /* CarthageInstallLibs.swift */; };
+		964270401C836CD300BCFB4E /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9642703F1C836CD300BCFB4E /* Bootstrap.swift */; };
+		964270421C83771300BCFB4E /* Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964270411C83771300BCFB4E /* Update.swift */; };
+		964270441C83779F00BCFB4E /* RemoveItemsStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964270431C83779F00BCFB4E /* RemoveItemsStep.swift */; };
 		964A33761C6A491B0085D16C /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A3BCA1C63AAC400E4AFCC /* FoundationExtensions.swift */; };
 		964A33771C6A49C70085D16C /* FileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96860A5E1C5A893B006DBC55 /* FileOperations.swift */; };
 		964A33791C6A4A140085D16C /* Regex.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 963488841C5F9587000D152F /* Regex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		966C941D1C5A35C800A80D20 /* CloneGitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */; };
 		967383A71C5947C0002E27A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 967383A61C5947C0002E27A3 /* Assets.xcassets */; };
-		967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383B41C5947C0002E27A3 /* swift_expressTests.swift */; };
+		967383B51C5947C0002E27A3 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383B41C5947C0002E27A3 /* Tests.swift */; };
 		967383C11C5948F4002E27A3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383C01C5948F4002E27A3 /* main.swift */; };
 		967383DE1C5963BD002E27A3 /* SwiftExpress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383DD1C5963BD002E27A3 /* SwiftExpress.swift */; };
 		967383E11C59672F002E27A3 /* Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967383E01C59672F002E27A3 /* Init.swift */; };
@@ -38,6 +41,9 @@
 		969CFAFE1C6570670009A663 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969CFAFD1C6570670009A663 /* Version.swift */; };
 		96A751291C69755A002D8AC5 /* SwiftTryCatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */; };
 		96A7512A1C69755A002D8AC5 /* SwiftTryCatch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		96AB7D231C80E27700F638F9 /* RenamePackageSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AB7D221C80E27700F638F9 /* RenamePackageSwift.swift */; };
+		96AB7D251C80FBED00F638F9 /* BuildSPM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AB7D241C80FBED00F638F9 /* BuildSPM.swift */; };
+		96AB7D271C80FD4800F638F9 /* RunSPM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AB7D261C80FD4800F638F9 /* RunSPM.swift */; };
 		96CCD7C61C5A6B8200E503E0 /* SubTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C51C5A6B8200E503E0 /* SubTask.swift */; };
 		96CCD7C81C5A788D00E503E0 /* Git.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C71C5A788D00E503E0 /* Git.swift */; };
 /* End PBXBuildFile section */
@@ -85,14 +91,17 @@
 		963488841C5F9587000D152F /* Regex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Regex.framework; path = Carthage/Build/Mac/Regex.framework; sourceTree = "<group>"; };
 		963488861C5F981A000D152F /* FindXcodeProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindXcodeProject.swift; sourceTree = "<group>"; };
 		963488881C5F9846000D152F /* RenameXcodeProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameXcodeProject.swift; sourceTree = "<group>"; };
-		9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarthageInstallLibs.swift; sourceTree = "<group>"; };
 		963AC8331C5988DE00362B15 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
+		963ED1C31C81D564002351EE /* CarthageInstallLibs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarthageInstallLibs.swift; sourceTree = "<group>"; };
+		9642703F1C836CD300BCFB4E /* Bootstrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
+		964270411C83771300BCFB4E /* Update.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Update.swift; sourceTree = "<group>"; };
+		964270431C83779F00BCFB4E /* RemoveItemsStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveItemsStep.swift; sourceTree = "<group>"; };
 		966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloneGitRepository.swift; sourceTree = "<group>"; };
 		967383A11C5947BF002E27A3 /* swift-express.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-express.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		967383A61C5947C0002E27A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		967383AB1C5947C0002E27A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		967383B01C5947C0002E27A3 /* swift-expressTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-expressTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		967383B41C5947C0002E27A3 /* swift_expressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_expressTests.swift; sourceTree = "<group>"; };
+		967383B41C5947C0002E27A3 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		967383B61C5947C0002E27A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		967383BF1C5947E6002E27A3 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		967383C01C5948F4002E27A3 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -109,6 +118,9 @@
 		9692AE1E1C5A4BA100DD9F5C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
 		969CFAFD1C6570670009A663 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftTryCatch.framework; path = Carthage/Build/Mac/SwiftTryCatch.framework; sourceTree = "<group>"; };
+		96AB7D221C80E27700F638F9 /* RenamePackageSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenamePackageSwift.swift; sourceTree = "<group>"; };
+		96AB7D241C80FBED00F638F9 /* BuildSPM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildSPM.swift; sourceTree = "<group>"; };
+		96AB7D261C80FD4800F638F9 /* RunSPM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunSPM.swift; sourceTree = "<group>"; };
 		96CCD7C51C5A6B8200E503E0 /* SubTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubTask.swift; sourceTree = "<group>"; };
 		96CCD7C71C5A788D00E503E0 /* Git.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Git.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +147,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9642703D1C8369DB00BCFB4E /* Build */ = {
+			isa = PBXGroup;
+			children = (
+				96AB7D241C80FBED00F638F9 /* BuildSPM.swift */,
+				968A3BCD1C63AF5A00E4AFCC /* Build.swift */,
+			);
+			path = Build;
+			sourceTree = "<group>";
+		};
+		9642703E1C836ACA00BCFB4E /* Run */ = {
+			isa = PBXGroup;
+			children = (
+				96AB7D261C80FD4800F638F9 /* RunSPM.swift */,
+				968A3BCF1C63AF7300E4AFCC /* Run.swift */,
+			);
+			path = Run;
+			sourceTree = "<group>";
+		};
 		967383981C5947BF002E27A3 = {
 			isa = PBXGroup;
 			children = (
@@ -169,10 +199,11 @@
 		967383B31C5947C0002E27A3 /* swift-expressTests */ = {
 			isa = PBXGroup;
 			children = (
-				967383B41C5947C0002E27A3 /* swift_expressTests.swift */,
+				967383B41C5947C0002E27A3 /* Tests.swift */,
 				967383B61C5947C0002E27A3 /* Info.plist */,
 			);
-			path = "swift-expressTests";
+			name = "swift-expressTests";
+			path = "Tests/swift-express";
 			sourceTree = SOURCE_ROOT;
 		};
 		967383C21C594916002E27A3 /* Frameworks */ = {
@@ -215,10 +246,12 @@
 		967383C71C594E89002E27A3 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				9642703D1C8369DB00BCFB4E /* Build */,
+				9642703E1C836ACA00BCFB4E /* Run */,
 				967383DF1C596718002E27A3 /* Init */,
-				968A3BCD1C63AF5A00E4AFCC /* Build.swift */,
-				968A3BCF1C63AF7300E4AFCC /* Run.swift */,
 				969CFAFD1C6570670009A663 /* Version.swift */,
+				9642703F1C836CD300BCFB4E /* Bootstrap.swift */,
+				964270411C83771300BCFB4E /* Update.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -237,7 +270,7 @@
 			children = (
 				966C941C1C5A35C800A80D20 /* CloneGitRepository.swift */,
 				963488881C5F9846000D152F /* RenameXcodeProject.swift */,
-				9634888A1C5F9878000D152F /* CarthageInstallLibs.swift */,
+				96AB7D221C80E27700F638F9 /* RenamePackageSwift.swift */,
 			);
 			path = Steps;
 			sourceTree = "<group>";
@@ -245,9 +278,11 @@
 		968A3BCC1C63AC5500E4AFCC /* Steps */ = {
 			isa = PBXGroup;
 			children = (
+				963ED1C31C81D564002351EE /* CarthageInstallLibs.swift */,
 				967383E91C598591002E27A3 /* CreateTempDirectory.swift */,
 				963488821C5F9253000D152F /* CopyDirectoryContents.swift */,
 				963488861C5F981A000D152F /* FindXcodeProject.swift */,
+				964270431C83779F00BCFB4E /* RemoveItemsStep.swift */,
 			);
 			path = Steps;
 			sourceTree = "<group>";
@@ -360,17 +395,23 @@
 				963488871C5F981A000D152F /* FindXcodeProject.swift in Sources */,
 				967383E11C59672F002E27A3 /* Init.swift in Sources */,
 				969CFAFE1C6570670009A663 /* Version.swift in Sources */,
+				96AB7D231C80E27700F638F9 /* RenamePackageSwift.swift in Sources */,
 				96860A5F1C5A893B006DBC55 /* FileOperations.swift in Sources */,
-				9634888B1C5F9878000D152F /* CarthageInstallLibs.swift in Sources */,
 				967383E31C5979D1002E27A3 /* Step.swift in Sources */,
+				96AB7D251C80FBED00F638F9 /* BuildSPM.swift in Sources */,
+				96AB7D271C80FD4800F638F9 /* RunSPM.swift in Sources */,
+				964270441C83779F00BCFB4E /* RemoveItemsStep.swift in Sources */,
 				967383DE1C5963BD002E27A3 /* SwiftExpress.swift in Sources */,
 				96CCD7C81C5A788D00E503E0 /* Git.swift in Sources */,
 				967383EA1C598591002E27A3 /* CreateTempDirectory.swift in Sources */,
 				967383C11C5948F4002E27A3 /* main.swift in Sources */,
 				96CCD7C61C5A6B8200E503E0 /* SubTask.swift in Sources */,
+				964270421C83771300BCFB4E /* Update.swift in Sources */,
 				968A3BCB1C63AAC400E4AFCC /* FoundationExtensions.swift in Sources */,
 				963488891C5F9846000D152F /* RenameXcodeProject.swift in Sources */,
 				967383E51C597E66002E27A3 /* StepCommand.swift in Sources */,
+				963ED1C41C81D564002351EE /* CarthageInstallLibs.swift in Sources */,
+				964270401C836CD300BCFB4E /* Bootstrap.swift in Sources */,
 				968A3BCE1C63AF5A00E4AFCC /* Build.swift in Sources */,
 				963AC8341C5988DE00362B15 /* Random.swift in Sources */,
 			);
@@ -382,7 +423,7 @@
 			files = (
 				964A33761C6A491B0085D16C /* FoundationExtensions.swift in Sources */,
 				964A33771C6A49C70085D16C /* FileOperations.swift in Sources */,
-				967383B51C5947C0002E27A3 /* swift_expressTests.swift in Sources */,
+				967383B51C5947C0002E27A3 /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,7 +559,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/Mac";
-				INFOPLIST_FILE = "swift-expressTests/Info.plist";
+				INFOPLIST_FILE = "Tests/swift-express/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-expressTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -531,7 +572,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/Mac";
-				INFOPLIST_FILE = "swift-expressTests/Info.plist";
+				INFOPLIST_FILE = "Tests/swift-express/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "xyz.crossroadlabs.swift-expressTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -1,4 +1,4 @@
-//===--- StepCommand.swift -----------------------------------------------------===//
+//===--- Package.swift ----------------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -18,30 +18,17 @@
 //
 //===---------------------------------------------------------------------------===//
 
-import Commandant
-import Result
+import PackageDescription
 
-protocol StepCommand : CommandType {
-    typealias Options: OptionsType
-    
-    func step(opts: Options) -> Step
-    
-    func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError>
-}
-
-extension StepCommand {
-    func run(options: Options) -> Result<(), SwiftExpressError> {
-        switch self.getOptions(options) {
-        case .Success(let opts):
-            do {
-                try StepRunner(step: step(options)).run(opts)
-                print("Task: \"\(self.verb)\" done.")
-                return Result(())
-            } catch {
-                return Result(error: error as! SwiftExpressError)
-            }
-        case .Failure(let err):
-            return Result(error: err)
-        }
-    }
-}
+let package = Package(
+    name: "swift-express",
+    targets: [
+        Target(
+            name: "swift-express"
+        )
+    ],
+    dependencies: [
+        .Package(url: "https://github.com/crossroadlabs/Commandant.git", majorVersion: 0),
+        .Package(url: "https://github.com/crossroadlabs/Regex.git", majorVersion: 0)
+    ]
+)

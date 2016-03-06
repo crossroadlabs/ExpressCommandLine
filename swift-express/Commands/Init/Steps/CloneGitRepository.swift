@@ -30,20 +30,12 @@ struct CloneGitRepository : Step {
     let folderExistsMessage = "CloneGitRepository: Output Folder already exists"
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["repositoryURL"] == nil {
+        guard let repositoryURL = params["repositoryURL"] as? String else {
             throw SwiftExpressError.BadOptions(message: "CloneGitRepository: No repositoryURL option.")
         }
-        
-        if params["outputFolder"] == nil {
+        guard let outputFolder = params["outputFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "CloneGitRepository: No outputFolder option.")
         }
-        
-        let repositoryURL = params["repositoryURL"]! as! String
-        let outputFolder = params["outputFolder"]! as! String
-        
-//        if FileManager.isDirectoryExists(outputFolder) || FileManager.isFileExists(outputFolder) {
-//            throw SwiftExpressError.BadOptions(message: folderExistsMessage)
-//        }
         
         try Git.cloneGitRepository(repositoryURL, toPath: outputFolder)
         
