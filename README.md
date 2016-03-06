@@ -24,7 +24,9 @@
 [![GitHub license](https://img.shields.io/badge/license-GPL v3-lightgrey.svg)](https://raw.githubusercontent.com/crossroadlabs/ExpressCommandLine/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/crossroadlabs/ExpressCommandLine.svg)](https://github.com/crossroadlabs/ExpressCommandLine/releases)
 
-### [Swift Express](https://github.com/crossroadlabs/Express) is a simple, yet unopinionated web application server written in Swift
+### Being [perfectionists](http://www.crossroadlabs.xyz), we took the best from what we think is the best: power of [Play Framework](https://www.playframework.com/) and simplicity of [Express.js](http://expressjs.com/)
+
+#### [Swift Express](https://github.com/crossroadlabs/Express) is an asynchronous, simple, powerful, yet unopinionated web application server written in Swift
 
 ## Usage
 
