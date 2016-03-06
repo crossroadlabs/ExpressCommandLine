@@ -41,11 +41,11 @@
 		969CFAFE1C6570670009A663 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969CFAFD1C6570670009A663 /* Version.swift */; };
 		96A751291C69755A002D8AC5 /* SwiftTryCatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */; };
 		96A7512A1C69755A002D8AC5 /* SwiftTryCatch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		96A7CF131C8C570A004365A3 /* RunSubtaskStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A7CF121C8C570A004365A3 /* RunSubtaskStep.swift */; };
 		96AB7D231C80E27700F638F9 /* RenamePackageSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AB7D221C80E27700F638F9 /* RenamePackageSwift.swift */; };
 		96AB7D251C80FBED00F638F9 /* BuildSPM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AB7D241C80FBED00F638F9 /* BuildSPM.swift */; };
 		96AB7D271C80FD4800F638F9 /* RunSPM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AB7D261C80FD4800F638F9 /* RunSPM.swift */; };
 		96CCD7C61C5A6B8200E503E0 /* SubTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C51C5A6B8200E503E0 /* SubTask.swift */; };
-		96CCD7C81C5A788D00E503E0 /* Git.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CCD7C71C5A788D00E503E0 /* Git.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,11 +118,11 @@
 		9692AE1E1C5A4BA100DD9F5C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
 		969CFAFD1C6570670009A663 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		96A751281C69755A002D8AC5 /* SwiftTryCatch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftTryCatch.framework; path = Carthage/Build/Mac/SwiftTryCatch.framework; sourceTree = "<group>"; };
+		96A7CF121C8C570A004365A3 /* RunSubtaskStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunSubtaskStep.swift; sourceTree = "<group>"; };
 		96AB7D221C80E27700F638F9 /* RenamePackageSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenamePackageSwift.swift; sourceTree = "<group>"; };
 		96AB7D241C80FBED00F638F9 /* BuildSPM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildSPM.swift; sourceTree = "<group>"; };
 		96AB7D261C80FD4800F638F9 /* RunSPM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunSPM.swift; sourceTree = "<group>"; };
 		96CCD7C51C5A6B8200E503E0 /* SubTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubTask.swift; sourceTree = "<group>"; };
-		96CCD7C71C5A788D00E503E0 /* Git.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Git.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,10 +235,10 @@
 				967383E41C597E66002E27A3 /* StepCommand.swift */,
 				963AC8331C5988DE00362B15 /* Random.swift */,
 				96CCD7C51C5A6B8200E503E0 /* SubTask.swift */,
-				96CCD7C71C5A788D00E503E0 /* Git.swift */,
 				96860A5E1C5A893B006DBC55 /* FileOperations.swift */,
 				968A3BCA1C63AAC400E4AFCC /* FoundationExtensions.swift */,
 				960A22E91C641725005DE6B1 /* Signal.swift */,
+				96A7CF121C8C570A004365A3 /* RunSubtaskStep.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -400,9 +400,9 @@
 				967383E31C5979D1002E27A3 /* Step.swift in Sources */,
 				96AB7D251C80FBED00F638F9 /* BuildSPM.swift in Sources */,
 				96AB7D271C80FD4800F638F9 /* RunSPM.swift in Sources */,
+				96A7CF131C8C570A004365A3 /* RunSubtaskStep.swift in Sources */,
 				964270441C83779F00BCFB4E /* RemoveItemsStep.swift in Sources */,
 				967383DE1C5963BD002E27A3 /* SwiftExpress.swift in Sources */,
-				96CCD7C81C5A788D00E503E0 /* Git.swift in Sources */,
 				967383EA1C598591002E27A3 /* CreateTempDirectory.swift in Sources */,
 				967383C11C5948F4002E27A3 /* main.swift in Sources */,
 				96CCD7C61C5A6B8200E503E0 /* SubTask.swift in Sources */,

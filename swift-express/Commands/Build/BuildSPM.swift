@@ -21,7 +21,7 @@
 import Foundation
 import Result
 
-struct BuildSPMStep:Step {
+struct BuildSPMStep : RunSubtaskStep {
     let dependsOn:[Step] = [CheckoutSPM(force: false)]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
@@ -51,7 +51,7 @@ struct BuildSPMStep:Step {
             args.appendContentsOf(["-Xcc", "-fblocks", "-Xswiftc", "-Ddispatch"])
         }
         
-        let result = try SubTask(task: "/usr/bin/env", arguments: args, workingDirectory: path, environment: nil, useAppOutput: true).runAndWait()
+        let result = try executeSubtaskAndWait(SubTask(task: "/usr/bin/env", arguments: args, workingDirectory: path, environment: nil, useAppOutput: true))
         if result != 0 {
             throw SwiftExpressError.SubtaskError(message: "Build task exited with status \(result)")
         }

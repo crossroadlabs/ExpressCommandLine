@@ -27,7 +27,7 @@ import Foundation
 // workingFolder
 //Output:
 // None
-struct CheckoutSPM : Step {
+struct CheckoutSPM : RunSubtaskStep {
     let dependsOn = [Step]()
     let force: Bool
     
@@ -46,7 +46,7 @@ struct CheckoutSPM : Step {
             return [String:Any]()
         }
         
-        let result = try SubTask(task: "/usr/bin/env", arguments: ["swift", "build", "--fetch"], workingDirectory: workingFolder, environment: nil, useAppOutput: true).runAndWait()
+        let result = try executeSubtaskAndWait(SubTask(task: "/usr/bin/env", arguments: ["swift", "build", "--fetch"], workingDirectory: workingFolder, environment: nil, useAppOutput: true))
         if result != 0 {
             throw SwiftExpressError.SubtaskError(message: "CheckoutSPM: package fetch failed. Exit code \(result)")
         }

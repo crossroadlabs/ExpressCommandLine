@@ -32,26 +32,8 @@ func ++ <K,V> (left: Dictionary<K,V>, right: Dictionary<K,V>?) -> Dictionary<K,V
     }
 }
 
-struct RunSPMStep : Step {
+struct RunSPMStep : RunSubtaskStep {
     let dependsOn:[Step] = []
-    
-    static var task: SubTask? = nil
-    
-    private func registerSignals(task: SubTask) {
-        RunSPMStep.task = task
-        trap_signal(.INT, action: { signal -> Void in
-            if RunSPMStep.task != nil {
-                RunSPMStep.task!.interrupt()
-                RunSPMStep.task = nil
-            }
-        })
-        trap_signal(.TERM, action: { signal -> Void in
-            if RunSPMStep.task != nil {
-                RunSPMStep.task!.terminate()
-                RunSPMStep.task = nil
-            }
-        })
-    }
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         guard let path = params["path"] as? String else {
@@ -65,15 +47,7 @@ struct RunSPMStep : Step {
         
         let binaryPath = path.addPathComponent(".build").addPathComponent(buildType.spmValue).addPathComponent("app")
         
-        let task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true)
-        
-        defer {
-            RunSPMStep.task = nil
-        }
-        
-        registerSignals(task)
-       
-        try task.runAndWait()
+        try executeSubtaskAndWait(SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true))
         
         return [String:Any]()
     }
