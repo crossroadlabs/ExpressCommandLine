@@ -37,6 +37,22 @@ struct RunSPMStep : Step {
     
     static var task: SubTask? = nil
     
+    private func registerSignals(task: SubTask) {
+        RunSPMStep.task = task
+        trap_signal(.INT, action: { signal -> Void in
+            if RunSPMStep.task != nil {
+                RunSPMStep.task!.interrupt()
+                RunSPMStep.task = nil
+            }
+        })
+        trap_signal(.TERM, action: { signal -> Void in
+            if RunSPMStep.task != nil {
+                RunSPMStep.task!.terminate()
+                RunSPMStep.task = nil
+            }
+        })
+    }
+    
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         guard let path = params["path"] as? String else {
             throw SwiftExpressError.BadOptions(message: "RunSPM: No path option.")
@@ -49,22 +65,16 @@ struct RunSPMStep : Step {
         
         let binaryPath = path.addPathComponent(".build").addPathComponent(buildType.spmValue).addPathComponent("app")
         
-        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true)
+        let task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true)
         
-        trap_signal(.INT, action: { signal -> Void in
-            if RunStep.task != nil {
-                RunStep.task!.interrupt()
-                RunStep.task = nil
-            }
-        })
-        trap_signal(.TERM, action: { signal -> Void in
-            if RunStep.task != nil {
-                RunStep.task!.terminate()
-                RunStep.task = nil
-            }
-        })
+        registerSignals(task)
         
-        try RunStep.task!.runAndWait()
+        do {
+            try task.runAndWait()
+        } catch {
+            RunSPMStep.task = nil
+            throw error
+        }
         
         return [String:Any]()
     }
