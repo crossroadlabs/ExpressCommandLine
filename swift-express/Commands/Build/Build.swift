@@ -55,7 +55,7 @@ func ==(lhs: BuildType, rhs: BuildType) -> Bool {
     }
 }
 
-struct BuildStep:Step {
+struct BuildStep : RunSubtaskStep {
     let dependsOn:[Step] = [FindXcodeProject(), CarthageInstallLibs(updateCommand: "bootstrap", force: false)]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
@@ -88,7 +88,7 @@ struct BuildStep:Step {
             }
         }
         
-        let result = try SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", file, "-scheme", name, "-configuration", buildType.description, "build"], workingDirectory: path, environment: nil, useAppOutput: true).runAndWait()
+        let result = try executeSubtaskAndWait(SubTask(task: "/usr/bin/env", arguments: ["xcodebuild", "-project", file, "-scheme", name, "-configuration", buildType.description, "build"], workingDirectory: path, environment: nil, useAppOutput: true))
         if result != 0 {
             throw SwiftExpressError.SubtaskError(message: "Build task failed. Exit code \(result)")
         }

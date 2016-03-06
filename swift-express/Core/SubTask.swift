@@ -92,11 +92,11 @@ class SubTask {
             }, catchBlock: { (exc) -> Void in
                 exception = exc
             }, finallyBlock: {})
-            if exception != nil {
-                throw SwiftExpressError.SubtaskError(message: "Task launch error: \(exception!)")
+            if let ex = exception {
+                throw SwiftExpressError.SubtaskError(message: "Task launch error: \(ex)")
             }
         #else
-            self.nTask.launch()
+            nTask.launch()
             chdir(oldWorkDir)
         #endif
     }

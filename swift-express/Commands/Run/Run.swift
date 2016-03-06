@@ -23,10 +23,8 @@ import Result
 import Foundation
 
 
-struct RunStep : Step {
+struct RunStep : RunSubtaskStep {
     let dependsOn:[Step] = [FindXcodeProject()]
-    
-    static var task: SubTask? = nil
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         guard let path = params["path"] as? String else {
@@ -43,22 +41,7 @@ struct RunStep : Step {
         
         let binaryPath = path.addPathComponent("dist").addPathComponent(buildType.description).addPathComponent("\(name).app").addPathComponent("Contents").addPathComponent("MacOS").addPathComponent(name)
 
-        RunStep.task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true, finishCallback: nil)
-        
-        trap_signal(.INT, action: { signal -> Void in
-            if RunStep.task != nil {
-                RunStep.task!.interrupt()
-                RunStep.task = nil
-            }
-        })
-        trap_signal(.TERM, action: { signal -> Void in
-            if RunStep.task != nil {
-                RunStep.task!.terminate()
-                RunStep.task = nil
-            }
-        })
-        
-        try RunStep.task!.runAndWait()
+        try executeSubtaskAndWait(SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true))
         
         return [String:Any]()
     }
