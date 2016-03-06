@@ -61,14 +61,13 @@ struct RunStep : Step {
 
         let task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true)
         
+        defer {
+            RunStep.task = nil
+        }
+        
         registerSignals(task)
         
-        do {
-            try task.runAndWait()
-        } catch {
-            RunStep.task = nil
-            throw error
-        }
+        try task.runAndWait()
         
         return [String:Any]()
     }

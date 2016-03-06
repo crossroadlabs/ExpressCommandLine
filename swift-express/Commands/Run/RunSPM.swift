@@ -67,14 +67,13 @@ struct RunSPMStep : Step {
         
         let task = SubTask(task: binaryPath, arguments: nil, workingDirectory: path, environment: nil, useAppOutput: true)
         
-        registerSignals(task)
-        
-        do {
-            try task.runAndWait()
-        } catch {
+        defer {
             RunSPMStep.task = nil
-            throw error
         }
+        
+        registerSignals(task)
+       
+        try task.runAndWait()
         
         return [String:Any]()
     }
