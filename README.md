@@ -1,7 +1,28 @@
-# Swift Express Command Line
+[//]: https://www.iconfinder.com/icons/383207/doc_tag_icon#size=64
+<p align="center">
+	<a href="http://swiftexpress.io/">
+		<img alt="Swift Express" src ="https://raw.githubusercontent.com/crossroadlabs/Express/master/logo-full.png" height=256/>
+	</a>
+	<a href="https://github.com/crossroadlabs/Express/blob/master/doc/index.md">
+		<h5 align="right">Documentation    <img src="https://cdn0.iconfinder.com/data/icons/glyphpack/82/tag-doc-64.png" height=16/>
+		</h5>
+	</a>
+</p>
 
+[<h5 align="right">Live 🐧 server running Demo  <img src="https://cdn0.iconfinder.com/data/icons/glyphpack/34/play-circle-32.png" height=16/>
+		</h5>](http://demo.swiftexpress.io/)
+
+[<h5 align="right">Eating our own dog food  <img src="https://cdn0.iconfinder.com/data/icons/glyphpack/147/globe-full-32.png" height=16/>
+		</h5>](http://swiftexpress.io/)
+
+
+# Command Line Interface
+
+![🐧 linux: ready](https://img.shields.io/badge/%F0%9F%90%A7%20linux-ready-red.svg)
+[![Build Status](https://travis-ci.org/crossroadlabs/ExpressCommandLine.svg?branch=master)](https://travis-ci.org/crossroadlabs/ExpressCommandLine)
 ![Platform OS X | Linux](https://img.shields.io/badge/platform-OS%20X%20%7C%20Linux-orange.svg)
 [![GitHub license](https://img.shields.io/badge/license-GPL v3-lightgrey.svg)](https://raw.githubusercontent.com/crossroadlabs/ExpressCommandLine/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/crossroadlabs/ExpressCommandLine.svg)](https://github.com/crossroadlabs/ExpressCommandLine/releases)
 
 ### [Swift Express](https://github.com/crossroadlabs/Express) is a simple, yet unopinionated web application server written in Swift
 
