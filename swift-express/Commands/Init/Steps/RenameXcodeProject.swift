@@ -31,20 +31,16 @@ struct RenameXcodeProject : Step {
     let dependsOn:[Step] = [FindXcodeProject()]
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["workingFolder"] == nil {
+        guard let workingFolder = params["workingFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No workingFolder option.")
         }
-        let workingFolder = params["workingFolder"]! as! String
-        
-        if combinedOutput["projectName"] == nil {
+        guard let projectName = combinedOutput["projectName"] as? String else {
             throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No projectName option.")
         }
-        let projectName = combinedOutput["projectName"]! as! String
-        
-        if params["newProjectName"] == nil {
+        guard let newName = params["newProjectName"] as? String else {
             throw SwiftExpressError.BadOptions(message: "RenameXcodeProject: No newProjectName option.")
         }
-        let newName = params["newProjectName"]! as! String
+
         let newProj = newName + ".xcodeproj"
         
         try FileManager.renameItem(workingFolder.addPathComponent(projectName+".xcodeproj"), newName: newProj)

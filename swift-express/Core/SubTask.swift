@@ -21,6 +21,8 @@
 import Foundation
 #if !os(Linux)
     import SwiftTryCatch
+#else
+    import Glibc
 #endif
 
 class SubTask {
@@ -35,8 +37,8 @@ class SubTask {
     
     init(task: String, arguments: [String]? = nil, workingDirectory: String? = nil, environment:[String:String]? = nil, useAppOutput: Bool = false, finishCallback: ((task:SubTask, status:Int32) -> ())? = nil) {
         self.task = task
-        if arguments != nil {
-            self.arguments = arguments!
+        if let arguments = arguments {
+            self.arguments = arguments
         } else {
             self.arguments = [String]()
         }
@@ -52,11 +54,16 @@ class SubTask {
     func run() throws {
         nTask.launchPath = task
         nTask.arguments = arguments
-        if env != nil {
+        if let env = env {
             nTask.environment = env
         }
-        if workingDirectory != nil {
-            nTask.currentDirectoryPath = workingDirectory!
+
+        let oldWorkDir = FileManager.currentWorkingDirectory()
+        if let dir = workingDirectory {
+            #if os(Linux)
+                chdir(dir)
+            #endif
+            nTask.currentDirectoryPath = dir
         }
         
         nTask.standardInput = NSPipe()
@@ -90,6 +97,7 @@ class SubTask {
             }
         #else
             self.nTask.launch()
+            chdir(oldWorkDir)
         #endif
     }
     

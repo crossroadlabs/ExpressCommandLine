@@ -34,17 +34,14 @@ struct CopyDirectoryContents : Step {
     let alreadyExistsError = "CopyDirectoryContents: Output folder already exists."
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["inputFolder"] == nil {
+        guard let inputFolder = params["inputFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "CopyDirectoryContents: No inputFolder option.")
         }
-        
-        if params["outputFolder"] == nil {
+        guard let outputFolder = params["outputFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "CopyDirectoryContents: No outputFolder option.")
         }
+
         do {
-            let inputFolder = params["inputFolder"]! as! String
-            let outputFolder = params["outputFolder"]! as! String
-            
             if FileManager.isDirectoryExists(outputFolder) || FileManager.isFileExists(outputFolder) {
                 throw SwiftExpressError.BadOptions(message: alreadyExistsError)
             } else {

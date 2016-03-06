@@ -152,6 +152,6 @@ extension String {
         if output.characters[output.characters.startIndex] != "/" {
             output = FileManager.currentWorkingDirectory().addPathComponent(output)
         }
-        return String._curDirR.replaceAll(String._topDirR.replaceAll(output, replacement: ""), replacement: "/")
+        return String._curDirR.replaceAll(String._topDirR.replaceAll(output, replacement: ""), replacement: "/").rtrim("/")
     }
 }

@@ -20,6 +20,9 @@
 
 import Foundation
 import Regex
+#if os(Linux)
+    import Glibc
+#endif
 
 enum FileOpenMode {
     case Read
@@ -143,7 +146,17 @@ struct FileManager {
     }
     
     static func moveItem(atPath: String, toPath: String) throws {
-        try NSFileManager.defaultManager().moveItemAtPath(atPath, toPath: toPath)
+        // Foundation implementation crashes on Linux. Using own implementation
+        if rename(atPath, toPath) != 0 {
+            if errno == EXDEV {
+                let dir = toPath.removeLastPathComponent()
+                try copyItem(atPath, toDirectory: dir)
+                try moveItem(dir.addPathComponent(atPath.lastPathComponent()), toPath: toPath)
+                try removeItem(atPath)
+            } else {
+                throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno), userInfo: [NSFilePathErrorKey:atPath])
+            }
+        }
     }
     
     static func renameItem(path: String, newName: String) throws {

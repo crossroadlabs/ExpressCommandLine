@@ -27,7 +27,7 @@ struct VersionCommand: CommandType {
     let function = "Display the current version of Swift Express Command Line"
     
     func run(options: NoOptions<SwiftExpressError>) -> Result<(), SwiftExpressError> {
-        print("Swift Express Command Line 0.2.0")
+        print("Swift Express Command Line \(CMD_LINE_VERSION)")
         return .Success(())
     }
 }

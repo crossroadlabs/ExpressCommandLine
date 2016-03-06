@@ -30,20 +30,15 @@ struct RenamePackageSwift : Step {
     let dependsOn:[Step] = []
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        if params["workingFolder"] == nil {
+        guard let workingFolder = params["workingFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "RenamePackageSwift: No workingFolder option.")
         }
-        let workingFolder = params["workingFolder"]! as! String
-        
-        if params["projectName"] == nil {
+        guard let projectName = params["projectName"] as? String else {
             throw SwiftExpressError.BadOptions(message: "RenamePackageSwift: No projectName option.")
         }
-        let projectName = params["projectName"]! as! String
-        
-        if params["newProjectName"] == nil {
+        guard let newName = params["newProjectName"] as? String else {
             throw SwiftExpressError.BadOptions(message: "RenamePackageSwift: No newProjectName option.")
         }
-        let newName = params["newProjectName"]! as! String
         
         guard let pbFile = try? File(path: workingFolder.addPathComponent("Package.swift"), mode: .Append) else {
             return [String:Any]()

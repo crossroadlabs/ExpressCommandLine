@@ -33,7 +33,7 @@ struct RemoveAndUpdateStep: Step {
     }
     
     func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        guard let path = ownParams["path"] as! String? else {
+        guard let path = ownParams["workingFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "UpdateSPM: No path option.")
         }
         return ["workingFolder": path]
@@ -47,13 +47,10 @@ struct UpdateCommand : StepCommand {
     let function = "update and build Express project dependencies"
     
     func step(opts: Options) -> Step {
-        if opts.spm || !opts.carthage {
+        if opts.spm || !opts.carthage || IS_LINUX {
             return RemoveAndUpdateStep(dependsOn: [RemoveItemsStep(items: ["Packages"]), CheckoutSPM(force: true)])
         }
-        if opts.fetch {
-            return CarthageInstallLibs(updateCommand: "update", force: true, fetchOnly: true)
-        }
-        return CarthageInstallLibs(updateCommand: "update", force: true, fetchOnly: false)
+        return CarthageInstallLibs(updateCommand: "update", force: true, fetchOnly: opts.fetch)
     }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
@@ -80,8 +77,8 @@ struct UpdateCommandOptions : OptionsType {
     static func evaluate(m: CommandMode) -> Result<UpdateCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Option(key: "spm", defaultValue: false, usage: "use SPM as package manager")
-            <*> m <| Option(key: "carthage", defaultValue: true, usage: "use Carthage as package manager")
+            <*> m <| Option(key: "spm", defaultValue: DEFAULTS_USE_SPM, usage: "use SPM as package manager")
+            <*> m <| Option(key: "carthage", defaultValue: DEFAULTS_USE_CARTHAGE, usage: "use Carthage as package manager")
             <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch. Always true for SPM")
     }
 }

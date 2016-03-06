@@ -36,7 +36,7 @@ struct CheckoutSPM : Step {
     }
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        guard let workingFolder = params["workingFolder"] as! String? else {
+        guard let workingFolder = params["workingFolder"] as? String else {
             throw SwiftExpressError.BadOptions(message: "CheckoutSPM: No workingFolder option.")
         }
         
@@ -50,21 +50,18 @@ struct CheckoutSPM : Step {
         if result != 0 {
             throw SwiftExpressError.SubtaskError(message: "CheckoutSPM: package fetch failed. Exit code \(result)")
         }
-        
-        return [String:Any]()
-    }
-    
-    func cleanup(params:[String: Any], output: StepResponse) throws {
-        guard let workingFolder = params["workingFolder"] as! String? else {
-            throw SwiftExpressError.BadOptions(message: "CheckoutSPM: No workingFolder option.")
-        }
-        let pkgFolder = workingFolder.addPathComponent("Packages")
+
         for pkg in try FileManager.listDirectory(pkgFolder) {
             let testsDir = pkgFolder.addPathComponent(pkg).addPathComponent("Tests")
             if FileManager.isDirectoryExists(testsDir) {
                 try FileManager.removeItem(testsDir)
             }
         }
+        
+        return [String:Any]()
+    }
+    
+    func cleanup(params:[String: Any], output: StepResponse) throws {
     }
     
     func revert(params: [String : Any], output: [String : Any]?, error: SwiftExpressError?) {
@@ -88,16 +85,13 @@ struct BootstrapCommand : StepCommand {
     let function = "download and build Express project dependencies"
     
     func step(opts: Options) -> Step {
-        if opts.spm || !opts.carthage {
+        if opts.spm || !opts.carthage || IS_LINUX {
             return CheckoutSPM(force: true)
         }
         if opts.noRefetch {
             return CarthageInstallLibs(updateCommand: "build", force: true)
         }
-        if opts.fetch {
-            return CarthageInstallLibs(updateCommand: "bootstrap", force: true, fetchOnly: true)
-        }
-        return CarthageInstallLibs(updateCommand: "bootstrap", force: true)
+        return CarthageInstallLibs(updateCommand: "bootstrap", force: true, fetchOnly: opts.fetch)
     }
     
     func getOptions(opts: Options) -> Result<[String:Any], SwiftExpressError> {
@@ -127,8 +121,8 @@ struct BootstrapCommandOptions : OptionsType {
     static func evaluate(m: CommandMode) -> Result<BootstrapCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Option(key: "spm", defaultValue: false, usage: "use SPM as package manager")
-            <*> m <| Option(key: "carthage", defaultValue: true, usage: "use Carthage as package manager")
+            <*> m <| Option(key: "spm", defaultValue: DEFAULTS_USE_SPM, usage: "use SPM as package manager")
+            <*> m <| Option(key: "carthage", defaultValue: DEFAULTS_USE_CARTHAGE, usage: "use Carthage as package manager")
             <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch. Always true for SPM (ignored if --no-fetch presents)")
             <*> m <| Option(key: "no-refetch", defaultValue: false, usage: "build without fetch. Always false for SPM.")
     }

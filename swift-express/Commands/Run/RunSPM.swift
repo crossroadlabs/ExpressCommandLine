@@ -21,7 +21,9 @@
 import Foundation
 import Result
 
-func + <K,V> (left: Dictionary<K,V>, right: Dictionary<K,V>?) -> Dictionary<K,V> {
+infix operator ++ {}
+
+func ++ <K,V> (left: Dictionary<K,V>, right: Dictionary<K,V>?) -> Dictionary<K,V> {
     guard let right = right else { return left }
     return left.reduce(right) {
         var new = $0 as [K:V]
@@ -31,15 +33,15 @@ func + <K,V> (left: Dictionary<K,V>, right: Dictionary<K,V>?) -> Dictionary<K,V>
 }
 
 struct RunSPMStep : Step {
-    let dependsOn:[Step] = [BuildSPMStep()]
+    let dependsOn:[Step] = []
     
     static var task: SubTask? = nil
     
     func run(params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        guard let path = params["path"] as! String? else {
+        guard let path = params["path"] as? String else {
             throw SwiftExpressError.BadOptions(message: "RunSPM: No path option.")
         }
-        guard let buildType = params["buildType"] as! BuildType? else {
+        guard let buildType = params["buildType"] as? BuildType else {
             throw SwiftExpressError.BadOptions(message: "RunSPM: No buildType option.")
         }
         
@@ -71,7 +73,7 @@ struct RunSPMStep : Step {
         
     }
     
-    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        return ownParams + ["force": false]
-    }
+//    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
+//        return ownParams ++ ["force": false, "dispatch": DEFAULTS_BUILD_DISPATCH]
+//    }
 }
