@@ -24,7 +24,7 @@ import Foundation
 // Input: repositoryURL : String
 // Input: outputFolder : String
 // Output: clonedFolder: String
-struct CloneGitRepository : Step {
+struct CloneGitRepository : RunSubtaskStep {
     let dependsOn = [Step]()
     
     let folderExistsMessage = "CloneGitRepository: Output Folder already exists"
@@ -37,7 +37,10 @@ struct CloneGitRepository : Step {
             throw SwiftExpressError.BadOptions(message: "CloneGitRepository: No outputFolder option.")
         }
         
-        try Git.cloneGitRepository(repositoryURL, toPath: outputFolder)
+        let result = try executeSubtaskAndWait(SubTask(task: "/usr/bin/env", arguments: ["git", "clone", repositoryURL, outputFolder], workingDirectory: nil, environment: nil, useAppOutput: true))
+        if result != 0 {
+            throw SwiftExpressError.SubtaskError(message: "git clone failed")
+        }
         
         return ["clonedFolder": outputFolder]
     }

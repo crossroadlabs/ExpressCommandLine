@@ -26,7 +26,7 @@ import Regex
 // workingFolder
 //Output:
 // None
-struct CarthageInstallLibs : Step {
+struct CarthageInstallLibs : RunSubtaskStep {
     let dependsOn = [Step]()
     
     let platform = "Mac"
@@ -56,7 +56,7 @@ struct CarthageInstallLibs : Step {
             args.insert("--no-build", atIndex: 1)
         }
         
-        let result = try SubTask(task: "/usr/local/bin/carthage", arguments: args, workingDirectory: workingFolder, environment: nil, useAppOutput: true).runAndWait()
+        let result = try executeSubtaskAndWait(SubTask(task: "/usr/local/bin/carthage", arguments: args, workingDirectory: workingFolder, environment: nil, useAppOutput: true))
         if result != 0 {
             throw SwiftExpressError.SubtaskError(message: "CarthageInstallLibs: bootstrap failed. Exit code \(result)")
         }
