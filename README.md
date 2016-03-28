@@ -1,9 +1,32 @@
-# Swift Express Command Line
+[//]: https://www.iconfinder.com/icons/383207/doc_tag_icon#size=64
+<p align="center">
+	<a href="http://swiftexpress.io/">
+		<img alt="Swift Express" src ="https://raw.githubusercontent.com/crossroadlabs/Express/master/logo-full.png" height=256/>
+	</a>
+	<a href="https://github.com/crossroadlabs/Express/blob/master/doc/index.md">
+		<h5 align="right">Documentation    <img src="https://cdn0.iconfinder.com/data/icons/glyphpack/82/tag-doc-64.png" height=16/>
+		</h5>
+	</a>
+</p>
 
-[![GitHub license](https://img.shields.io/badge/license-GPL v3-lightgrey.svg)](https://raw.githubusercontent.com/crossroadlabs/ExpressCommandLine/master/LICENSE)
+[<h5 align="right">Live 🐧 server running Demo  <img src="https://cdn0.iconfinder.com/data/icons/glyphpack/34/play-circle-32.png" height=16/>
+		</h5>](http://demo.swiftexpress.io/)
+
+[<h5 align="right">Eating our own dog food  <img src="https://cdn0.iconfinder.com/data/icons/glyphpack/147/globe-full-32.png" height=16/>
+		</h5>](http://swiftexpress.io/)
+
+
+# Command Line Interface
+
+![🐧 linux: ready](https://img.shields.io/badge/%F0%9F%90%A7%20linux-ready-red.svg)
+[![Build Status](https://travis-ci.org/crossroadlabs/ExpressCommandLine.svg?branch=master)](https://travis-ci.org/crossroadlabs/ExpressCommandLine)
 ![Platform OS X | Linux](https://img.shields.io/badge/platform-OS%20X%20%7C%20Linux-orange.svg)
+[![GitHub license](https://img.shields.io/badge/license-GPL v3-lightgrey.svg)](https://raw.githubusercontent.com/crossroadlabs/ExpressCommandLine/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/crossroadlabs/ExpressCommandLine.svg)](https://github.com/crossroadlabs/ExpressCommandLine/releases)
 
-### [Swift Express](https://github.com/crossroadlabs/Express) is a simple, yet unopinionated web application server written in Swift
+### Being [perfectionists](http://www.crossroadlabs.xyz), we took the best from what we think is the best: power of [Play Framework](https://www.playframework.com/) and simplicity of [Express.js](http://expressjs.com/)
+
+#### [Swift Express](https://github.com/crossroadlabs/Express) is an asynchronous, simple, powerful, yet unopinionated web application server written in Swift
 
 ## Usage
 
@@ -20,9 +43,9 @@ swift-express init YourProject
 * `--template git-url` allows specifying the project template git URL. Defaults to `https://github.com/crossroadlabs/ExpressTemplate.git`.
 * `--path path/to/dir` specifies where to create the application. Defaults to the current directory.
 
-### Install project dependencies
+### Initialise project dependencies
 
-This one for downloading project dependencies (frameworks and libs)
+To download and build project dependencies call `bootstrap` command:
 
 ```sh
 swift-express bootstrap
@@ -30,15 +53,15 @@ swift-express bootstrap
 
 Optional parameters:
 
-* `--spm` use Swift Package Manager instead of Carthage. Default is false. Always true on Linux.
-* `--carthage` use Carthage as package manager. Default is true. Always false on Linux.
-* `--fetch` fetch dependencies without building. Default is false. Always true for SPM.
+* `--spm` use Swift Package Manager instead of Carthage. Is default on Linux.
+* `--carthage` use Carthage as package manager. Is default for OS X. Not available on Linux.
+* `--fetch` fetch dependencies without building. Default is false. Always true for SPM as it has no separate build dependencies option.
 * `--no-refetch` build dependencies without fetching. Default is false. Always false for SPM. 
 * `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
 
 ### Update project dependencies
 
-This one for updating already installed project dependencies (frameworks and libs)
+To update project dependencies according to `Cartfile` or `Package.swift` call `update` command:
 
 ```sh
 swift-express update
@@ -46,9 +69,9 @@ swift-express update
 
 Optional parameters:
 
-* `--spm` use Swift Package Manager instead of Carthage. Default is false. Always true on Linux.
-* `--carthage` use Carthage as package manager. Default is true. Always false on Linux.
-* `--fetch` fetch dependencies without building. Default is false. Always true for SPM.
+* `--spm` use Swift Package Manager instead of Carthage. Is default on Linux.
+* `--carthage` use Carthage as package manager. Is default for OS X. Not available on Linux.
+* `--fetch` fetch dependencies without building. Default is false. Always true for SPM as it has no separate build dependencies option.
 * `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
 
 ### Build project
@@ -69,10 +92,10 @@ Default configuration is `debug`
 
 Optional parameters:
 
-* `--spm` use Swift Package Manager as build tool. Default is false. Always true on Linux.
-* `--xcode` use Xcode as build tool. Default is true. Always false on Linux.
-* `--dispatch` build with Dispatch support. Default is false. Always true on OS X.
-* `--force` force rebuild. Default is false.
+* `--spm` use Swift Package Manager as build tool. Is default on Linux.
+* `--xcode` use Xcode as build tool. Is default for OS X. Not available on Linux.
+* `--dispatch` build with Dispatch support. Is default on OS X.
+* `--force` force rebuild. Essentially cleans before building.
 * `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
 
 ### Run the app
@@ -93,9 +116,9 @@ Default configuration is `debug`
 
 Optional parameters:
 
-* `--spm` run app built by Swift Package Manager. Default is false. Always true on Linux.
-* `--xcode` run app built by Xcode. Default is true. Always false on Linux.
-* `--path path/to/the/app` can be used outside the app's folder explicitly specifying the path to the app.
+* `--spm` run app built by Swift Package Manager. Is default on Linux.
+* `--xcode` run app built by Xcode. Is default for OS X. Not available on Linux.
+* `--path path/to/the/app` can be used outside of the app's folder explicitly specifying the path to the app.
 
 ### Print help
 
@@ -113,7 +136,7 @@ swift-express help bootstrap
 
 ## Installation
 
-Please refer to the main Swift Express article here: [https://github.com/crossroadlabs/Express](https://github.com/crossroadlabs/Express)
+Please refer to the main Swift Express article here: [https://github.com/crossroadlabs/Express/blob/master/doc/gettingstarted/installing.md](https://github.com/crossroadlabs/Express/blob/master/doc/gettingstarted/installing.md)
 
 ## Changelog
 
