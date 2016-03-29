@@ -28,7 +28,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .Package(url: "https://github.com/crossroadlabs/Commandant.git", majorVersion: 0),
+        .Package(url: "https://github.com/Carthage/Commandant.git", majorVersion: 0),
         .Package(url: "https://github.com/crossroadlabs/Regex.git", majorVersion: 0)
     ]
 )
