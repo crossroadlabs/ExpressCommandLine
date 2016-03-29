@@ -22,7 +22,7 @@ import Commandant
 import Result
 
 protocol StepCommand : CommandType {
-    typealias Options: OptionsType
+    associatedtype Options: OptionsType
     
     func step(opts: Options) -> Step
     
