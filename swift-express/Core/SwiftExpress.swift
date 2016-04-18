@@ -21,7 +21,7 @@
 import Commandant
 import Foundation
 
-let CMD_LINE_VERSION = "0.2.1"
+let CMD_LINE_VERSION = "0.2.2"
 
 #if os(Linux)
     let IS_LINUX = true
