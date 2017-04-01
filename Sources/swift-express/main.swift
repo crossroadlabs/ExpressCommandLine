@@ -1,4 +1,4 @@
-//===--- Package.swift ----------------------------------------------------------===//
+//===--- main.swift ------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -16,18 +16,17 @@
 //You should have received a copy of the GNU General Public License
 //along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
 //
-//===---------------------------------------------------------------------------===//
+//===---------------------------------------------===//
 
-import PackageDescription
-
-let package = Package(
-    name: "swift-express",
-    dependencies: [
-        .Package(url: "https://github.com/Carthage/Commandant.git", majorVersion: 0, minor: 12),
-        .Package(url: "https://github.com/crossroadlabs/Regex.git", "1.0.0-alpha")
-    ]
-)
-
-#if os(OSX)
-    package.dependencies.append(.Package(url: "https://github.com/ypopovych/SwiftTryCatch.git", "1.1.1-alpha"))
-#endif
+commandRegistry().main(arguments: CommandLine.arguments, defaultVerb: "help") { (error) -> () in
+    switch error {
+    case .subtaskError(let message):
+        print("Subtask Error: \(message)")
+    case .someNSError(let err):
+        print("NSError: ", err)
+    case .badOptions(let message):
+        print("Bad options: \(message)")
+    case .unknownError(let err):
+        print("Unknown Error: \(err)")
+    }
+}

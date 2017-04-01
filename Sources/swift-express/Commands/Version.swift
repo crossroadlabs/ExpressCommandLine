@@ -1,4 +1,4 @@
-//===--- Package.swift ----------------------------------------------------------===//
+//===--- Version.swift --------------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -18,16 +18,17 @@
 //
 //===---------------------------------------------------------------------------===//
 
-import PackageDescription
+import Commandant
+import Result
+import Foundation
 
-let package = Package(
-    name: "swift-express",
-    dependencies: [
-        .Package(url: "https://github.com/Carthage/Commandant.git", majorVersion: 0, minor: 12),
-        .Package(url: "https://github.com/crossroadlabs/Regex.git", "1.0.0-alpha")
-    ]
-)
+struct VersionCommand: CommandProtocol {
+    let verb = "version"
+    let function = "Display the current version of Swift Express Command Line"
+    
+    func run(_ options: NoOptions<SwiftExpressError>) -> Result<(), SwiftExpressError> {
+        print("Swift Express Command Line \(CMD_LINE_VERSION)")
+        return .success(())
+    }
+}
 
-#if os(OSX)
-    package.dependencies.append(.Package(url: "https://github.com/ypopovych/SwiftTryCatch.git", "1.1.1-alpha"))
-#endif

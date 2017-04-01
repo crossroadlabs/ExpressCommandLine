@@ -1,3 +1,0 @@
-github "Carthage/Commandant" ~> 0.8
-github "crossroadlabs/Regex" ~> 0.5
-github "ypopovych/SwiftTryCatch" "master"
