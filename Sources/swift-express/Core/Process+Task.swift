@@ -68,9 +68,9 @@ extension Process {
             }
         #else
             let path = FileManager.default.currentDirectoryPath
-            FileManager.default.changeCurrentDirectoryPath(self.currentDirectoryPath)
+            let _ = FileManager.default.changeCurrentDirectoryPath(self.currentDirectoryPath)
             launch()
-            FileManager.default.currentDirectoryPath(path)
+            let _ = FileManager.default.changeCurrentDirectoryPath(path)
         #endif
     }
     
