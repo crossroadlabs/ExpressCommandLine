@@ -50,7 +50,6 @@ struct BuildStep : RunSubtaskStep {
     let dependsOn:[Step] = [Bootstrap()]
     
     func run(_ params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        print("Params", params)
         guard let path = params["path"] as? URL else {
             throw SwiftExpressError.badOptions(message: "Build: No path option.")
         }

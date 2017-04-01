@@ -31,7 +31,6 @@ struct Update : RunSubtaskStep {
     let dependsOn = [Step]()
     
     func run(_ params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        print("Params", params)
         guard let workingFolder = params["workingFolder"] as? URL else {
             throw SwiftExpressError.badOptions(message: "Bootstrap: No workingFolder option.")
         }
