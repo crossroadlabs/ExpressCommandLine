@@ -67,7 +67,10 @@ extension Process {
                 throw SwiftExpressError.subtaskError(message: "\(error.name): \(error.reason ?? ""), \(error.userInfo ?? [:])")
             }
         #else
+            let path = FileManager.default.currentDirectoryPath
+            FileManager.default.changeCurrentDirectoryPath(self.currentDirectoryPath)
             launch()
+            FileManager.default.currentDirectoryPath(path)
         #endif
     }
     
