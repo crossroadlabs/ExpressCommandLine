@@ -37,7 +37,7 @@ struct Checkout : RunSubtaskStep {
     
     func run(_ params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         guard let workingFolder = params["workingFolder"] as? URL else {
-            throw SwiftExpressError.badOptions(message: "CheckoutSPM: No workingFolder option.")
+            throw SwiftExpressError.badOptions(message: "Checkout: No workingFolder option.")
         }
         
         let pkgFolder = workingFolder.appendingPathComponent("Packages")
@@ -48,7 +48,7 @@ struct Checkout : RunSubtaskStep {
         
         let result = try executeSubtaskAndWait(Process(task: "/usr/bin/env", arguments: ["swift", "build", "--fetch"], workingDirectory: workingFolder, useAppOutput: true))
         if result != 0 {
-            throw SwiftExpressError.subtaskError(message: "CheckoutSPM: package fetch failed. Exit code \(result)")
+            throw SwiftExpressError.subtaskError(message: "Checkout: package fetch failed. Exit code \(result)")
         }
         
         return [String:Any]()
@@ -65,7 +65,7 @@ struct Checkout : RunSubtaskStep {
                     try FileManager.default.removeItem(at: pkgFolder)
                 }
             } catch {
-                print("Can't revert CheckoutSPM: \(error)")
+                print("Checkout: Can't revert. \(error)")
             }
         }
     }
@@ -96,7 +96,7 @@ struct BootstrapCommandOptions : OptionsProtocol {
     static func evaluate(_ m: CommandMode) -> Result<BootstrapCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch. Always true for SPM (ignored if --no-fetch presents)")
+            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch. Always true for SPM (ignored if --no-refetch presents)")
             <*> m <| Option(key: "no-refetch", defaultValue: false, usage: "build without fetch. Always false for SPM.")
     }
 }

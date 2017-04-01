@@ -34,7 +34,7 @@ struct RemoveAndUpdateStep: Step {
     
     func callParams(_ ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
         guard let path = ownParams["workingFolder"] as? URL else {
-            throw SwiftExpressError.badOptions(message: "UpdateSPM: No path option.")
+            throw SwiftExpressError.badOptions(message: "Update: No path option.")
         }
         return ["workingFolder": path]
     }
