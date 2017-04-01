@@ -58,7 +58,7 @@ extension FileManager {
             inFile.closeFile()
         }
         if !fileExists(at: dstURL) {
-            FileManager.default.createFile(atPath: dstURL.path, contents: nil, attributes: nil)
+            try Data().write(to: dstURL)
         }
         let outFile = try FileHandle(forWritingTo: dstURL)
         defer {
