@@ -47,9 +47,10 @@ func ==(lhs: BuildType, rhs: BuildType) -> Bool {
 }
 
 struct BuildStep : RunSubtaskStep {
-    let dependsOn:[Step] = [Checkout(force: false)]
+    let dependsOn:[Step] = [Bootstrap()]
     
     func run(_ params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
+        print("Params", params)
         guard let path = params["path"] as? URL else {
             throw SwiftExpressError.badOptions(message: "Build: No path option.")
         }
@@ -63,9 +64,9 @@ struct BuildStep : RunSubtaskStep {
         print("Building in \(buildType.description) mode with Swift Package Manager...")
         
         if force {
-            let buildpath = path.appendingPathComponent(".build").appendingPathComponent(buildType.description)
-            if FileManager.default.directoryExists(at: buildpath) {
-                try FileManager.default.removeItem(at: buildpath)
+            let result = try executeSubtaskAndWait(Process(task: "/usr/bin/env", arguments: ["swift", "package", "reset"], workingDirectory: path, useAppOutput: true))
+            if result != 0 {
+                throw SwiftExpressError.subtaskError(message: "Bootstrap: package reset failed. Exit code \(result)")
             }
         }
         
@@ -104,11 +105,11 @@ struct BuildStep : RunSubtaskStep {
         }
     }
     
-    func callParams(ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
+    func callParams(_ ownParams: [String: Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String: Any] {
         guard ownParams["path"] != nil else {
             throw SwiftExpressError.badOptions(message: "Build: No path option.")
         }
-        return ["workingFolder": ownParams["path"]!]
+        return ["workingFolder": ownParams["path"]!, "force": ownParams["force"]!]
     }
 }
 

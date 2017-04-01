@@ -24,7 +24,7 @@ import Foundation
 
 struct InitStep : Step {
     let dependsOn:[Step] = [CreateTempDirectory(), CloneGitRepository(),
-        CopyDirectoryContents(excludeList: ["^\\.git$", "^LICENSE$", "^NOTICE$", "^README.md$"]), RenamePackageSwift()]
+        CopyDirectoryContents(excludeList: ["^\\.git$", "^LICENSE$", "^NOTICE$", "^README.md$"]), GetProjectNameStep(), RenamePackageSwift()]
     
     func run(_ params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
         // Nothing to do. All tasks done
@@ -44,8 +44,10 @@ struct InitStep : Step {
         case _ as CopyDirectoryContents:
             let path = (ownParams["path"]! as! URL).appendingPathComponent(ownParams["name"]! as! String)
             return ["inputFolder": previousStepsOutput["clonedFolder"]!, "outputFolder": path]
+        case _ as GetProjectNameStep:
+            return ["workingFolder": previousStepsOutput["outputFolder"]!]
         case _ as RenamePackageSwift:
-            return ["workingFolder": previousStepsOutput["outputFolder"]!, "newProjectName": ownParams["name"]!, "projectName":previousStepsOutput["oldProjectName"]!]
+            return ["workingFolder": previousStepsOutput["outputFolder"]!, "newProjectName": ownParams["name"]!, "projectName": previousStepsOutput["projectName"]!]
         default:
             throw SwiftExpressError.badOptions(message: "InitStep: Wrong subsstep")
         }

@@ -22,47 +22,66 @@ import Result
 import Commandant
 import Foundation
 
-struct RemoveAndUpdateStep: Step {
-    var dependsOn: [Step]
+// Install project dependencies.
+//Input:
+// workingFolder
+//Output:
+// None
+struct Update : RunSubtaskStep {
+    let dependsOn = [Step]()
     
     func run(_ params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
-        return [String: Any]()
+        print("Params", params)
+        guard let workingFolder = params["workingFolder"] as? URL else {
+            throw SwiftExpressError.badOptions(message: "Bootstrap: No workingFolder option.")
+        }
+        guard let force = params["force"] as? Bool else {
+            throw SwiftExpressError.badOptions(message: "Bootstrap: No force option.")
+        }
+        
+        if force {
+            let result = try executeSubtaskAndWait(Process(task: "/usr/bin/env", arguments: ["swift", "package", "reset"], workingDirectory: workingFolder, useAppOutput: true))
+            if result != 0 {
+                throw SwiftExpressError.subtaskError(message: "Bootstrap: package reset failed. Exit code \(result)")
+            }
+        }
+        
+        let result = try executeSubtaskAndWait(Process(task: "/usr/bin/env", arguments: ["swift", "package", "update"], workingDirectory: workingFolder, useAppOutput: true))
+        if result != 0 {
+            throw SwiftExpressError.subtaskError(message: "Bootstrap: package fetch failed. Exit code \(result)")
+        }
+        
+        return [String:Any]()
     }
     
     func cleanup(_ params:[String: Any], output: StepResponse) throws {
     }
-    
-    func callParams(_ ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-        guard let path = ownParams["workingFolder"] as? URL else {
-            throw SwiftExpressError.badOptions(message: "Update: No path option.")
-        }
-        return ["workingFolder": path]
-    }
 }
+
 
 struct UpdateCommand : SimpleStepCommand {
     typealias Options = UpdateCommandOptions
     
     let verb = "update"
     let function = "update and build Express project dependencies"
-    let step: Step = RemoveAndUpdateStep(dependsOn: [RemoveItemsStep(items: [".build"]), Checkout(force: true)])
+    let step: Step = Update()
     
     func getOptions(_ opts: Options) -> Result<[String:Any], SwiftExpressError> {
-        return Result(["workingFolder": opts.path.standardized])
+        return Result(["workingFolder": opts.path.standardized, "force": opts.force])
     }
 }
 
 struct UpdateCommandOptions : OptionsProtocol {
     let path: URL
-    let fetch: Bool
+    let force: Bool
     
-    static func create(_ path: String) -> ((Bool) -> UpdateCommandOptions) {
-        return { (fetch: Bool) in UpdateCommandOptions(path: URL(fileURLWithPath: path), fetch: fetch) }
+    static func create(_ path: String) -> ((Bool) -> UpdateCommandOptions){
+        return { force in UpdateCommandOptions(path: URL(fileURLWithPath: path), force: force) }
     }
     
     static func evaluate(_ m: CommandMode) -> Result<UpdateCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch. Always true for SPM")
+            <*> m <| Option(key: "force", defaultValue: false, usage: "force build even if already compiled")
     }
 }

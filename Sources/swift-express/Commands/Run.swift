@@ -60,10 +60,6 @@ struct RunStep : RunSubtaskStep {
     func cleanup(_ params: [String : Any], output: StepResponse) throws {
         
     }
-    
-//    func callParams(ownParams: [String : Any], forStep: Step, previousStepsOutput: StepResponse) throws -> [String : Any] {
-//        return ownParams ++ ["force": false, "dispatch": DEFAULTS_BUILD_DISPATCH]
-//    }
 }
 
 struct RunCommandOptions : OptionsProtocol {

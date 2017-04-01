@@ -48,19 +48,19 @@ struct CopyDirectoryContents : Step {
                 try FileManager.default.createDirectory(at: outputFolder, withIntermediateDirectories: true)
             }
         
-            var copiedItems = [URL]()
+            var copiedItems = [String]()
         
             let contents = try FileManager.default.contentsOfDirectory(at: inputFolder, includingPropertiesForKeys: nil)
             
             for item in contents {
                 let ignore = excludeList.reduce(false) { (prev, r) -> Bool in
-                    return prev || r.matches(item.absoluteString)
+                    return prev || r.matches(item.lastPathComponent)
                 }
                 if ignore {
                     continue
                 }
-                try FileManager.default.copyItem(at: item, to: outputFolder)
-                copiedItems.append(item)
+                try FileManager.default.copyItem(at: item, to: outputFolder.appendingPathComponent(item.lastPathComponent))
+                copiedItems.append(item.lastPathComponent)
             }
             return ["copiedItems": copiedItems, "outputFolder": outputFolder]
         } catch let err as SwiftExpressError {

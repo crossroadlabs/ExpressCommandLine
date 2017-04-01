@@ -28,13 +28,15 @@ extension Process {
         self.init()
         
         self.launchPath = task
-        self.arguments = arguments
+        if let arguments = arguments {
+            self.arguments = arguments
+        }
         if let env = environment {
             self.environment = env
         }
         
         if let dir = workingDirectory {
-            self.currentDirectoryPath = dir.absoluteString
+            self.currentDirectoryPath = dir.path
         }
         
         if let finishCb = finishCallback {

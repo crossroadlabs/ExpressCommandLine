@@ -22,52 +22,39 @@ import Result
 import Commandant
 import Foundation
 
-// Install carthage dependencies.
+// Install project dependencies.
 //Input:
 // workingFolder
 //Output:
 // None
-struct Checkout : RunSubtaskStep {
+struct Bootstrap : RunSubtaskStep {
     let dependsOn = [Step]()
-    let force: Bool
-    
-    init(force: Bool = true) {
-        self.force = force
-    }
     
     func run(_ params: [String: Any], combinedOutput: StepResponse) throws -> [String: Any] {
+        print("Params", params)
         guard let workingFolder = params["workingFolder"] as? URL else {
-            throw SwiftExpressError.badOptions(message: "Checkout: No workingFolder option.")
+            throw SwiftExpressError.badOptions(message: "Bootstrap: No workingFolder option.")
+        }
+        guard let force = params["force"] as? Bool else {
+            throw SwiftExpressError.badOptions(message: "Bootstrap: No force option.")
         }
         
-        let pkgFolder = workingFolder.appendingPathComponent("Packages")
-        
-        if !force && FileManager.default.directoryExists(at: pkgFolder) {
-            return [String:Any]()
+        if force {
+            let result = try executeSubtaskAndWait(Process(task: "/usr/bin/env", arguments: ["swift", "package", "reset"], workingDirectory: workingFolder, useAppOutput: true))
+            if result != 0 {
+                throw SwiftExpressError.subtaskError(message: "Bootstrap: package reset failed. Exit code \(result)")
+            }
         }
         
-        let result = try executeSubtaskAndWait(Process(task: "/usr/bin/env", arguments: ["swift", "build", "--fetch"], workingDirectory: workingFolder, useAppOutput: true))
+        let result = try executeSubtaskAndWait(Process(task: "/usr/bin/env", arguments: ["swift", "package", "fetch"], workingDirectory: workingFolder, useAppOutput: true))
         if result != 0 {
-            throw SwiftExpressError.subtaskError(message: "Checkout: package fetch failed. Exit code \(result)")
+            throw SwiftExpressError.subtaskError(message: "Bootstrap: package fetch failed. Exit code \(result)")
         }
         
         return [String:Any]()
     }
     
     func cleanup(_ params:[String: Any], output: StepResponse) throws {
-    }
-    
-    func revert(params: [String : Any], output: [String : Any]?, error: SwiftExpressError?) {
-        if let workingFolder = params["workingFolder"] {
-            do {
-                let pkgFolder = (workingFolder as! URL).appendingPathComponent("Packages")
-                if FileManager.default.directoryExists(at: pkgFolder) {
-                    try FileManager.default.removeItem(at: pkgFolder)
-                }
-            } catch {
-                print("Checkout: Can't revert. \(error)")
-            }
-        }
     }
 }
 
@@ -76,27 +63,24 @@ struct BootstrapCommand : SimpleStepCommand {
     
     let verb = "bootstrap"
     let function = "download and build Express project dependencies"
-    let step: Step = Checkout(force: true)
+    let step: Step = Bootstrap()
     
     func getOptions(_ opts: Options) -> Result<[String:Any], SwiftExpressError> {
-        return Result(["workingFolder": opts.path.standardized])
+        return Result(["workingFolder": opts.path.standardized, "force": opts.force])
     }
 }
 
 struct BootstrapCommandOptions : OptionsProtocol {
     let path: URL
-    let fetch: Bool
-    let noRefetch: Bool
+    let force: Bool
     
-    static func create(_ path: String) -> ((Bool) -> ((Bool) -> BootstrapCommandOptions)) {
-        return  { fetch in { noRefetch in
-            BootstrapCommandOptions(path: URL(fileURLWithPath: path), fetch: fetch, noRefetch: noRefetch)
-        } } }
+    static func create(_ path: String)  -> ((Bool) -> BootstrapCommandOptions) {
+        return { force in BootstrapCommandOptions(path: URL(fileURLWithPath: path), force: force) }
+    }
     
     static func evaluate(_ m: CommandMode) -> Result<BootstrapCommandOptions, CommandantError<SwiftExpressError>> {
         return create
             <*> m <| Option(key: "path", defaultValue: ".", usage: "project directory")
-            <*> m <| Option(key: "fetch", defaultValue: false, usage: "only fetch. Always true for SPM (ignored if --no-refetch presents)")
-            <*> m <| Option(key: "no-refetch", defaultValue: false, usage: "build without fetch. Always false for SPM.")
+            <*> m <| Option(key: "force", defaultValue: false, usage: "refetch all packages")
     }
 }

@@ -42,6 +42,11 @@ struct RenamePackageSwift : Step {
         
         let psFile = try FileHandle(forUpdating: workingFolder.appendingPathComponent("Package.swift"))
         
+        defer {
+            psFile.synchronizeFile()
+            psFile.closeFile()
+        }
+        
         let nameRegex = ("name:\\s*\"" + projectName + "\"").r!
         
         guard let fileContents = String(data: psFile.readDataToEndOfFile(), encoding: .utf8) else {
