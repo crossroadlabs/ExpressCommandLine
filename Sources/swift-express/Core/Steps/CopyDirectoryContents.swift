@@ -59,7 +59,7 @@ struct CopyDirectoryContents : Step {
                 if ignore {
                     continue
                 }
-                try FileManager.default.copyItem(at: item, to: outputFolder.appendingPathComponent(item.lastPathComponent))
+                try FileManager.default._copyItem(at: item, to: outputFolder.appendingPathComponent(item.lastPathComponent))
                 copiedItems.append(item.lastPathComponent)
             }
             return ["copiedItems": copiedItems, "outputFolder": outputFolder]

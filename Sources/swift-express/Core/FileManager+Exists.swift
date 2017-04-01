@@ -42,4 +42,51 @@ extension FileManager {
     var tempDirectory: URL {
         return URL(fileURLWithPath: NSTemporaryDirectory())
     }
+    
+    #if os(Linux)
+    func _copyItem(at srcURL: URL, to dstURL: URL) throws {
+        if fileExists(at: srcURL) {
+            try copyFile(at: srcURL, to: dstURL)
+        } else {
+            try copyDirectory(at: srcURL, to: dstURL)
+        }
+    }
+    
+    private func copyFile(at srcURL: URL, to dstURL: URL) throws {
+        let inFile = try FileHandle(forReadingFrom: srcURL)
+        defer {
+            inFile.closeFile()
+        }
+        if !fileExists(at: dstURL) {
+            FileManager.default.createFile(atPath: dstURL.path, contents: nil, attributes: nil)
+        }
+        let outFile = try FileHandle(forWritingTo: dstURL)
+        defer {
+            outFile.synchronizeFile()
+            outFile.closeFile()
+        }
+        var bytes = inFile.readData(ofLength: 1024*1024)
+        while bytes.count > 0 {
+            outFile.write(bytes)
+            bytes = inFile.readData(ofLength: 1024*1024)
+        }
+    }
+    
+    private func copyDirectory(at srcURL: URL, to dstURL: URL) throws {
+        if !directoryExists(at: dstURL) {
+            try createDirectory(at: dstURL, withIntermediateDirectories: true, attributes: nil)
+        }
+        for item in try contentsOfDirectory(at: srcURL, includingPropertiesForKeys: nil) {
+            if fileExists(at: item) {
+                try copyFile(at: item, to: dstURL.appendingPathComponent(item.lastPathComponent))
+            } else {
+                try copyDirectory(at: item, to: dstURL.appendingPathComponent(item.lastPathComponent))
+            }
+        }
+    }
+    #else
+    func _copyItem(at srcURL: URL, to dstURL: URL) throws {
+        try copyItem(at: srcURL, to: dstURL)
+    }
+    #endif
 }
