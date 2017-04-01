@@ -40,10 +40,6 @@ extension FileManager {
     }
     
     var tempDirectory: URL {
-        if #available(OSX 10.12, *) {
-            return self.temporaryDirectory
-        } else {
-            return URL(fileURLWithPath: NSTemporaryDirectory())
-        }
+        return URL(fileURLWithPath: NSTemporaryDirectory())
     }
 }
