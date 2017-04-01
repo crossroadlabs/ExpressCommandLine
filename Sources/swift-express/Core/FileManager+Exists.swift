@@ -22,15 +22,21 @@ import Foundation
 
 extension FileManager {
     func directoryExists(at URL: URL) -> Bool {
-        var isDir : ObjCBool = false;
-        let exists = fileExists(atPath: URL.path, isDirectory: &isDir)
-        return exists && isDir.boolValue
+        do {
+            let attrs = try attributesOfItem(atPath: URL.path)
+            return attrs[FileAttributeKey.type] as? FileAttributeType == FileAttributeType.typeDirectory
+        } catch {
+            return false;
+        }
     }
     
     func fileExists(at URL: URL) -> Bool {
-        var isDir : ObjCBool = false;
-        let exists = fileExists(atPath: URL.path, isDirectory: &isDir)
-        return exists && !isDir.boolValue
+        do {
+            let attrs = try attributesOfItem(atPath: URL.path)
+            return attrs[FileAttributeKey.type] as? FileAttributeType == FileAttributeType.typeRegular
+        } catch {
+            return false;
+        }
     }
     
     var tempDirectory: URL {
