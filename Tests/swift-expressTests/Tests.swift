@@ -1,4 +1,4 @@
-//===--- Package.swift ----------------------------------------------------------===//
+//===--- Tests.swift ------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -16,18 +16,27 @@
 //You should have received a copy of the GNU General Public License
 //along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
 //
-//===---------------------------------------------------------------------------===//
+//===---------------------------------------------===//
 
-import PackageDescription
+import XCTest
 
-let package = Package(
-    name: "swift-express",
-    dependencies: [
-        .Package(url: "https://github.com/Carthage/Commandant.git", majorVersion: 0, minor: 12),
-        .Package(url: "https://github.com/crossroadlabs/Regex.git", majorVersion: 1, minor: 0)
-    ]
-)
+class Tests: XCTestCase {
 
-#if os(OSX)
-    package.dependencies.append(.Package(url: "https://github.com/ypopovych/SwiftTryCatch.git", majorVersion: 1, minor: 1))
+}
+
+#if os(Linux)
+extension Tests : XCTestCaseProvider {
+	var allTests : [(String, () throws -> Void)] {
+		return []
+	}
+}
+#endif
+
+#if os(Linux)
+extension Tests {
+	static var allTests : [(String, (Tests) -> () throws -> Void)] {
+		return [
+		]
+	}
+}
 #endif

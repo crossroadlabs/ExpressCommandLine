@@ -1,4 +1,4 @@
-//===--- Package.swift ----------------------------------------------------------===//
+//===--- Signal.swift --------------------------------------------------===//
 //Copyright (c) 2015-2016 Daniel Leping (dileping)
 //
 //This file is part of Swift Express Command Line
@@ -16,18 +16,30 @@
 //You should have received a copy of the GNU General Public License
 //along with Swift Express Command Line. If not, see <http://www.gnu.org/licenses/>.
 //
-//===---------------------------------------------------------------------------===//
+//===-------------------------------------------------------------------===//
 
-import PackageDescription
+import Foundation
 
-let package = Package(
-    name: "swift-express",
-    dependencies: [
-        .Package(url: "https://github.com/Carthage/Commandant.git", majorVersion: 0, minor: 12),
-        .Package(url: "https://github.com/crossroadlabs/Regex.git", majorVersion: 1, minor: 0)
-    ]
-)
+enum Signal:Int32 {
+    case HUP    = 1
+    case INT    = 2
+    case QUIT   = 3
+    case ABRT   = 6
+    case KILL   = 9
+    case ALRM   = 14
+    case TERM   = 15
+}
 
-#if os(OSX)
-    package.dependencies.append(.Package(url: "https://github.com/ypopovych/SwiftTryCatch.git", majorVersion: 1, minor: 1))
-#endif
+typealias SigactionHandler = @convention(c)(Int32) -> Void
+
+func trap_signal(_ signum: Signal, action: SigactionHandler) {
+    var sigAction = sigaction()
+    
+    #if os(Linux)
+        sigAction.__sigaction_handler = unsafeBitCast(action, to: sigaction.__Unnamed_union___sigaction_handler.self)
+    #else
+        sigAction.__sigaction_u = unsafeBitCast(action, to: __sigaction_u.self)
+    #endif
+    
+    sigaction(signum.rawValue, &sigAction, nil)
+}

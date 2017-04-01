@@ -1,7 +1,9 @@
 import XCTest
 
-@testable import swift-expresstest
+import swift-expressTests
 
-XCTMain([
-	Tests(),
-])
+var tests = [XCTestCaseEntry]()
+
+tests += swift-expressTests.allTests()
+
+XCTMain(tests)
