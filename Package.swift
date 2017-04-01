@@ -29,5 +29,5 @@ let package = Package(
 )
 
 #if os(OSX)
-    package.dependencies.append(.Package(url: "https://github.com/ypopovych/SwiftTryCatch.git", "1.1.1-alpha"))
+    package.dependencies.append(.Package(url: "https://github.com/ypopovych/SwiftTryCatch.git", majorVersion: 1, minor: 1))
 #endif
