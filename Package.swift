@@ -24,7 +24,7 @@ let package = Package(
     name: "swift-express",
     dependencies: [
         .Package(url: "https://github.com/Carthage/Commandant.git", majorVersion: 0, minor: 12),
-        .Package(url: "https://github.com/crossroadlabs/Regex.git", "1.0.0-alpha")
+        .Package(url: "https://github.com/crossroadlabs/Regex.git", majorVersion: 1, minor: 0)
     ]
 )
 
